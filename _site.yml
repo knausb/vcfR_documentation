@@ -1,4 +1,5 @@
 name: "vcfR"
+output_dir: .
 navbar:
   title: "vcfR"
   left:
@@ -11,5 +12,6 @@ output:
     theme: cosmo
     highlight: textmate
     include:
+      before_body: header.html
       after_body: footer.html
     css: styles.css      
