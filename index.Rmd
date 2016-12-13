@@ -1,0 +1,9 @@
+---
+title: "vcfR documentation"
+---
+
+The R package vcfR is a set of tools designed to read, write, manipulate and analyze VCF data.
+
+
+
+
