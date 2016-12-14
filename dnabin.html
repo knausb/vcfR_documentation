@@ -11,7 +11,7 @@
 
 
 
-<title>vcfR: VCF data in R</title>
+<title>Creating DNAbin objects</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -216,15 +216,16 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 
 
 
-<h1 class="title toc-ignore">vcfR: VCF data in R</h1>
+<h1 class="title toc-ignore">Creating DNAbin objects</h1>
 
 </div>
 
 
-<p>The R package vcfR is a set of tools designed to read, write, manipulate and analyze VCF data.</p>
-<p>Facilitates easy manipulation of variant call format (VCF) data. Functions are provided to rapidly read from and write to VCF files. Once VCF data is read into R a parser function extracts matrices of data. This information can then be used for quality control or other purposes. Additional functions provide visualization of genomic data. Once processing is complete data may be written to a VCF file (*.vcf.gz). It also may be converted into other popular R objects (e.g., genlight, DNAbin). VcfR provides a link between VCF data and familiar R software.</p>
-<p><a href="https://CRAN.R-project.org/package=vcfR">vcfR</a> on CRAN.<br />
-<a href="https://github.com/knausb/vcfR">vcfR</a> on GitHub.</p>
+<p>Within vcfR we use a vcfR object to contain our data. Once we have performed some manipulations we may want to convert the data to some other format for further analysis. Within vcfR we have several options.</p>
+<ul>
+<li>Output to VCF</li>
+<li>Convert to genind</li>
+</ul>
 
 <center>
 <hr class="style1">

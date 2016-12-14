@@ -1,0 +1,17 @@
+---
+title: "Export of vcfR data"
+---
+
+
+Within vcfR we use a vcfR object to contain our data.
+Once we have performed some manipulations we may want to convert the data to some other format for further analysis.
+Within vcfR we have several options.
+
+* Output to VCF
+* Convert to genind
+
+
+
+
+
+
