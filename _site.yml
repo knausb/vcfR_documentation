@@ -7,6 +7,10 @@ navbar:
       href: index.html
     - text: "About"
       href: about.html
+    - text: "Tutorial"
+      menu:
+        - text: "A quick introduction"
+          href: "quick_intro.html"
     - text: "Export"
       menu:
         - text: "Overview"
