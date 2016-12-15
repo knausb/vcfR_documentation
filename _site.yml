@@ -11,6 +11,10 @@ navbar:
       menu:
         - text: "A quick introduction"
           href: "quick_intro.html"
+    - text: "FAQ"
+      menu:
+        - text: "Subset to 1 chromosome"
+          href: "subset_data_to_1chrom.html"
     - text: "Export"
       menu:
         - text: "Overview"
