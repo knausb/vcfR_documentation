@@ -5,8 +5,8 @@ navbar:
   left:
     - text: "Home"
       href: index.html
-    - text: "About"
-      href: about.html
+    - text: "R language"
+      href: rlanguage.html
     - text: "Tutorial"
       menu:
         - text: "A quick introduction"
