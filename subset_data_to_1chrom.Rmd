@@ -1,0 +1,104 @@
+---
+title: "Subsetting data to a single chromosome"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+
+The functions in vcfR are designed to work on a single chromosome.
+Many genomes don't actually have chromosomes but instead have supercontigs or contigs.
+Here I use the terms chromosome, supercontig and contig as synonyms.
+They make for a nice way to subset genomic data to a smaller unit, and this unit has a convenient coordinant system.
+Depending on the organization of your data, you may have to subset some of your files before you can use them in vcfR.
+Here I demontrate how I accomplish this.
+
+
+## Subsetting a FASTA file to one chromosome
+
+
+A FASTA file for a genome typically consists of many sequences (chromosomes, supercontigs, contigs, etc.).
+Typically these can be read into R and subset within R.
+We can use the function `read.dna()` from the package 'ape' to read in our FASTA to an object of class DNAbin.
+We can then subset this object to a single sequence with the function `grep()` and a regular expression.
+More information on these topics can be found within R with `?grep` and `?"regular expression"`
+
+
+
+```{r, eval=FALSE}
+library(ape)
+dna <- read.dna("pinf_super_contigs.fa", format = "fasta")
+dna2 <- dna[ grep( "Supercontig_1.1 ", names(dna) ) ]
+names(dna2) <- "Supercontig_1.1"
+dna2 <- as.matrix(dna2)
+```
+
+
+Using this example (with your FASTA file name and chromosome name) should result in an object of class DNAbin that consists of a single sequence.
+Note that I've used the function `names()` to rename the sequence.
+It has been my experience that genomic data files do not always include a consistent naming convention.
+This is how I standardize the names.
+
+
+## Subsetting a GFF file
+
+
+Annotation files can be easily subset as well.
+A GFF file is simply a tabular file with the chromosome in the first column.
+This can also be subset with a regular expression.
+
+
+```{r, eval=FALSE}
+gff <- read.table('gff_file.gff', sep="\t", quote="")
+gff2 <- gff[grep("Supercontig_1.1", gff[,1]),]
+```
+
+
+## Subsetting a VCF file
+
+I personally like to call variants on a per chromosome basis and send each chromosome as a seperate job to our SGE system.
+The genome I currently work on has about 5,000 supercontigs.
+This means I create about 5,000 jobs and therefore split the task of variant calling into many smaller jobs.
+This results one chromosome per VCF file and means I do not have to subset my VCF files.
+
+
+You may have to subset your VCF file.
+(Okay, I do too sometimes.)
+I suggest you do this outside of R because you may not have enough memory to read the entire file into memory.
+In a Unix environment this can be accomplished at the command line.
+
+
+```{bash, eval=FALSE}
+grep "^#" my_variants.vcf > header.vcf # Meta
+grep "^Supercontig_1.1" my_variants.vcf > tmp.vcf # Body
+cat header.vcf tmp.vcf > sc1.vcf.gz
+```
+
+
+If you're working with compressed data it can be handled similarly.
+
+
+```{bash, eval=FALSE}
+zgrep "^#" my_variants.vcf.gz | gzip -c > header.vcf.gz # Meta
+zgrep "^Supercontig_1.1" my_variants.vcf.gz > tmp.vcf.gz # Body
+zcat header.vcf.gz tmp.vcf.gz | gzip -c > sc1.vcf.gz
+```
+
+
+This could also be accomplished with [VCFtools](https://vcftools.github.io/) (which may help Windows users as well).
+
+
+## vcfR
+
+
+You should now be able to import your VCF data with vcfR.
+
+
+```{r create.chromR, eval=FALSE}
+library(vcfR)
+vcf <- read.vcfR("sc1.vcf")
+chrom <- create.chromR(name='Supercontig', vcf=vcf, seq=dna2, ann=gff2)
+```
+
+
