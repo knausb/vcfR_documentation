@@ -11,6 +11,8 @@ navbar:
       menu:
         - text: "A quick introduction"
           href: "quick_intro.html"
+        - text: "VCF data"
+          href: "vcf_data.html"
     - text: "FAQ"
       menu:
         - text: "Subset to 1 chromosome"
