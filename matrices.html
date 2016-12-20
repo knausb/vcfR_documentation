@@ -262,14 +262,98 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 
 
 <p>The data contained in VCF files presents a challenge to analysis in that the data are not strictly tabular and are large. Because the data are not strictly tabular we need to find ways to coerce the data into tables or matrices. Once the data is stored as a matrix it can be operated on by numerous R functions and packages. Because the data are large, this process needs to happen in a computationally efficent manner. Here we explore how vcfR facilitates these tasks.</p>
-<div id="extract.gt" class="section level2">
-<h2>extract.gt()</h2>
+<div id="extracting-data-matrices" class="section level2">
+<h2>Extracting data matrices</h2>
+<p>Typical VCF datasets are so large that it is not practical to view them in their entirety. Here we use the example dataset <code>vcfR_test</code> which comes with vcfR. This is a nice dataset because it is small enough to visualize.</p>
+<pre class="r"><code>library(vcfR)</code></pre>
+<pre><code>## 
+##    *****       ***   vcfR   ***       *****
+##    This is vcfR 1.3.0.9000 
+##      browseVignettes(&#39;vcfR&#39;) # Documentation
+##      citation(&#39;vcfR&#39;) # Citation
+##    *****       *****      *****       *****</code></pre>
+<pre class="r"><code>data(&quot;vcfR_test&quot;)
+head(vcfR_test)</code></pre>
+<pre><code>## [1] &quot;***** Object of class &#39;vcfR&#39; *****&quot;
+## [1] &quot;***** Meta section *****&quot;
+## [1] &quot;##fileformat=VCFv4.3&quot;
+## [1] &quot;##fileDate=20090805&quot;
+## [1] &quot;##source=myImputationProgramV3.1&quot;
+## [1] &quot;##reference=file:///seq/references/1000GenomesPilot-NCBI36.fasta&quot;
+## [1] &quot;##contig=&lt;ID=20,length=62435964,assembly=B36,md5=f126cdf8a6e0c7f379d [Truncated]&quot;
+## [1] &quot;##phasing=partial&quot;
+## [1] &quot;First 6 rows.&quot;
+## [1] 
+## [1] &quot;***** Fixed section *****&quot;
+##      CHROM POS       ID          REF   ALT      QUAL FILTER
+## [1,] &quot;20&quot;  &quot;14370&quot;   &quot;rs6054257&quot; &quot;G&quot;   &quot;A&quot;      &quot;29&quot; &quot;PASS&quot;
+## [2,] &quot;20&quot;  &quot;17330&quot;   NA          &quot;T&quot;   &quot;A&quot;      &quot;3&quot;  &quot;q10&quot; 
+## [3,] &quot;20&quot;  &quot;1110696&quot; &quot;rs6040355&quot; &quot;A&quot;   &quot;G,T&quot;    &quot;67&quot; &quot;PASS&quot;
+## [4,] &quot;20&quot;  &quot;1230237&quot; NA          &quot;T&quot;   NA       &quot;47&quot; &quot;PASS&quot;
+## [5,] &quot;20&quot;  &quot;1234567&quot; &quot;microsat1&quot; &quot;GTC&quot; &quot;G,GTCT&quot; &quot;50&quot; &quot;PASS&quot;
+## [1] 
+## [1] &quot;***** Genotype section *****&quot;
+##      FORMAT        NA00001          NA00002          NA00003       
+## [1,] &quot;GT:GQ:DP:HQ&quot; &quot;0|0:48:1:51,51&quot; &quot;1|0:48:8:51,51&quot; &quot;1/1:43:5:.,.&quot;
+## [2,] &quot;GT:GQ:DP:HQ&quot; &quot;0|0:49:3:58,50&quot; &quot;0|1:3:5:65,3&quot;   &quot;0/0:41:3&quot;    
+## [3,] &quot;GT:GQ:DP:HQ&quot; &quot;1|2:21:6:23,27&quot; &quot;2|1:2:0:18,2&quot;   &quot;2/2:35:4&quot;    
+## [4,] &quot;GT:GQ:DP:HQ&quot; &quot;0|0:54:7:56,60&quot; &quot;0|0:48:4:51,51&quot; &quot;0/0:61:2&quot;    
+## [5,] &quot;GT:GQ:DP&quot;    &quot;0/1:35:4&quot;       &quot;0/2:17:2&quot;       &quot;1/1:40:3&quot;    
+## [1] 
+## [1] &quot;Unique GT formats:&quot;
+## [1] &quot;GT:GQ:DP:HQ&quot; &quot;GT:GQ:DP&quot;   
+## [1]</code></pre>
+<p>In the genotype section we see four columns: a FORMAT column that indicates the contents of subsequent columns and three sample columns. Variants one through four contain four pieces of information with each genotype (GT:GQ:DP:HQ). The meaning of these acronyms should be defined in the meta section. Each element of the genotype matrix therefore contains a colon delimeted list that we need to parse before we can work with it. For example, if we wanted to analyze teh genotypes we would need to isolate them from the other information. Thsi can be accomplished using the function <code>extract.gt()</code>.</p>
+<pre class="r"><code>gt &lt;- extract.gt(vcfR_test)
+gt</code></pre>
+<pre><code>##            NA00001 NA00002 NA00003
+## rs6054257  &quot;0|0&quot;   &quot;1|0&quot;   &quot;1/1&quot;  
+## 20_17330   &quot;0|0&quot;   &quot;0|1&quot;   &quot;0/0&quot;  
+## rs6040355  &quot;1|2&quot;   &quot;2|1&quot;   &quot;2/2&quot;  
+## 20_1230237 &quot;0|0&quot;   &quot;0|0&quot;   &quot;0/0&quot;  
+## microsat1  &quot;0/1&quot;   &quot;0/2&quot;   &quot;1/1&quot;</code></pre>
+<p>When a genotype section is included in VCF data the one mandatory field is the genotype (GT) and it must be the first. The genotype is the default field for <code>extract.gt()</code> to work on. Note that the samplers names have been used to name the columns. The variant names (row names) are a little more complicated. The ‘ID’ column of the fixed section contains optional unique identifiers. These typically come from some sort of database of variants. If this column were entirely populated with unique identifiers we could use it to name our variants. However, all variants do not always have an ID. For example, variants 2 and 4 have missing IDs (NA). The function <code>extract.gt()</code> tries to name these variants by combining the chromosome (CHROM) and the position (POS) with the delimiter ’_’ to create a name. We see in our matrix of genotypes that they all have a name.</p>
+<p>We can also extract numeric data from our VCF data. We can do this by selecting a numeric element and setting the parameter <code>as.numeric = TRUE</code>.</p>
+<pre class="r"><code>gt &lt;- extract.gt(vcfR_test, element = &#39;DP&#39;, as.numeric = TRUE)
+gt</code></pre>
+<pre><code>##            NA00001 NA00002 NA00003
+## rs6054257        1       8       5
+## 20_17330         3       5       3
+## rs6040355        6       0       4
+## 20_1230237       7       4       2
+## microsat1        4       2       3</code></pre>
+<p>Here we’ve extracted the sequence depth (DP) of each variant and converted it to a numeric. Because they are numeric they may be used for quantitative comparisons. Much of R is designed to work with matrices of numbers. Be careful setting the parameter <code>as.numeric = TRUE</code>. It will do its best to convert the data to a numeric, even if this may not make sense. For example, we could convert the genotype to numeric.</p>
+<pre class="r"><code>gt &lt;- extract.gt(vcfR_test, element = &#39;GT&#39;, as.numeric = TRUE)
+gt</code></pre>
+<pre><code>##            NA00001 NA00002 NA00003
+## rs6054257        0       1       1
+## 20_17330         0       0       0
+## rs6040355        1       2       2
+## 20_1230237       0       0       0
+## microsat1        0       0       1</code></pre>
+<p>This operation did not throw an error, but the resulting matrix doesn’t appear to make much sense. Only ask to convert numeric data to numeric data or you will probably get unexpected results.</p>
 </div>
-<div id="masplit" class="section level2">
-<h2>masplit()</h2>
-</div>
-<div id="visualization" class="section level2">
-<h2>Visualization</h2>
+<div id="matrix-parsing" class="section level2">
+<h2>Matrix parsing</h2>
+<p>Some elements fromthe genotype section may require further parsing. In our example the haplotype quality (HQ) includes a quality for each haplotype and these values are comma delimited.</p>
+<pre class="r"><code>gt &lt;- extract.gt(vcfR_test, element = &#39;HQ&#39;)
+gt</code></pre>
+<pre><code>##            NA00001 NA00002 NA00003
+## rs6054257  &quot;51,51&quot; &quot;51,51&quot; &quot;.,.&quot;  
+## 20_17330   &quot;58,50&quot; &quot;65,3&quot;  NA     
+## rs6040355  &quot;23,27&quot; &quot;18,2&quot;  NA     
+## 20_1230237 &quot;56,60&quot; &quot;51,51&quot; NA     
+## microsat1  NA      NA      NA</code></pre>
+<p>Note that some elements contain data while in others it is missing.</p>
+<pre class="r"><code>myHQ1 &lt;- masplit(gt[,1:2], sort = 0)
+myHQ1</code></pre>
+<pre><code>##            NA00001 NA00002
+## rs6054257       51      51
+## 20_17330        58      65
+## rs6040355       23      18
+## 20_1230237      56      51
+## microsat1       NA      NA</code></pre>
+<p>The function <code>masplit()</code> is fairly flexible in that you can choose which element to return and you can also sort the data prior to selection. These functions should help make VCF data accessible to the wealth of existing R functions and packages.</p>
 </div>
 
 <center>

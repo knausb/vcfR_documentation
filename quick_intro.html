@@ -373,14 +373,8 @@ vcf_file &lt;- system.file(&quot;extdata&quot;, &quot;pinf_sc50.vcf.gz&quot;, pa
 dna_file &lt;- system.file(&quot;extdata&quot;, &quot;pinf_sc50.fasta&quot;, package = pkg)
 gff_file &lt;- system.file(&quot;extdata&quot;, &quot;pinf_sc50.gff&quot;, package = pkg)</code></pre>
 <p>Then read in the VCF file with vcfR.</p>
-<pre class="r"><code>library(vcfR)</code></pre>
-<pre><code>## 
-##    *****       ***   vcfR   ***       *****
-##    This is vcfR 1.3.0.9000 
-##      browseVignettes(&#39;vcfR&#39;) # Documentation
-##      citation(&#39;vcfR&#39;) # Citation
-##    *****       *****      *****       *****</code></pre>
-<pre class="r"><code>vcf &lt;- read.vcfR( vcf_file, verbose = FALSE )</code></pre>
+<pre class="r"><code>library(vcfR)
+vcf &lt;- read.vcfR( vcf_file, verbose = FALSE )</code></pre>
 <p>The function <code>read.vcfR()</code> takes the filename you specify and reads it into R where it is stored as a <strong>vcfR</strong> object. The <strong>vcfR</strong> object is an S4 class object with three slots containing the metadata, the fixed data and the genotype data. More information on VCF data can be found in the vignette ‘vcf data.’ This object provides a known organization for the data so that downstream functions can easily access it.</p>
 <p>Genomic reference sequence files are typically in FASTA format files. These can be read in using the package ape.</p>
 <pre class="r"><code>dna &lt;- ape::read.dna(dna_file, format = &quot;fasta&quot;)</code></pre>
@@ -426,15 +420,15 @@ plot(chrom)</code></pre>
 <p>The function <code>var.win()</code> performs windowing analyses on the data. Currently it summarizes variant count per window as well as G/C content per window.</p>
 <pre class="r"><code>chrom &lt;- proc.chromR(chrom, verbose=TRUE)</code></pre>
 <pre><code>## Nucleotide regions complete.</code></pre>
-<pre><code>##   elapsed time:  0.625</code></pre>
+<pre><code>##   elapsed time:  0.621</code></pre>
 <pre><code>## N regions complete.</code></pre>
-<pre><code>##   elapsed time:  0.261</code></pre>
+<pre><code>##   elapsed time:  0.259</code></pre>
 <pre><code>## Population summary complete.</code></pre>
-<pre><code>##   elapsed time:  0.156</code></pre>
+<pre><code>##   elapsed time:  0.158</code></pre>
 <pre><code>## window_init complete.</code></pre>
-<pre><code>##   elapsed time:  0.001</code></pre>
+<pre><code>##   elapsed time:  0</code></pre>
 <pre><code>## windowize_fasta complete.</code></pre>
-<pre><code>##   elapsed time:  0.163</code></pre>
+<pre><code>##   elapsed time:  0.161</code></pre>
 <pre><code>## windowize_annotations complete.</code></pre>
 <pre><code>##   elapsed time:  0.011</code></pre>
 <pre><code>## windowize_variants complete.</code></pre>

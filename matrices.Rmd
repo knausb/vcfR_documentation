@@ -10,17 +10,101 @@ Because the data are large, this process needs to happen in a computationally ef
 Here we explore how vcfR facilitates these tasks.
 
 
-## extract.gt()
+## Extracting data matrices
+
+
+Typical VCF datasets are so large that it is not practical to view them in their entirety.
+Here we use the example dataset `vcfR_test` which comes with vcfR.
+This is a nice dataset because it is small enough to visualize.
+
+
+```{r}
+library(vcfR)
+data("vcfR_test")
+head(vcfR_test)
+```
+
+
+In the genotype section we see four columns: a FORMAT column that indicates the contents of subsequent columns and three sample columns.
+Variants one through four contain four pieces of information with each genotype (GT:GQ:DP:HQ).
+The meaning of these acronyms should be defined in the meta section.
+Each element of the genotype matrix therefore contains a colon delimeted list that we need to parse before we can work with it.
+For example, if we wanted to analyze teh genotypes we would need to isolate them from the other information.
+Thsi can be accomplished using the function `extract.gt()`.
 
 
 
-## masplit()
+```{r}
+gt <- extract.gt(vcfR_test)
+gt
+```
 
 
+When a genotype section is included in VCF data the one mandatory field is the genotype (GT) and it must be the first.
+The genotype is the default field for `extract.gt()` to work on.
+Note that the samplers names have been used to name the columns.
+The variant names (row names) are a little more complicated.
+The 'ID' column of the fixed section contains optional unique identifiers.
+These typically come from some sort of database of variants.
+If this column were entirely populated with unique identifiers we could use it to name our variants.
+However, all variants do not always have an ID.
+For example, variants 2 and 4 have missing IDs (NA).
+The function `extract.gt()` tries to name these variants by combining the chromosome (CHROM) and the position (POS) with the delimiter '_' to create a name.
+We see in our matrix of genotypes that they all have a name.
 
-## Visualization
+
+We can also extract numeric data from our VCF data.
+We can do this by selecting a numeric element and setting the parameter `as.numeric = TRUE`.
 
 
+```{r}
+gt <- extract.gt(vcfR_test, element = 'DP', as.numeric = TRUE)
+gt
+```
+
+
+Here we've extracted the sequence depth (DP) of each variant and converted it to a numeric.
+Because they are numeric they may be used for quantitative comparisons.
+Much of R is designed to work with matrices of numbers.
+Be careful setting the parameter `as.numeric = TRUE`.
+It will do its best to convert the data to a numeric, even if this may not make sense.
+For example, we could convert the genotype to numeric.
+
+
+```{r}
+gt <- extract.gt(vcfR_test, element = 'GT', as.numeric = TRUE)
+gt
+```
+
+
+This operation did not throw an error, but the resulting matrix doesn't appear to make much sense.
+Only ask to convert numeric data to numeric data or you will probably get unexpected results.
+
+
+## Matrix parsing
+
+
+Some elements fromthe genotype section may require further parsing.
+In our example the haplotype quality (HQ) includes a quality for each haplotype and these values are comma delimited.
+
+
+```{r}
+gt <- extract.gt(vcfR_test, element = 'HQ')
+gt
+```
+
+
+Note that some elements contain data while in others it is missing.
+
+
+```{r}
+myHQ1 <- masplit(gt[,1:2], sort = 0)
+myHQ1
+```
+
+
+The function `masplit()` is fairly flexible in that you can choose which element to return and you can also sort the data prior to selection.
+These functions should help make VCF data accessible to the wealth of existing R functions and packages.
 
 
 
