@@ -7,7 +7,7 @@ output:
 ---
 
 
-vcfR is a package intended to help visualize, manipulate and quality filter data in VCF files.
+vcfR is a package intended to help visualize, manipulate and quality filter VCF data.
 
 
 ## Preliminaries
