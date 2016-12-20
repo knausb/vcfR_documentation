@@ -1,0 +1,28 @@
+---
+title: "vcfR objects"
+---
+
+
+The package vcfR uses two objects to contain data: vcfR and chromR.
+The chromR object will be covered in a later section.
+The vcfR object is intended to contain data read in from a variant call format (VCF) file.
+Once stored in this object the data may be manipulated in a number of ways.
+It may also be used as part of the more complicated chromR object.
+Here we provide an overview of the vcfR object.
+
+
+## Creation
+
+
+
+## Summarization
+
+
+
+## Subsetting
+
+
+## Queries
+
+
+

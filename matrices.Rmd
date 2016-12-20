@@ -1,0 +1,26 @@
+---
+title: "Extracting matrices from vcfR objects"
+---
+
+
+The data contained in VCF files presents a challenge to analysis in that the data are not strictly tabular and are large.
+Because the data are not strictly tabular we need to find ways to coerce the data into tables or matrices.
+Once the data is stored as a matrix it can be operated on by numerous R functions and packages.
+Because the data are large, this process needs to happen in a computationally efficent manner.
+Here we explore how vcfR facilitates these tasks.
+
+
+## extract.gt()
+
+
+
+## masplit()
+
+
+
+## Visualization
+
+
+
+
+

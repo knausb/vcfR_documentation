@@ -1,0 +1,30 @@
+---
+title: "chromR objects"
+---
+
+
+The chromR object was created to contain VCF, sequence and annotation data.
+Some of this is optional.
+By providing a perspective that integrates these data types it is hoped that the investigator may see new insights into their data.
+
+
+
+## create.chromR()
+
+
+
+## masker()
+
+
+
+## proc.chromR()
+
+
+## Summarization
+
+
+
+## Visualization
+
+
+
