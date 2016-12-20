@@ -14,15 +14,126 @@ Here we provide an overview of the vcfR object.
 ## Creation
 
 
+A first step in understanding the vcfR object is to create one so we can explore it.
+
+
+```{r}
+library(vcfR)
+vcf_file <- system.file("extdata", "pinf_sc50.vcf.gz", package = "pinfsc50")
+vcf <- read.vcfR( vcf_file, verbose = FALSE )
+```
+
+
+Here we start by loading the library vcfR to make its functions available to us.
+The function `system.file()` locates teh file 'pinf_sc50.vcf.gz' in the R package 'pinfsc50.'
+This library may be in different locations on different system, so this function helps us find our example file.
+In practice, you'll substitute this step by using the name of your data file and any relevant path information (if the file is not in your working directory).
+The function `read.vcfR()` reads in a VCF file and returns a vcfR object.
+Here we've called this vcfR object 'vcf.'
+We've also set 'verbose = FALSE' in order to improve the formating of this page.
+In practice, tou will typically leave 'verbose = TRUE' (it's default) so that progress is reported.
+Large files may require some patience to import, so progress provides important feedback during this step.
+
 
 ## Summarization
 
+
+Once we're imorted our VCF data, we'll want to explore our vcfR object to validate that its contents are what we expect.
+Two relevant tools are the object's `show` method as wellas the `head()` command.
+
+
+```{r}
+vcf
+```
+
+
+When we execute the object's name with no function we implement the object's `show` method.
+The `show` method for vcfR objects reports a summary of the object's contents.
+Here we see that we have 18 samples and 22,031 variants.
+We should know how many samples were in our experiment.
+This number should be compared to the value reported here.
+We may similarly have some information about how many variants should be in the file.
+That number can also be compared to the value reported here.
+
+
+```{r}
+head(vcf)
+```
+
+
+The `head()` function reports the head, or the top, of an object.
+A vcfR object consists of three slots: meta, fix and gt.
+Here we see the first few lines or rows of each slot.
+More information on VCF data can be found in the section [vcf_data](./vcf_data.html). 
+
+
+## Queries
+
+
+Once we have validated that our vcfR object contains the data we expect we may want to explore it further.
+
+
+```{r}
+head(is.polymorphic(vcf, na.omit = TRUE))
+head(is.biallelic(vcf))
+```
+
+
+VCF files report only variable, or polymorphic, positions.
+This means that all positions in your VCF file should have been polymorphic.
+The package vcfR allows you to manipulate VCF data.
+For example, you may want to omit certain samples.
+If the samples you omit were the only ones polymorphic for certain positions you may have rendered these positions unpolymorphic.
+Note that columns of the 'fix' slot contains summaries over all samples.
+If you remove samples then these summaries are no longer accurate, so make sure you keep this in mind when making these changes.
+This function allows you to query the positions to validate that they are polymorphic.
+
+
+The function `is.biallelic()` queries positions to determine if they contain no more than two alleles.
+Some downstream analyses can only handle biallelic loci.
+Some R object from other packages, or file formats for other softwares, can only handle biallelic loci.
+This funciton helps validate if loci contain more than two alleles and can help manage this situation if desired.
+
+
+```{r}
+vcf2 <- extract.indels(vcf)
+```
+
+
+Variants contained in VCF data may include single nucleotide polymorphisms (SNPs) as well as indels or more complicated features.
+Some analyses may require that only SNPs are used (e.g., when a mutation model is used).
+In these cases it may be useful to subset the data to only the SNPs.
+The function `extract.indels()` may be used for this.
+Note that it is different from the previous queries in that it subsets the vcfR object for you instead of just returning an index.
+This allows the rapid creation of vcfR object that should only contain SNPs.
 
 
 ## Subsetting
 
 
-## Queries
+The package vcfR provides the ability to manipulte VCF data.
+With this functionality comes the ability to create invalide VCF files.
+When done with forethought this provides valuable options.
+When not done with forethought this is likely to create problems.
+Please familiarize yourself with the VCF specification if your goal is to output valid VCF files.
+If your goal is to create different formats of your data then these tools may be helpful.
+
+
+```{r}
+vcf[,1:4]
+vcf[1:4,]
+vcf[is.biallelic(vcf),]
+```
+
+
+The square brackets (`[]`) have been implemented for vcfR objects in order to allow their manipulation appear similar to other R objects.
+The vcfR object's 'fix' and 'gt' slots consist of matrices.
+When columns are selected, by subsetting after the comma, only columns from the 'gt' slot are manipulated and the 'fix' slot is maintained.
+Note that the first column of the 'gt' slot contains the format information for all of the subsequent columns.
+This means you will typically want to include the first column.
+When selecting rows, by indexing before the comma, both the 'fix' and 'gt' slots are subset.
+Subsetting can be performed in typical R manners such as the numeric sequences provided above.
+They can also be combined with the query functions presented above to facilitate more complex operations.
 
 
 

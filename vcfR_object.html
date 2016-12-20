@@ -19,12 +19,11 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-1.1/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-1.1/highlight.js"></script>
 
 <style type="text/css">code{white-space: pre;}</style>
-<link rel="stylesheet"
-      href="site_libs/highlight/textmate.css"
-      type="text/css" />
-<script src="site_libs/highlight/highlight.js"></script>
 <style type="text/css">
   pre:not([class]) {
     background-color: white;
@@ -152,7 +151,6 @@ $(document).ready(function () {
 <div class="container-fluid main-container">
 
 <!-- tabsets -->
-<script src="site_libs/navigation-1.1/tabsets.js"></script>
 <script>
 $(document).ready(function () {
   window.buildTabsets("TOC");
@@ -263,15 +261,112 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 <p>The package vcfR uses two objects to contain data: vcfR and chromR. The chromR object will be covered in a later section. The vcfR object is intended to contain data read in from a variant call format (VCF) file. Once stored in this object the data may be manipulated in a number of ways. It may also be used as part of the more complicated chromR object. Here we provide an overview of the vcfR object.</p>
 <div id="creation" class="section level2">
 <h2>Creation</h2>
+<p>A first step in understanding the vcfR object is to create one so we can explore it.</p>
+<pre class="r"><code>library(vcfR)
+vcf_file &lt;- system.file(&quot;extdata&quot;, &quot;pinf_sc50.vcf.gz&quot;, package = &quot;pinfsc50&quot;)
+vcf &lt;- read.vcfR( vcf_file, verbose = FALSE )</code></pre>
+<p>Here we start by loading the library vcfR to make its functions available to us. The function <code>system.file()</code> locates teh file ‘pinf_sc50.vcf.gz’ in the R package ‘pinfsc50.’ This library may be in different locations on different system, so this function helps us find our example file. In practice, you’ll substitute this step by using the name of your data file and any relevant path information (if the file is not in your working directory). The function <code>read.vcfR()</code> reads in a VCF file and returns a vcfR object. Here we’ve called this vcfR object ‘vcf.’ We’ve also set ‘verbose = FALSE’ in order to improve the formating of this page. In practice, tou will typically leave ‘verbose = TRUE’ (it’s default) so that progress is reported. Large files may require some patience to import, so progress provides important feedback during this step.</p>
 </div>
 <div id="summarization" class="section level2">
 <h2>Summarization</h2>
-</div>
-<div id="subsetting" class="section level2">
-<h2>Subsetting</h2>
+<p>Once we’re imorted our VCF data, we’ll want to explore our vcfR object to validate that its contents are what we expect. Two relevant tools are the object’s <code>show</code> method as wellas the <code>head()</code> command.</p>
+<pre class="r"><code>vcf</code></pre>
+<pre><code>## ***** Object of Class vcfR *****
+## 18 samples
+## 22,031 variants
+## Object size: 20.9 Mb
+## 7.929 percent missing data
+## *****        *****         *****</code></pre>
+<p>When we execute the object’s name with no function we implement the object’s <code>show</code> method. The <code>show</code> method for vcfR objects reports a summary of the object’s contents. Here we see that we have 18 samples and 22,031 variants. We should know how many samples were in our experiment. This number should be compared to the value reported here. We may similarly have some information about how many variants should be in the file. That number can also be compared to the value reported here.</p>
+<pre class="r"><code>head(vcf)</code></pre>
+<pre><code>## [1] &quot;***** Object of class &#39;vcfR&#39; *****&quot;
+## [1] &quot;***** Meta section *****&quot;
+## [1] &quot;##fileformat=VCFv4.1&quot;
+## [1] &quot;##source=\&quot;GATK haplotype Caller, phased with beagle4\&quot;&quot;
+## [1] &quot;##FILTER=&lt;ID=LowQual,Description=\&quot;Low quality\&quot;&gt;&quot;
+## [1] &quot;##FORMAT=&lt;ID=AD,Number=.,Type=Integer,Description=\&quot;Allelic depths fo [Truncated]&quot;
+## [1] &quot;##FORMAT=&lt;ID=DP,Number=1,Type=Integer,Description=\&quot;Approximate read  [Truncated]&quot;
+## [1] &quot;##FORMAT=&lt;ID=GQ,Number=1,Type=Integer,Description=\&quot;Genotype Quality\&quot;&gt;&quot;
+## [1] &quot;First 6 rows.&quot;
+## [1] 
+## [1] &quot;***** Fixed section *****&quot;
+##      CHROM              POS   ID REF  ALT QUAL      FILTER
+## [1,] &quot;Supercontig_1.50&quot; &quot;41&quot;  NA &quot;AT&quot; &quot;A&quot; &quot;4784.43&quot; NA    
+## [2,] &quot;Supercontig_1.50&quot; &quot;136&quot; NA &quot;A&quot;  &quot;C&quot; &quot;550.27&quot;  NA    
+## [3,] &quot;Supercontig_1.50&quot; &quot;254&quot; NA &quot;T&quot;  &quot;G&quot; &quot;774.44&quot;  NA    
+## [4,] &quot;Supercontig_1.50&quot; &quot;275&quot; NA &quot;A&quot;  &quot;G&quot; &quot;714.53&quot;  NA    
+## [5,] &quot;Supercontig_1.50&quot; &quot;386&quot; NA &quot;T&quot;  &quot;G&quot; &quot;876.55&quot;  NA    
+## [6,] &quot;Supercontig_1.50&quot; &quot;462&quot; NA &quot;T&quot;  &quot;G&quot; &quot;1301.07&quot; NA    
+## [1] 
+## [1] &quot;***** Genotype section *****&quot;
+##      FORMAT           BL2009P4_us23             
+## [1,] &quot;GT:AD:DP:GQ:PL&quot; &quot;1|1:0,7:7:21:283,21,0&quot;   
+## [2,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:12,0:12:36:0,36,427&quot; 
+## [3,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:27,0:27:81:0,81,1117&quot;
+## [4,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:29,0:29:87:0,87,1243&quot;
+## [5,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:26,0:26:78:0,78,1034&quot;
+## [6,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:23,0:23:69:0,69,958&quot; 
+##      DDR7602                     IN2009T1_us22              
+## [1,] &quot;1|1:0,6:6:18:243,18,0&quot;     &quot;1|1:0,8:8:24:324,24,0&quot;    
+## [2,] &quot;0|0:20,0:20:60:0,60,819&quot;   &quot;0|0:16,0:16:48:0,48,650&quot;  
+## [3,] &quot;0|0:26,0:26:78:0,78,1077&quot;  &quot;0|0:23,0:23:69:0,69,946&quot;  
+## [4,] &quot;0|0:27,0:27:81:0,81,1158&quot;  &quot;0|0:32,0:32:96:0,96,1299&quot; 
+## [5,] &quot;0|0:30,0:30:90:0,90,1242&quot;  &quot;0|0:41,0:41:99:0,122,1613&quot;
+## [6,] &quot;0|0:36,0:36:99:0,108,1556&quot; &quot;0|0:35,0:35:99:0,105,1467&quot;
+##      LBUS5                       NL07434                    
+## [1,] &quot;1|1:0,6:6:18:243,18,0&quot;     &quot;1|1:0,12:12:36:486,36,0&quot;  
+## [2,] &quot;0|0:20,0:20:60:0,60,819&quot;   &quot;0|0:28,0:28:84:0,84,948&quot;  
+## [3,] &quot;0|0:26,0:26:78:0,78,1077&quot;  &quot;0|1:19,20:39:99:565,0,559&quot;
+## [4,] &quot;0|0:27,0:27:81:0,81,1158&quot;  &quot;0|1:19,19:38:99:523,0,535&quot;
+## [5,] &quot;0|0:30,0:30:90:0,90,1242&quot;  &quot;0|1:22,22:44:99:593,0,651&quot;
+## [6,] &quot;0|0:36,0:36:99:0,108,1556&quot; &quot;0|1:29,25:54:99:723,0,876&quot;
+## [1] &quot;First 6 columns only.&quot;
+## [1] 
+## [1] &quot;Unique GT formats:&quot;
+## [1] &quot;GT:AD:DP:GQ:PL&quot;
+## [1]</code></pre>
+<p>The <code>head()</code> function reports the head, or the top, of an object. A vcfR object consists of three slots: meta, fix and gt. Here we see the first few lines or rows of each slot. More information on VCF data can be found in the section <a href="./vcf_data.html">vcf_data</a>.</p>
 </div>
 <div id="queries" class="section level2">
 <h2>Queries</h2>
+<p>Once we have validated that our vcfR object contains the data we expect we may want to explore it further.</p>
+<pre class="r"><code>head(is.polymorphic(vcf, na.omit = TRUE))</code></pre>
+<pre><code>##  Supercontig_1.50_41 Supercontig_1.50_136 Supercontig_1.50_254 
+##                FALSE                 TRUE                 TRUE 
+## Supercontig_1.50_275 Supercontig_1.50_386 Supercontig_1.50_462 
+##                 TRUE                 TRUE                 TRUE</code></pre>
+<pre class="r"><code>head(is.biallelic(vcf))</code></pre>
+<pre><code>## [1] TRUE TRUE TRUE TRUE TRUE TRUE</code></pre>
+<p>VCF files report only variable, or polymorphic, positions. This means that all positions in your VCF file should have been polymorphic. The package vcfR allows you to manipulate VCF data. For example, you may want to omit certain samples. If the samples you omit were the only ones polymorphic for certain positions you may have rendered these positions unpolymorphic. Note that columns of the ‘fix’ slot contains summaries over all samples. If you remove samples then these summaries are no longer accurate, so make sure you keep this in mind when making these changes. This function allows you to query the positions to validate that they are polymorphic.</p>
+<p>The function <code>is.biallelic()</code> queries positions to determine if they contain no more than two alleles. Some downstream analyses can only handle biallelic loci. Some R object from other packages, or file formats for other softwares, can only handle biallelic loci. This funciton helps validate if loci contain more than two alleles and can help manage this situation if desired.</p>
+<pre class="r"><code>vcf2 &lt;- extract.indels(vcf)</code></pre>
+<p>Variants contained in VCF data may include single nucleotide polymorphisms (SNPs) as well as indels or more complicated features. Some analyses may require that only SNPs are used (e.g., when a mutation model is used). In these cases it may be useful to subset the data to only the SNPs. The function <code>extract.indels()</code> may be used for this. Note that it is different from the previous queries in that it subsets the vcfR object for you instead of just returning an index. This allows the rapid creation of vcfR object that should only contain SNPs.</p>
+</div>
+<div id="subsetting" class="section level2">
+<h2>Subsetting</h2>
+<p>The package vcfR provides the ability to manipulte VCF data. With this functionality comes the ability to create invalide VCF files. When done with forethought this provides valuable options. When not done with forethought this is likely to create problems. Please familiarize yourself with the VCF specification if your goal is to output valid VCF files. If your goal is to create different formats of your data then these tools may be helpful.</p>
+<pre class="r"><code>vcf[,1:4]</code></pre>
+<pre><code>## ***** Object of Class vcfR *****
+## 3 samples
+## 22,031 variants
+## Object size: 11.2 Mb
+## 2.875 percent missing data
+## *****        *****         *****</code></pre>
+<pre class="r"><code>vcf[1:4,]</code></pre>
+<pre><code>## ***** Object of Class vcfR *****
+## 18 samples
+## 4 variants
+## Object size: 0 Mb
+## 6.944 percent missing data
+## *****        *****         *****</code></pre>
+<pre class="r"><code>vcf[is.biallelic(vcf),]</code></pre>
+<pre><code>## ***** Object of Class vcfR *****
+## 18 samples
+## 21,719 variants
+## Object size: 20.3 Mb
+## 7.991 percent missing data
+## *****        *****         *****</code></pre>
+<p>The square brackets (<code>[]</code>) have been implemented for vcfR objects in order to allow their manipulation appear similar to other R objects. The vcfR object’s ‘fix’ and ‘gt’ slots consist of matrices. When columns are selected, by subsetting after the comma, only columns from the ‘gt’ slot are manipulated and the ‘fix’ slot is maintained. Note that the first column of the ‘gt’ slot contains the format information for all of the subsequent columns. This means you will typically want to include the first column. When selecting rows, by indexing before the comma, both the ‘fix’ and ‘gt’ slots are subset. Subsetting can be performed in typical R manners such as the numeric sequences provided above. They can also be combined with the query functions presented above to facilitate more complex operations.</p>
 </div>
 
 <center>
@@ -287,8 +382,11 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 <script>
 
 // add bootstrap table styles to pandoc tables
-$(document).ready(function () {
+function bootstrapStylePandocTables() {
   $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
 });
 
 
