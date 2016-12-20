@@ -7,10 +7,20 @@ Packages are collections of code that extend functionality to the basic R langua
 Because of this, users will need a familiartiy with the R language before they will be successful with vcfR.
 Here I've attempted to aggregate some links to help new R users familiarize themselves with the language.
 
-* [Introductory Statistics with R](http://www.springer.com/us/book/9780387790534) by Peter Dalgaard. This is part of how I learned R. One thing I like about it is that it is relatively short, so it only covers the basics and allows you to subsequently pusue your focus. 
 
-* [Tutorials for learning R](https://www.r-bloggers.com/how-to-learn-r-2/) from the R-bloggers. The R-bloggers are a good source for all sorts of R information. Here they've put togetehr a list of links.
+* [Introductory Statistics with R](http://www.springer.com/us/book/9780387790534) by Peter Dalgaard.
+This is part of how I learned R. One thing I like about it is that it is relatively short, so it only covers the basics and allows you to subsequently pusue your focus.
+
+
+* [Tutorials for learning R](https://www.r-bloggers.com/how-to-learn-r-2/) from the R-bloggers.
+The R-bloggers are a good source for all sorts of R information.
+Here they've put together a list of links.
+
 
 * [swirl](http://swirlstats.com/) a colleague recommended this.
 
-* [The R Book](http://www.wiley.com/WileyCDA/WileyTitle/productCd-0470973927.html) by Michael J. Crawley. I don't have a lot of personal experience with this book, but it appears quite popular. This is more of an attempt to be comprehensive than the Dalgaard book above.
+* [The R Book](http://www.wiley.com/WileyCDA/WileyTitle/productCd-0470973927.html) by Michael J. Crawley.
+I don't have a lot of personal experience with this book, but it appears quite popular. 
+This is an attempt to be more comprehensive than the Dalgaard book above.
+
+
