@@ -359,7 +359,7 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 </div>
 
 
-<p>vcfR is a package intended to help visualize, manipulate and quality filter data in VCF files.</p>
+<p>vcfR is a package intended to help visualize, manipulate and quality filter VCF data.</p>
 <div id="preliminaries" class="section level2">
 <h2>Preliminaries</h2>
 <p>Input files frequently present challenges to analysis. A common problem I encounter is that chromosome names are not standardized among VCF, FASTA and GFF files. This presents work for the analyst. I suggest reading these files into R, syncronizing the names in R and then proceeding with downstream analyses. The other option I see is to create a set of files where the data is identical to the initial files, but the names have been syncronized. This later choice results in the creation of files which are largely redundant, something I feel is unnecessary.</p>
@@ -420,15 +420,15 @@ plot(chrom)</code></pre>
 <p>The function <code>var.win()</code> performs windowing analyses on the data. Currently it summarizes variant count per window as well as G/C content per window.</p>
 <pre class="r"><code>chrom &lt;- proc.chromR(chrom, verbose=TRUE)</code></pre>
 <pre><code>## Nucleotide regions complete.</code></pre>
-<pre><code>##   elapsed time:  0.621</code></pre>
+<pre><code>##   elapsed time:  0.622</code></pre>
 <pre><code>## N regions complete.</code></pre>
-<pre><code>##   elapsed time:  0.259</code></pre>
+<pre><code>##   elapsed time:  0.261</code></pre>
 <pre><code>## Population summary complete.</code></pre>
-<pre><code>##   elapsed time:  0.158</code></pre>
+<pre><code>##   elapsed time:  0.155</code></pre>
 <pre><code>## window_init complete.</code></pre>
-<pre><code>##   elapsed time:  0</code></pre>
+<pre><code>##   elapsed time:  0.001</code></pre>
 <pre><code>## windowize_fasta complete.</code></pre>
-<pre><code>##   elapsed time:  0.161</code></pre>
+<pre><code>##   elapsed time:  0.163</code></pre>
 <pre><code>## windowize_annotations complete.</code></pre>
 <pre><code>##   elapsed time:  0.011</code></pre>
 <pre><code>## windowize_variants complete.</code></pre>
