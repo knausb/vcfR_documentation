@@ -19,8 +19,13 @@ Here they've put together a list of links.
 
 * [swirl](http://swirlstats.com/) a colleague recommended this.
 
+
 * [The R Book](http://www.wiley.com/WileyCDA/WileyTitle/productCd-0470973927.html) by Michael J. Crawley.
 I don't have a lot of personal experience with this book, but it appears quite popular. 
 This is an attempt to be more comprehensive than the Dalgaard book above.
+
+
+* [R for Data Science](http://r4ds.had.co.nz/)
+An introduction to R, data science and 'tidy data.'
 
 

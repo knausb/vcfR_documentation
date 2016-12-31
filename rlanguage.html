@@ -19,11 +19,12 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
-<script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-1.1/textmate.css" rel="stylesheet" />
-<script src="site_libs/highlightjs-1.1/highlight.js"></script>
 
 <style type="text/css">code{white-space: pre;}</style>
+<link rel="stylesheet"
+      href="site_libs/highlight/textmate.css"
+      type="text/css" />
+<script src="site_libs/highlight/highlight.js"></script>
 <style type="text/css">
   pre:not([class]) {
     background-color: white;
@@ -151,6 +152,7 @@ $(document).ready(function () {
 <div class="container-fluid main-container">
 
 <!-- tabsets -->
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
 <script>
 $(document).ready(function () {
   window.buildTabsets("TOC");
@@ -206,6 +208,21 @@ $(document).ready(function () {
     </li>
     <li>
       <a href="chromR_object.html">chromR objects</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    GBS class
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="gbs_class.html">GBS class</a>
+    </li>
+    <li>
+      <a href="vcf_data.html">VCF data</a>
     </li>
   </ul>
 </li>
@@ -267,6 +284,7 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 <li><p><a href="https://www.r-bloggers.com/how-to-learn-r-2/">Tutorials for learning R</a> from the R-bloggers. The R-bloggers are a good source for all sorts of R information. Here they’ve put together a list of links.</p></li>
 <li><p><a href="http://swirlstats.com/">swirl</a> a colleague recommended this.</p></li>
 <li><p><a href="http://www.wiley.com/WileyCDA/WileyTitle/productCd-0470973927.html">The R Book</a> by Michael J. Crawley. I don’t have a lot of personal experience with this book, but it appears quite popular. This is an attempt to be more comprehensive than the Dalgaard book above.</p></li>
+<li><p><a href="http://r4ds.had.co.nz/">R for Data Science</a> An introduction to R, data science and ‘tidy data.’</p></li>
 </ul>
 
 <center>
@@ -282,11 +300,8 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 <script>
 
 // add bootstrap table styles to pandoc tables
-function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
-}
 $(document).ready(function () {
-  bootstrapStylePandocTables();
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
 });
 
 

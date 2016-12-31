@@ -21,6 +21,12 @@ navbar:
           href: "tidy_vcfR.html"
         - text: "chromR objects"
           href: "chromR_object.html"
+    - text: "GBS class"
+      menu:
+        - text: "GBS class"
+          href: "gbs_class.html"
+        - text: "VCF data"
+          href: "vcf_data.html"
     - text: "FAQ"
       menu:
         - text: "Subset to 1 chromosome"
