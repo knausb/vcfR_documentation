@@ -11,7 +11,7 @@
 
 
 
-<title>Creating DNAbin objects</title>
+<title>Apply</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -276,16 +276,94 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 
 
 
-<h1 class="title toc-ignore">Creating DNAbin objects</h1>
+<h1 class="title toc-ignore">Apply</h1>
 
 </div>
 
 
-<p>Within vcfR we use a vcfR object to contain our data. Once we have performed some manipulations we may want to convert the data to some other format for further analysis. Within vcfR we have several options.</p>
-<ul>
-<li>Output to VCF</li>
-<li>Convert to genind</li>
-</ul>
+<p>One of the weaknesses of R is that loops can be relatively slow to execute. The apply family of functions attempts to address this. Use <code>?apply</code> or <code>?lapply</code> for examples of other flavors of the apply command.</p>
+<hr />
+<div id="use-of-apply" class="section level2">
+<h2>Use of apply()</h2>
+<p>Create a test matrix.</p>
+<pre class="r"><code>tmp &lt;- matrix(rep(1:3, times=3), ncol=3)
+tmp</code></pre>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]    1    1    1
+## [2,]    2    2    2
+## [3,]    3    3    3</code></pre>
+<p>‘Apply’ the function ‘sum’ over rows.</p>
+<pre class="r"><code>apply(tmp, MARGIN=1, sum)</code></pre>
+<pre><code>## [1] 3 6 9</code></pre>
+<p>‘Apply’ the function ‘sum’ over rows.</p>
+<pre class="r"><code>apply(tmp, MARGIN=2, sum)</code></pre>
+<pre><code>## [1] 6 6 6</code></pre>
+<hr />
+</div>
+<div id="use-of-custom-functions" class="section level2">
+<h2>Use of custom functions</h2>
+<p>If the operation we wish to apply to a data structure exists as an R function, we can call it from the apply command. We can also define our own functions to apply over a data structure.</p>
+<p>In practice, if we wanted to get averages over a matrix, there are existing functions that should be used. Here we’ll create our own as an example.</p>
+<pre class="r"><code>myMean &lt;- function(x){
+  sum(x)/length(x)
+}
+
+apply(tmp, MARGIN=1, myMean)</code></pre>
+<pre><code>## [1] 1 2 3</code></pre>
+<p>Through defining our own functions we can extract all sorts of summaries from data in a fairly efficient manner.</p>
+<hr />
+</div>
+<div id="homework" class="section level2">
+<h2>Homework</h2>
+<p>A large part of quality control of data sets is finding and mitigating missing data. Here I’ll create a larger toy data set and add some missing data. As homework, create a custom function that will help you identify missing data.</p>
+<pre class="r"><code>toy &lt;- matrix(ncol=10, nrow=12)
+set.seed(999)
+toy[] &lt;- rnorm(length(toy))
+
+colnames(toy) &lt;- paste(&quot;sample&quot;, 1:ncol(toy), sep=&quot;_&quot;)
+rownames(toy) &lt;- paste(&quot;variant&quot;, 1:nrow(toy), sep=&quot;_&quot;)
+
+set.seed(999)
+is.na(toy[round(runif(n=30, min=1, max=length(toy)))]) &lt;- TRUE
+toy</code></pre>
+<pre><code>##              sample_1   sample_2   sample_3     sample_4    sample_5
+## variant_1  -0.2817402  0.9387494 -1.1252685 -0.370527471  0.58226648
+## variant_2  -1.3125596         NA  0.6422657  0.522867793 -0.03472639
+## variant_3          NA  0.9576504 -1.1067376  0.517805536 -0.11666415
+## variant_4   0.2700705         NA         NA -1.402510873 -0.64498209
+## variant_5  -0.2773064         NA -1.5540951 -0.485636726          NA
+## variant_6  -0.5660237  0.1006576         NA  0.008498139  0.36609447
+## variant_7  -1.8786583  0.9013448  2.3826642 -1.282113287          NA
+## variant_8          NA -2.0743571  0.6012761           NA  0.28261247
+## variant_9  -0.9677497 -1.2285633  0.1793613  0.300665411          NA
+## variant_10 -1.1210094  0.6430443  1.0805315  0.276478845 -1.27921590
+## variant_11         NA         NA         NA -2.050877659  0.43536881
+## variant_12  0.1339774  0.2940356 -2.1137370  0.014190211 -0.56550098
+##              sample_6    sample_7    sample_8   sample_9  sample_10
+## variant_1  -0.9233114  0.94970110 -1.20409383         NA -1.5100543
+## variant_2   1.1649540          NA -0.37684776         NA -0.6772986
+## variant_3   1.0420687  0.97400041  1.36364858 -0.2417764 -0.2979716
+## variant_4          NA  0.06229143 -0.25288275         NA -1.5191194
+## variant_5          NA  0.53842205          NA -1.6509552 -0.9118353
+## variant_6  -1.1469577 -2.06482325  0.43714914  0.4782007 -0.8358807
+## variant_7  -1.4081795          NA          NA -0.8052824 -0.2171495
+## variant_8  -0.2823287 -0.16022669  0.02768521         NA -1.0710323
+## variant_9  -0.4177700 -0.64292273          NA         NA  0.9450480
+## variant_10         NA  0.98529855  1.28372914 -2.5954909  1.1279968
+## variant_11 -0.1062858 -1.22857333 -1.12974161  0.2901482 -1.2786429
+## variant_12         NA  0.08522467  1.04665773  1.3836599  0.4576313</code></pre>
+<p>Now we create a custom function to process our matrix.</p>
+<pre class="r"><code>my_fun &lt;- function(x){
+  length(x)
+}</code></pre>
+<p>Lastly, we use apply to iterate the function over the matrix.</p>
+<pre class="r"><code>apply(toy, MARGIN=1, my_fun)</code></pre>
+<pre><code>##  variant_1  variant_2  variant_3  variant_4  variant_5  variant_6 
+##         10         10         10         10         10         10 
+##  variant_7  variant_8  variant_9 variant_10 variant_11 variant_12 
+##         10         10         10         10         10         10</code></pre>
+<p>Can you modify the function <code>my_fun()</code> so that it counts missing data in each sample and variant?</p>
+</div>
 
 <center>
 <hr class="style1">

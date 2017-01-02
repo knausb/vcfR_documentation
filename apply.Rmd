@@ -1,0 +1,108 @@
+---
+title: "Apply"
+output:
+  html_document
+---
+
+
+One of the weaknesses of R is that loops can be relatively slow to execute.
+The apply family of functions attempts to address this.
+Use `?apply` or `?lapply` for examples of other flavors of the apply command.
+
+*****
+
+## Use of apply()
+
+Create a test matrix.
+
+```{r}
+tmp <- matrix(rep(1:3, times=3), ncol=3)
+tmp
+```
+
+
+'Apply' the function 'sum' over rows.
+
+```{r}
+apply(tmp, MARGIN=1, sum)
+```
+
+
+'Apply' the function 'sum' over rows.
+
+```{r}
+apply(tmp, MARGIN=2, sum)
+```
+
+
+*****
+
+## Use of custom functions
+
+
+If the operation we wish to apply to a data structure exists as an R function, we can call it from the apply command.
+We can also define our own functions to apply over a data structure.
+
+
+In practice, if we wanted to get averages over a matrix, there are existing functions that should be used.
+Here we'll create our own as an example.
+
+
+```{r}
+myMean <- function(x){
+  sum(x)/length(x)
+}
+
+apply(tmp, MARGIN=1, myMean)
+
+```
+
+
+Through defining our own functions we can extract all sorts of summaries from data in a fairly efficient manner.
+
+
+*****
+
+## Homework
+
+
+A large part of quality control of data sets is finding and mitigating missing data.
+Here I'll create a larger toy data set and add some missing data.
+As homework, create a custom function that will help you identify missing data.
+
+
+```{r}
+toy <- matrix(ncol=10, nrow=12)
+set.seed(999)
+toy[] <- rnorm(length(toy))
+
+colnames(toy) <- paste("sample", 1:ncol(toy), sep="_")
+rownames(toy) <- paste("variant", 1:nrow(toy), sep="_")
+
+set.seed(999)
+is.na(toy[round(runif(n=30, min=1, max=length(toy)))]) <- TRUE
+toy
+```
+
+
+Now we create a custom function to process our matrix.
+
+
+```{r}
+my_fun <- function(x){
+  length(x)
+}
+```
+
+
+Lastly, we use apply to iterate the function over the matrix.
+
+
+```{r}
+apply(toy, MARGIN=1, my_fun)
+```
+
+
+Can you modify the function `my_fun()` so that it counts missing data in each sample and variant?
+
+

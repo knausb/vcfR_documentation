@@ -27,6 +27,8 @@ navbar:
           href: "gbs_class.html"
         - text: "VCF data"
           href: "vcf_data.html"
+        - text: "Apply"
+          href: "apply.html"
     - text: "FAQ"
       menu:
         - text: "Subset to 1 chromosome"
