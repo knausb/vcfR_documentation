@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Brian J. Knaus" />
+
+
+<title>Quality filtering</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-1.1/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-1.1/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 61px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+
+.section h2 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+.section h3 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+.section h4 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+.section h5 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+.section h6 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">vcfR</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="rlanguage.html">R language</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Tutorial
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="quick_intro.html">A quick introduction</a>
+    </li>
+    <li>
+      <a href="vcf_data.html">VCF data</a>
+    </li>
+    <li>
+      <a href="vcfR_object.html">vcfR objects</a>
+    </li>
+    <li>
+      <a href="matrices.html">Extracting matrices</a>
+    </li>
+    <li>
+      <a href="tidy_vcfR.html">Tidy vcfR</a>
+    </li>
+    <li>
+      <a href="chromR_object.html">chromR objects</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    GBS class
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="gbs_class.html">GBS class</a>
+    </li>
+    <li>
+      <a href="vcf_data.html">VCF data</a>
+    </li>
+    <li>
+      <a href="quality_filtering.html">Quality filtering</a>
+    </li>
+    <li>
+      <a href="apply.html">Apply</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    FAQ
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="subset_data_to_1chrom.html">Subset to 1 chromosome</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Export
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="export.html">Overview</a>
+    </li>
+    <li>
+      <a href="dnabin.html">DNAbin</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+<p>
+<center>
+<h3>vcfR documentation</h3>
+by
+<br>
+Brian J. Knaus and Niklaus J. Gr&uuml;nwald
+</center>
+</p>
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Quality filtering</h1>
+<h4 class="author"><em>Brian J. Knaus</em></h4>
+
+</div>
+
+
+<p>In a previous session we filtered our GBS data based on missingness. First, samples with a high degree of missingness were identified and removed from the data set. Second, variants that had a high degree of missingness were identified and removed. Here we identify variants with unusual coverage and remove them.</p>
+<p>This is adapted from a package vignette that uses genomic data. Here we use GBS data.</p>
+<pre class="r"><code>browseVignettes(&#39;vcfR&#39;)
+vignette(package=&quot;vcfR&quot;, topic = &quot;sequence_coverage&quot;)</code></pre>
+<div id="data-import" class="section level2">
+<h2>Data import</h2>
+<pre class="r"><code>library(vcfR)
+vcf &lt;- read.vcfR(&#39;TASSEL_GBS0077_filtered.vcf.gz&#39;)</code></pre>
+<pre class="r"><code>vcf</code></pre>
+<pre><code>## ***** Object of Class vcfR *****
+## 41 samples
+## 44,321 variants
+## Object size: 23.8 Mb
+## 1.13 percent missing data
+## *****        *****         *****</code></pre>
+<pre class="r"><code>head(vcf)</code></pre>
+<pre><code>## [1] &quot;***** Object of class &#39;vcfR&#39; *****&quot;
+## [1] &quot;***** Meta section *****&quot;
+## [1] &quot;##fileformat=VCFv4.0&quot;
+## [1] &quot;##FORMAT=&lt;ID=GT,Number=1,Type=String,Description=\&quot;Genotype\&quot;&gt;&quot;
+## [1] &quot;##FORMAT=&lt;ID=AD,Number=.,Type=Integer,Description=\&quot;Allelic depths fo [Truncated]&quot;
+## [1] &quot;##FORMAT=&lt;ID=DP,Number=1,Type=Integer,Description=\&quot;Read Depth (only  [Truncated]&quot;
+## [1] &quot;##FORMAT=&lt;ID=GQ,Number=1,Type=Float,Description=\&quot;Genotype Quality\&quot;&gt;&quot;
+## [1] &quot;##FORMAT=&lt;ID=PL,Number=3,Type=Float,Description=\&quot;Normalized, Phred-s [Truncated]&quot;
+## [1] &quot;First 6 rows.&quot;
+## [1] 
+## [1] &quot;***** Fixed section *****&quot;
+##      CHROM POS    ID        REF ALT QUAL FILTER
+## [1,] &quot;1&quot;   &quot;4509&quot; &quot;S1_4509&quot; &quot;T&quot; &quot;C&quot; &quot;20&quot; &quot;PASS&quot;
+## [2,] &quot;1&quot;   &quot;4657&quot; &quot;S1_4657&quot; &quot;G&quot; &quot;A&quot; &quot;20&quot; &quot;PASS&quot;
+## [3,] &quot;1&quot;   &quot;5647&quot; &quot;S1_5647&quot; &quot;C&quot; &quot;G&quot; &quot;20&quot; &quot;PASS&quot;
+## [4,] &quot;1&quot;   &quot;5714&quot; &quot;S1_5714&quot; &quot;G&quot; &quot;A&quot; &quot;20&quot; &quot;PASS&quot;
+## [5,] &quot;1&quot;   &quot;6122&quot; &quot;S1_6122&quot; &quot;T&quot; &quot;G&quot; &quot;20&quot; &quot;PASS&quot;
+## [6,] &quot;1&quot;   &quot;6234&quot; &quot;S1_6234&quot; &quot;C&quot; &quot;T&quot; &quot;20&quot; &quot;PASS&quot;
+## [1] 
+## [1] &quot;***** Genotype section *****&quot;
+##      FORMAT           1                         
+## [1,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0/0:5,0:5:96:0,15,180&quot;   
+## [2,] &quot;GT:AD:DP:GQ:PL&quot; &quot;1/1:0,1:1:66:36,3,0&quot;     
+## [3,] &quot;GT:AD:DP:GQ:PL&quot; &quot;1/1:0,5:5:96:180,15,0&quot;   
+## [4,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0/0:3,0:3:88:0,9,108&quot;    
+## [5,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0/1:3,2:5:99:57,0,93&quot;    
+## [6,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0/1:7,6:13:100:177,0,213&quot;
+##      10                         13                     
+## [1,] &quot;1/1:0,10:10:99:255,30,0&quot;  &quot;0/0:9,0:9:99:0,27,255&quot;
+## [2,] &quot;0/0:4,0:4:94:0,12,144&quot;    &quot;0/0:1,0:1:66:0,3,36&quot;  
+## [3,] &quot;0/0:8,0:8:99:0,24,255&quot;    NA                     
+## [4,] &quot;0/0:7,0:7:99:0,21,252&quot;    &quot;0/0:2,0:2:79:0,6,72&quot;  
+## [5,] &quot;1/1:0,31:31:99:255,93,0&quot;  &quot;0/0:6,0:6:98:0,18,216&quot;
+## [6,] &quot;1/1:0,50:50:99:255,150,0&quot; &quot;0/0:9,0:9:99:0,27,255&quot;
+##      18                         2                         
+## [1,] &quot;0/0:5,0:5:96:0,15,180&quot;    &quot;1/1:0,8:8:99:255,24,0&quot;   
+## [2,] &quot;1/1:0,7:7:99:252,21,0&quot;    &quot;0/0:5,0:5:96:0,15,180&quot;   
+## [3,] &quot;1/1:0,3:3:88:108,9,0&quot;     &quot;0/0:3,0:3:88:0,9,108&quot;    
+## [4,] &quot;1/1:0,2:2:79:72,6,0&quot;      &quot;0/0:8,0:8:99:0,24,255&quot;   
+## [5,] &quot;0/0:28,0:28:99:0,84,255&quot;  &quot;1/1:0,19:19:99:255,57,0&quot; 
+## [6,] &quot;0/0:34,0:34:99:0,102,255&quot; &quot;1/1:0,39:39:99:255,117,0&quot;
+## [1] &quot;First 6 columns only.&quot;
+## [1] 
+## [1] &quot;Unique GT formats:&quot;
+## [1] &quot;GT:AD:DP:GQ:PL&quot;
+## [1]</code></pre>
+</div>
+<div id="extract-depth-data-dp" class="section level2">
+<h2>Extract Depth Data (DP)</h2>
+<pre class="r"><code>dp &lt;- extract.gt(vcf, element = &quot;DP&quot;, as.numeric=TRUE)</code></pre>
+<pre class="r"><code>boxplot(dp, col=2:8, las=3)</code></pre>
+<p><img src="quality_filtering_files/figure-html/unnamed-chunk-5-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>Once we have extracted the quantile information we can use apply and quantile to build intervals for what we may consider acceptable coverage.</p>
+<pre class="r"><code>quants &lt;- apply(dp, MARGIN=2, quantile, probs=c(0.1, 0.8), na.rm=TRUE)
+#quants &lt;- apply(dp, MARGIN=2, quantile, probs=c(0.34, 0.68), na.rm=TRUE)
+quants[,1:17]</code></pre>
+<pre><code>##      1 10 13 18  2 20 22 31 34 37 39  4 40 43 45 46 48
+## 10%  2  7  2  3  6  4  6  4  3  3  6  4  5  3  3  6  2
+## 80% 24 63 22 35 50 44 55 41 36 37 54 38 48 32 31 60 25</code></pre>
+<p>We can now use these thresholds to censor data outside this threshold.</p>
+<pre class="r"><code>dp2 &lt;- sweep(dp, MARGIN=2, FUN = &quot;-&quot;, quants[1,])
+dp[dp2 &lt; 0] &lt;- NA
+
+dp2 &lt;- sweep(dp, MARGIN=2, FUN = &quot;-&quot;, quants[2,])
+dp[dp2 &gt; 0] &lt;- NA
+
+dp[dp &lt; 4] &lt;- NA</code></pre>
+<p>Update the vcfR object with the censored data.</p>
+<pre class="r"><code>vcf@gt[,-1][ is.na(dp) == TRUE ] &lt;- NA</code></pre>
+<p>We’ll want to see how this has affected the missingness of our vcfR object.</p>
+<pre class="r"><code>vcf</code></pre>
+<pre><code>## ***** Object of Class vcfR *****
+## 41 samples
+## 44,321 variants
+## Object size: 22.7 Mb
+## 33.43 percent missing data
+## *****        *****         *****</code></pre>
+<p>We’ll want to mitigate variants with a high degree of missingness.</p>
+<pre class="r"><code>dp &lt;- extract.gt(vcf, element = &quot;DP&quot;, as.numeric=TRUE)
+
+miss &lt;- apply(dp, MARGIN=1, function(x){sum(is.na(x))})
+miss &lt;- miss/ncol(dp)</code></pre>
+<p>Plot a histogram.</p>
+<pre class="r"><code>hist(miss, col=8, breaks=seq(0,1,by=0.02))</code></pre>
+<p><img src="quality_filtering_files/figure-html/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Omit variants with a high degree of missingness.</p>
+<pre class="r"><code>#vcf &lt;- vcf[miss &lt; 0.05,]
+vcf &lt;- vcf[miss &lt; 0.1,]
+vcf</code></pre>
+<pre><code>## ***** Object of Class vcfR *****
+## 41 samples
+## 16,288 variants
+## Object size: 8.6 Mb
+## 3.901 percent missing data
+## *****        *****         *****</code></pre>
+<pre class="r"><code>dp &lt;- extract.gt(vcf, element = &quot;DP&quot;, as.numeric=TRUE)
+heatmap.bp(dp[1:1000,], rlabels = FALSE)</code></pre>
+<p><img src="quality_filtering_files/figure-html/unnamed-chunk-13-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>boxplot(dp, col=2:8, las=3)</code></pre>
+<p><img src="quality_filtering_files/figure-html/unnamed-chunk-14-1.png" width="1152" style="display: block; margin: auto;" /></p>
+</div>
+<div id="output-to-file" class="section level2">
+<h2>Output to file</h2>
+<pre class="r"><code>write.vcf(tas, &#39;TASSEL_GBS0077_dp_filtered.vcf.gz&#39;)</code></pre>
+</div>
+
+<center>
+<hr class="style1">
+<p>Copyright &copy; 2017 Brian J. Knaus. All rights reserved.</p>
+<p>USDA Agricultural Research Service, Horticultural Crops Research Lab.</p>
+</center>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

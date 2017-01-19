@@ -1,0 +1,145 @@
+---
+title: "Quality filtering"
+author: "Brian J. Knaus"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+
+In a previous session we filtered our GBS data based on missingness.
+First, samples with a high degree of missingness were identified and removed from the data set.
+Second, variants that had a high degree of missingness were identified and removed.
+Here we identify variants with unusual coverage and remove them.
+
+
+This is adapted from a package vignette that uses genomic data.
+Here we use GBS data.
+
+
+```{r, eval=FALSE}
+browseVignettes('vcfR')
+vignette(package="vcfR", topic = "sequence_coverage")
+```
+
+
+## Data import
+
+
+```{r, results='hide'}
+library(vcfR)
+vcf <- read.vcfR('TASSEL_GBS0077_filtered.vcf.gz')
+```
+
+
+```{r}
+vcf
+head(vcf)
+```
+
+
+## Extract Depth Data (DP)
+
+
+```{r}
+dp <- extract.gt(vcf, element = "DP", as.numeric=TRUE)
+```
+
+
+
+```{r, fig.align='center', fig.width=12}
+boxplot(dp, col=2:8, las=3)
+```
+
+
+
+Once we have extracted the quantile information we can use apply and quantile to build intervals for what we may consider acceptable coverage.
+
+
+```{r}
+quants <- apply(dp, MARGIN=2, quantile, probs=c(0.1, 0.8), na.rm=TRUE)
+#quants <- apply(dp, MARGIN=2, quantile, probs=c(0.34, 0.68), na.rm=TRUE)
+quants[,1:17]
+```
+
+
+We can now use these thresholds to censor data outside this threshold.
+
+
+```{r}
+dp2 <- sweep(dp, MARGIN=2, FUN = "-", quants[1,])
+dp[dp2 < 0] <- NA
+
+dp2 <- sweep(dp, MARGIN=2, FUN = "-", quants[2,])
+dp[dp2 > 0] <- NA
+
+dp[dp < 4] <- NA
+```
+
+
+Update the vcfR object with the censored data.
+
+
+```{r}
+vcf@gt[,-1][ is.na(dp) == TRUE ] <- NA
+```
+
+
+We'll want to see how this has affected the missingness of our vcfR object.
+
+```{r}
+vcf
+```
+
+
+We'll want to mitigate variants with a high degree of missingness.
+
+
+```{r}
+dp <- extract.gt(vcf, element = "DP", as.numeric=TRUE)
+
+miss <- apply(dp, MARGIN=1, function(x){sum(is.na(x))})
+miss <- miss/ncol(dp)
+```
+
+
+Plot a histogram.
+
+
+```{r, fig.align='center'}
+hist(miss, col=8, breaks=seq(0,1,by=0.02))
+```
+
+
+Omit variants with a high degree of missingness.
+
+
+```{r}
+#vcf <- vcf[miss < 0.05,]
+vcf <- vcf[miss < 0.1,]
+vcf
+```
+
+
+
+```{r, fig.align='center', fig.width=12, fig.height=12}
+dp <- extract.gt(vcf, element = "DP", as.numeric=TRUE)
+heatmap.bp(dp[1:1000,], rlabels = FALSE)
+```
+
+
+```{r, fig.align='center', fig.width=12}
+boxplot(dp, col=2:8, las=3)
+```
+
+
+
+
+## Output to file
+
+
+```{r, eval=FALSE}
+write.vcf(tas, 'TASSEL_GBS0077_dp_filtered.vcf.gz')
+```
+
