@@ -12,4 +12,5 @@ Facilitates easy manipulation of [variant call format (VCF)](https://github.com/
 [vcfR](https://github.com/knausb/vcfR) on GitHub.
 
 
+GitHub site for [vcfR_documentation](https://github.com/knausb/vcfR_documentation).
 

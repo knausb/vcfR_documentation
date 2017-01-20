@@ -223,6 +223,12 @@ $(document).ready(function () {
       <a href="vcf_data.html">VCF data</a>
     </li>
     <li>
+      <a href="extract_data.html">Extract data</a>
+    </li>
+    <li>
+      <a href="depth_plot.html">Depth plot</a>
+    </li>
+    <li>
       <a href="quality_filtering.html">Quality filtering</a>
     </li>
     <li>
@@ -286,14 +292,8 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 <div id="extracting-data-matrices" class="section level2">
 <h2>Extracting data matrices</h2>
 <p>Typical VCF datasets are so large that it is not practical to view them in their entirety. Here we use the example dataset <code>vcfR_test</code> which comes with vcfR. This is a nice dataset because it is small enough to visualize.</p>
-<pre class="r"><code>library(vcfR)</code></pre>
-<pre><code>## 
-##    *****       ***   vcfR   ***       *****
-##    This is vcfR 1.4.0.9000 
-##      browseVignettes(&#39;vcfR&#39;) # Documentation
-##      citation(&#39;vcfR&#39;) # Citation
-##    *****       *****      *****       *****</code></pre>
-<pre class="r"><code>data(&quot;vcfR_test&quot;)
+<pre class="r"><code>library(vcfR)
+data(&quot;vcfR_test&quot;)
 head(vcfR_test)</code></pre>
 <pre><code>## [1] &quot;***** Object of class &#39;vcfR&#39; *****&quot;
 ## [1] &quot;***** Meta section *****&quot;

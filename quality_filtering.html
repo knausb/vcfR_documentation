@@ -321,6 +321,12 @@ div.tocify {
       <a href="vcf_data.html">VCF data</a>
     </li>
     <li>
+      <a href="extract_data.html">Extract data</a>
+    </li>
+    <li>
+      <a href="depth_plot.html">Depth plot</a>
+    </li>
+    <li>
       <a href="quality_filtering.html">Quality filtering</a>
     </li>
     <li>
@@ -384,14 +390,8 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 <div id="data-import" class="section level2">
 <h2>Data import</h2>
 <p>Our first step will be to import the VCF data into R. The result will be that our VCF data will be stored in a ‘vcfR’ object. Once we have read it in we can validate our data is what we expect by using the <code>show</code> method. The <code>show</code> method is available for many types of objects and is implemented when the object’s name is entered at the console with no other information. THe <code>show</code> method typically provides summary information about the object and what it contains.</p>
-<pre class="r"><code>library(vcfR)</code></pre>
-<pre><code>## 
-##    *****       ***   vcfR   ***       *****
-##    This is vcfR 1.4.0 
-##      browseVignettes(&#39;vcfR&#39;) # Documentation
-##      citation(&#39;vcfR&#39;) # Citation
-##    *****       *****      *****       *****</code></pre>
-<pre class="r"><code>vcf &lt;- read.vcfR(&#39;TASSEL_GBS0077.vcf.gz&#39;)
+<pre class="r"><code>library(vcfR)
+vcf &lt;- read.vcfR(&#39;TASSEL_GBS0077.vcf.gz&#39;)
 class(vcf)</code></pre>
 <pre class="r"><code>vcf</code></pre>
 <pre><code>## ***** Object of Class vcfR *****
@@ -402,8 +402,8 @@ class(vcf)</code></pre>
 ## *****        *****         *****</code></pre>
 <p>The results from the <code>show</code> method informs us that our vcfR object contains 61 samples and 69,296 variants. This is what we expected so we can be confident that our data was imported correctly. The output also informs us that there is just over 37% missing data in our file. In our experience this is typical for GBS data sets.</p>
 </div>
-<div id="extract-depth-data-dp" class="section level2">
-<h2>Extract Depth Data (DP)</h2>
+<div id="extract-depth-dp" class="section level2">
+<h2>Extract depth (DP)</h2>
 <p>The vcfR function <code>extract.gt()</code> is used to extract matrices of data from teh GT portion of VCF data. the funtion <code>extract.gt()</code> provides a link between VCF data and R. Much of R is designed to operate on matrices of data and once <code>extract.gt()</code> provides this matrix the universe of R becomes available. Note that we use the ‘as.numeric=TRUE’ option here. We should only use this option when we are certain that we have numeric data. If you use it on non-numeric data R will do its best to do something, which is not likely to be what you expect. We can use the <code>queryMETA()</code> function remind us what this element is.</p>
 <pre class="r"><code>queryMETA(vcf, element = &#39;FORMAT.+DP&#39;)</code></pre>
 <pre><code>## [[1]]
@@ -453,45 +453,47 @@ title(ylab = &quot;Missingness&quot;)</code></pre>
 <p><img src="quality_filtering_files/figure-html/unnamed-chunk-6-1.png" width="1152" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>library(reshape2)
 library(ggplot2) 
+library(cowplot)
 
 # Melt our matrix into a long form data.frame.
 dpf &lt;- melt(dp, varnames=c(&#39;Index&#39;, &#39;Sample&#39;), value.name = &#39;Depth&#39;, na.rm=TRUE)
 dpf &lt;- dpf[ dpf$Depth &gt; 0,]
 
 # Create a row designator.
-dpf$row &lt;- &quot;Row_1&quot;
+# You may want to adjust this
 #samps_per_row &lt;- 20
-#myRows &lt;- ceiling(length(levels(dpf$Sample))/samps_per_row)
-#for(i in 2:myRows){
-#  myIndex &lt;- c(i*samps_per_row - samps_per_row + 1):c(i*samps_per_row)
-#  myIndex &lt;- myIndex[myIndex &lt;= length(levels(dpf$Sample))]
-#  myLevels &lt;- levels(dpf$Sample)[myIndex]
-#  dpf$row[dpf$row == myLevels]
-#  dpf$row[myLevels == dpf$row]
-#  myRegex &lt;- paste(myLevels, collapse = &quot;$|^&quot;)
-#  myRegex &lt;- paste(&quot;$&quot;, myRegex, &quot;^&quot;, sep = &quot;&quot;)
-#  dpf$row[grep(myRegex, dpf$Sample)] &lt;- paste(&quot;Row_&quot;, i, sep=&quot;&quot;)
-#}
-#unique(dpf$row)
-#dpf$row &lt;- as.factor(dpf$row)
+samps_per_row &lt;- 16
+myRows &lt;- ceiling(length(levels(dpf$Sample))/samps_per_row)
+myList &lt;- vector(mode = &quot;list&quot;, length = myRows)
+
+for(i in 1:myRows){
+  myIndex &lt;- c(i*samps_per_row - samps_per_row + 1):c(i*samps_per_row)
+  myIndex &lt;- myIndex[myIndex &lt;= length(levels(dpf$Sample))]
+  myLevels &lt;- levels(dpf$Sample)[myIndex]
+  myRegex &lt;- paste(myLevels, collapse = &quot;$|^&quot;)
+  myRegex &lt;- paste(&quot;^&quot;, myRegex, &quot;$&quot;, sep = &quot;&quot;)
+  myList[[i]] &lt;- dpf[grep(myRegex, dpf$Sample),]
+  myList[[i]]$Sample &lt;- factor(myList[[i]]$Sample)
+}
 
 # Create the plot.
-p &lt;- ggplot(dpf, aes(x=Sample, y=Depth)) + geom_violin(fill=&quot;#C0C0C0&quot;, adjust=1.0,
-                                                       scale = &quot;count&quot;, trim=TRUE)
-p &lt;- p + facet_grid(row ~ .)
+myPlots &lt;- vector(mode = &quot;list&quot;, length = myRows)
+for(i in 1:myRows){
+  myPlots[[i]] &lt;- ggplot(myList[[i]], aes(x=Sample, y=Depth)) + 
+                  geom_violin(fill=&quot;#90EE90&quot;, adjust=1.0, scale = &quot;count&quot;, trim=TRUE)
 
-p &lt;- p + theme_bw()
-p &lt;- p + theme(axis.title.x = element_blank(), 
-               axis.text.x = element_text(angle = 60, hjust = 1))
-p &lt;- p + scale_y_continuous(trans=scales::log2_trans(), 
-                            breaks=c(1, 10, 100, 800),
-                            minor_breaks=c(1:10, 2:10*10, 2:8*100))
-p &lt;- p + theme( panel.grid.major.y=element_line(color = &quot;#A9A9A9&quot;, size=0.6) )
-p &lt;- p + theme( panel.grid.minor.y=element_line(color = &quot;#C0C0C0&quot;, size=0.2) )
-
-# Plot the plot.
-p</code></pre>
-<p><img src="quality_filtering_files/figure-html/unnamed-chunk-7-1.png" width="1152" style="display: block; margin: auto;" /></p>
+  myPlots[[i]] &lt;- myPlots[[i]] + theme_bw()
+  myPlots[[i]] &lt;- myPlots[[i]] + theme(axis.title.x = element_blank(), 
+                  axis.text.x = element_text(angle = 60, hjust = 1))
+  myPlots[[i]] &lt;- myPlots[[i]] + scale_y_continuous(trans=scales::log2_trans(), 
+                  breaks=c(1, 10, 100, 800),
+                  minor_breaks=c(1:10, 2:10*10, 2:8*100))
+  myPlots[[i]] &lt;- myPlots[[i]] + theme( panel.grid.major.y=element_line(color = &quot;#A9A9A9&quot;, size=0.6) )
+  myPlots[[i]] &lt;- myPlots[[i]] + theme( panel.grid.minor.y=element_line(color = &quot;#C0C0C0&quot;, size=0.2) )
+}</code></pre>
+<pre class="r"><code># Plot the plot.
+plot_grid(plotlist = myPlots, nrow = myRows)</code></pre>
+<p><img src="quality_filtering_files/figure-html/unnamed-chunk-8-1.png" width="1152" style="display: block; margin: auto;" /></p>
 <p>Once we have extracted the quantile information we can use apply and quantile to build intervals for what we may consider acceptable coverage.</p>
 <pre class="r"><code>quants &lt;- apply(dp, MARGIN=2, quantile, probs=c(0.1, 0.8), na.rm=TRUE)
 #quants &lt;- apply(dp, MARGIN=2, quantile, probs=c(0.34, 0.68), na.rm=TRUE)
@@ -527,7 +529,7 @@ miss &lt;- apply(dp, MARGIN=1, function(x){sum(is.na(x))})
 miss &lt;- miss/ncol(dp)</code></pre>
 <p>Plot a histogram.</p>
 <pre class="r"><code>hist(miss, col=8, breaks=seq(0,1,by=0.02))</code></pre>
-<p><img src="quality_filtering_files/figure-html/unnamed-chunk-13-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p><img src="quality_filtering_files/figure-html/unnamed-chunk-14-1.png" width="1152" style="display: block; margin: auto;" /></p>
 <p>Omit variants with a high degree of missingness.</p>
 <pre class="r"><code>#vcf &lt;- vcf[miss &lt; 0.05,]
 vcf &lt;- vcf[miss &lt; 0.1,]
@@ -540,10 +542,10 @@ vcf</code></pre>
 ## *****        *****         *****</code></pre>
 <pre class="r"><code>dp &lt;- extract.gt(vcf, element = &quot;DP&quot;, as.numeric=TRUE)
 heatmap.bp(dp, rlabels = FALSE)</code></pre>
-<p><img src="quality_filtering_files/figure-html/unnamed-chunk-15-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p><img src="quality_filtering_files/figure-html/unnamed-chunk-16-1.png" width="1152" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>#heatmap.bp(dp[1:1000,], rlabels = FALSE)</code></pre>
 <pre class="r"><code>boxplot(dp, col=2:8, las=3)</code></pre>
-<p><img src="quality_filtering_files/figure-html/unnamed-chunk-16-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p><img src="quality_filtering_files/figure-html/unnamed-chunk-17-1.png" width="1152" style="display: block; margin: auto;" /></p>
 </div>
 <div id="output-to-file" class="section level2">
 <h2>Output to file</h2>

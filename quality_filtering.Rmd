@@ -52,7 +52,7 @@ In our experience this is typical for GBS data sets.
 
 
 
-## Extract Depth Data (DP)
+## Extract depth (DP)
 
 
 The vcfR function `extract.gt()` is used to extract matrices of data from teh GT portion of VCF data.
@@ -107,44 +107,50 @@ boxplot(dp, col=2:8, las=3)
 ```{r}
 library(reshape2)
 library(ggplot2) 
+library(cowplot)
 
 # Melt our matrix into a long form data.frame.
 dpf <- melt(dp, varnames=c('Index', 'Sample'), value.name = 'Depth', na.rm=TRUE)
 dpf <- dpf[ dpf$Depth > 0,]
 
 # Create a row designator.
-dpf$row <- "Row_1"
+# You may want to adjust this
 #samps_per_row <- 20
-#myRows <- ceiling(length(levels(dpf$Sample))/samps_per_row)
-#for(i in 2:myRows){
-#  myIndex <- c(i*samps_per_row - samps_per_row + 1):c(i*samps_per_row)
-#  myIndex <- myIndex[myIndex <= length(levels(dpf$Sample))]
-#  myLevels <- levels(dpf$Sample)[myIndex]
-#  dpf$row[dpf$row == myLevels]
-#  dpf$row[myLevels == dpf$row]
-#  myRegex <- paste(myLevels, collapse = "$|^")
-#  myRegex <- paste("$", myRegex, "^", sep = "")
-#  dpf$row[grep(myRegex, dpf$Sample)] <- paste("Row_", i, sep="")
-#}
-#unique(dpf$row)
-#dpf$row <- as.factor(dpf$row)
+samps_per_row <- 16
+myRows <- ceiling(length(levels(dpf$Sample))/samps_per_row)
+myList <- vector(mode = "list", length = myRows)
+
+for(i in 1:myRows){
+  myIndex <- c(i*samps_per_row - samps_per_row + 1):c(i*samps_per_row)
+  myIndex <- myIndex[myIndex <= length(levels(dpf$Sample))]
+  myLevels <- levels(dpf$Sample)[myIndex]
+  myRegex <- paste(myLevels, collapse = "$|^")
+  myRegex <- paste("^", myRegex, "$", sep = "")
+  myList[[i]] <- dpf[grep(myRegex, dpf$Sample),]
+  myList[[i]]$Sample <- factor(myList[[i]]$Sample)
+}
 
 # Create the plot.
-p <- ggplot(dpf, aes(x=Sample, y=Depth)) + geom_violin(fill="#C0C0C0", adjust=1.0,
-                                                       scale = "count", trim=TRUE)
-p <- p + facet_grid(row ~ .)
+myPlots <- vector(mode = "list", length = myRows)
+for(i in 1:myRows){
+  myPlots[[i]] <- ggplot(myList[[i]], aes(x=Sample, y=Depth)) + 
+                  geom_violin(fill="#90EE90", adjust=1.0, scale = "count", trim=TRUE)
 
-p <- p + theme_bw()
-p <- p + theme(axis.title.x = element_blank(), 
-               axis.text.x = element_text(angle = 60, hjust = 1))
-p <- p + scale_y_continuous(trans=scales::log2_trans(), 
-                            breaks=c(1, 10, 100, 800),
-                            minor_breaks=c(1:10, 2:10*10, 2:8*100))
-p <- p + theme( panel.grid.major.y=element_line(color = "#A9A9A9", size=0.6) )
-p <- p + theme( panel.grid.minor.y=element_line(color = "#C0C0C0", size=0.2) )
+  myPlots[[i]] <- myPlots[[i]] + theme_bw()
+  myPlots[[i]] <- myPlots[[i]] + theme(axis.title.x = element_blank(), 
+                  axis.text.x = element_text(angle = 60, hjust = 1))
+  myPlots[[i]] <- myPlots[[i]] + scale_y_continuous(trans=scales::log2_trans(), 
+                  breaks=c(1, 10, 100, 800),
+                  minor_breaks=c(1:10, 2:10*10, 2:8*100))
+  myPlots[[i]] <- myPlots[[i]] + theme( panel.grid.major.y=element_line(color = "#A9A9A9", size=0.6) )
+  myPlots[[i]] <- myPlots[[i]] + theme( panel.grid.minor.y=element_line(color = "#C0C0C0", size=0.2) )
+}
+```
 
+
+```{r, fig.height=20}
 # Plot the plot.
-p
+plot_grid(plotlist = myPlots, nrow = myRows)
 ```
 
 
