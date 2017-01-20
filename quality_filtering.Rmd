@@ -108,11 +108,32 @@ boxplot(dp, col=2:8, las=3)
 library(reshape2)
 library(ggplot2) 
 
+# Melt our matrix into a long form data.frame.
 dpf <- melt(dp, varnames=c('Index', 'Sample'), value.name = 'Depth', na.rm=TRUE)
 dpf <- dpf[ dpf$Depth > 0,]
 
+# Create a row designator.
+dpf$row <- "Row_1"
+#samps_per_row <- 20
+#myRows <- ceiling(length(levels(dpf$Sample))/samps_per_row)
+#for(i in 2:myRows){
+#  myIndex <- c(i*samps_per_row - samps_per_row + 1):c(i*samps_per_row)
+#  myIndex <- myIndex[myIndex <= length(levels(dpf$Sample))]
+#  myLevels <- levels(dpf$Sample)[myIndex]
+#  dpf$row[dpf$row == myLevels]
+#  dpf$row[myLevels == dpf$row]
+#  myRegex <- paste(myLevels, collapse = "$|^")
+#  myRegex <- paste("$", myRegex, "^", sep = "")
+#  dpf$row[grep(myRegex, dpf$Sample)] <- paste("Row_", i, sep="")
+#}
+#unique(dpf$row)
+#dpf$row <- as.factor(dpf$row)
+
+# Create the plot.
 p <- ggplot(dpf, aes(x=Sample, y=Depth)) + geom_violin(fill="#C0C0C0", adjust=1.0,
                                                        scale = "count", trim=TRUE)
+p <- p + facet_grid(row ~ .)
+
 p <- p + theme_bw()
 p <- p + theme(axis.title.x = element_blank(), 
                axis.text.x = element_text(angle = 60, hjust = 1))
@@ -121,6 +142,8 @@ p <- p + scale_y_continuous(trans=scales::log2_trans(),
                             minor_breaks=c(1:10, 2:10*10, 2:8*100))
 p <- p + theme( panel.grid.major.y=element_line(color = "#A9A9A9", size=0.6) )
 p <- p + theme( panel.grid.minor.y=element_line(color = "#C0C0C0", size=0.2) )
+
+# Plot the plot.
 p
 ```
 
