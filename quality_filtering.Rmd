@@ -1,6 +1,5 @@
 ---
 title: "Quality filtering"
-author: "Brian J. Knaus"
 output:
   html_document:
     toc: true
@@ -8,48 +7,121 @@ output:
 ---
 
 
-In a previous session we filtered our GBS data based on missingness.
-First, samples with a high degree of missingness were identified and removed from the data set.
-Second, variants that had a high degree of missingness were identified and removed.
-Here we identify variants with unusual coverage and remove them.
-
-
-This is adapted from a package vignette that uses genomic data.
-Here we use GBS data.
-
-
-```{r, eval=FALSE}
-browseVignettes('vcfR')
-vignette(package="vcfR", topic = "sequence_coverage")
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(fig.align = 'center')
+knitr::opts_chunk$set(fig.width = 12)
 ```
+
+
+
+Once a sequencing run has been completed the sequence reads are typically aligned to a reference genome and variants are called.
+These variants are typically stored in a VCF format file.
+THe R package vcfR was designed to import and export this data into the R environment.
+Once in the R environment, vcfR provides tools to manipulate the data to help you understand its content.
+Common issues in variant data may be that certain samples may be of low quality or certain vriants may be of questionable quality.
+Here we'll provide examples of how vcfR can help accomplish these tasks.
 
 
 ## Data import
 
 
+Our first step will be to import the VCF data into R.
+The result will be that our VCF data will be stored in a 'vcfR' object.
+Once we have read it in we can validate our data is what we expect by using the `show` method.
+The `show` method is available for many types of objects and is implemented when the object's name is entered at the console with no other information.
+THe `show` method typically provides summary information about the object and what it contains.
+
+
 ```{r, results='hide'}
 library(vcfR)
-vcf <- read.vcfR('TASSEL_GBS0077_filtered.vcf.gz')
+vcf <- read.vcfR('TASSEL_GBS0077.vcf.gz')
+class(vcf)
 ```
 
 
 ```{r}
 vcf
-head(vcf)
 ```
+
+
+The results from the `show` method informs us that our vcfR object contains 61 samples and 69,296 variants.
+This is what we expected so we can be confident that our data was imported correctly.
+The output also informs us that there is just over 37% missing data in our file.
+In our experience this is typical for GBS data sets.
+
 
 
 ## Extract Depth Data (DP)
 
 
+The vcfR function `extract.gt()` is used to extract matrices of data from teh GT portion of VCF data.
+the funtion `extract.gt()` provides a link between VCF data and R.
+Much of R is designed to operate on matrices of data and once `extract.gt()` provides this matrix the universe of R becomes available.
+Note that we use the 'as.numeric=TRUE' option here.
+We should only use this option when we are certain that we have numeric data.
+If you use it on non-numeric data R will do its best to do something, which is not likely to be what you expect.
+We can use the `queryMETA()` function remind us what this element is.
+
+
 ```{r}
+queryMETA(vcf, element = 'FORMAT.+DP')
+vcf@gt[1:4,1:4]
 dp <- extract.gt(vcf, element = "DP", as.numeric=TRUE)
+dp[1:4,1:3]
+```
+
+
+## Missing data
+
+
+```{r}
+sum(is.na(dp[,1]))
+# apply(dp, MARGIN = 2, function(x){sum(is.na(x))})
+```
+
+
+```{r}
+myMiss <- apply(dp, MARGIN = 2, function(x){sum(is.na(x))})
+myMiss <- myMiss/nrow(vcf)
+
+library(RColorBrewer)
+palette(brewer.pal(n=12, name = 'Set3'))
+
+par(mar = c(12,4,4,2))
+barplot(myMiss, las = 2, col = 1:12)
+title(ylab = "Missingness")
+par(mar = c(5,4,4,2))
 ```
 
 
 
-```{r, fig.align='center', fig.width=12}
+## Sequence depth
+
+
+```{r}
 boxplot(dp, col=2:8, las=3)
+```
+
+
+```{r}
+library(reshape2)
+library(ggplot2) 
+
+dpf <- melt(dp, varnames=c('Index', 'Sample'), value.name = 'Depth', na.rm=TRUE)
+dpf <- dpf[ dpf$Depth > 0,]
+
+p <- ggplot(dpf, aes(x=Sample, y=Depth)) + geom_violin(fill="#C0C0C0", adjust=1.0,
+                                                       scale = "count", trim=TRUE)
+p <- p + theme_bw()
+p <- p + theme(axis.title.x = element_blank(), 
+               axis.text.x = element_text(angle = 60, hjust = 1))
+p <- p + scale_y_continuous(trans=scales::log2_trans(), 
+                            breaks=c(1, 10, 100, 800),
+                            minor_breaks=c(1:10, 2:10*10, 2:8*100))
+p <- p + theme( panel.grid.major.y=element_line(color = "#A9A9A9", size=0.6) )
+p <- p + theme( panel.grid.minor.y=element_line(color = "#C0C0C0", size=0.2) )
+p
 ```
 
 
@@ -125,7 +197,8 @@ vcf
 
 ```{r, fig.align='center', fig.width=12, fig.height=12}
 dp <- extract.gt(vcf, element = "DP", as.numeric=TRUE)
-heatmap.bp(dp[1:1000,], rlabels = FALSE)
+heatmap.bp(dp, rlabels = FALSE)
+#heatmap.bp(dp[1:1000,], rlabels = FALSE)
 ```
 
 
