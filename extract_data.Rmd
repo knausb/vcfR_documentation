@@ -1,0 +1,76 @@
+---
+title: "Extract data"
+output:
+  html_document:
+    toc: true
+---
+
+
+```{r, results='hide', echo = FALSE}
+suppressPackageStartupMessages( library(vcfR) )
+vcf <- read.vcfR('TASSEL_GBS0077.vcf.gz')
+```
+
+
+
+## Extracting data matrices
+
+
+The vcfR function `extract.gt()` is used to extract matrices of data from the GT portion of VCF data.
+The funtion `extract.gt()` provides a link between VCF data and R.
+Much of R is designed to operate on matrices of data and once `extract.gt()` provides this matrix the universe of R becomes available.
+
+
+## Querying the meta data
+
+
+As an example of how to use `extract.gt()` we will extract the depth (DP) data.
+Note that we use the 'as.numeric=TRUE' option here.
+We should only use this option when we are certain that we have numeric data.
+If you use it on non-numeric data R will do its best to do something, which is not likely to be what you expect.
+We can use the `queryMETA()` function remind us what this element is.
+
+
+```{r}
+queryMETA(vcf, element = 'FORMAT.+DP')
+```
+
+
+The `queryMETA()` function reports a description to tell us what the acronym 'DP' means.
+It also reports the type of data this is.
+Here we see that 'DP' is integer data.
+Because integers are a form of numerics we can safely use `as.numeric = TRUE`.
+
+
+## Extract depth (DP)
+
+
+The GT portion of VCF data is not strictly tabular.
+We can observe this by accessing the `@gt` slot of the vcfR object.
+
+```{r}
+vcf@gt[1:4,1:4]
+```
+
+
+The first column reports the format for subsequent columns.
+This is a colon delimited string containing abbreviations for the data that appear in subsequent columns, in the same order as they appear in subsequent columns.
+Different variants (rows) can have different formats, so these need to be processed independently.
+The `extract.gt()` function finds which position the data you're interested in is in the format string and processes this position in the subsequent columns.
+Here we've also used the option to convert the data to numerical data.
+The default is to leave the data as character data.
+
+
+```{r}
+dp <- extract.gt(vcf, element = "DP", as.numeric=TRUE)
+dp[1:4,1:3]
+```
+
+We now have a matrix of numerical 'DP' data with the sample names as column names.
+Samples (columns) or variants (rows) can be accessed with the square brackets (`[,]`).
+If you need a matrix where the samples are in rows and the variants are in columns you can use the transpose function (`t()`).
+We have now taken our VCF data and extracted it into a form that makes it available to much of the broad spectrum of existing R packages and functions.
+
+
+
+

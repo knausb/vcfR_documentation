@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Extract data</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-1.1/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-1.1/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 61px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+
+.section h2 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+.section h3 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+.section h4 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+.section h5 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+.section h6 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">vcfR</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="rlanguage.html">R language</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Tutorial
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="quick_intro.html">A quick introduction</a>
+    </li>
+    <li>
+      <a href="vcf_data.html">VCF data</a>
+    </li>
+    <li>
+      <a href="vcfR_object.html">vcfR objects</a>
+    </li>
+    <li>
+      <a href="matrices.html">Extracting matrices</a>
+    </li>
+    <li>
+      <a href="tidy_vcfR.html">Tidy vcfR</a>
+    </li>
+    <li>
+      <a href="chromR_object.html">chromR objects</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    GBS class
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="gbs_class.html">GBS class</a>
+    </li>
+    <li>
+      <a href="vcf_data.html">VCF data</a>
+    </li>
+    <li>
+      <a href="extract_data.html">Extract data</a>
+    </li>
+    <li>
+      <a href="depth_plot.html">Depth plot</a>
+    </li>
+    <li>
+      <a href="quality_filtering.html">Quality filtering</a>
+    </li>
+    <li>
+      <a href="apply.html">Apply</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    FAQ
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="subset_data_to_1chrom.html">Subset to 1 chromosome</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Export
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="export.html">Overview</a>
+    </li>
+    <li>
+      <a href="dnabin.html">DNAbin</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+<p>
+<center>
+<h3>vcfR documentation</h3>
+by
+<br>
+Brian J. Knaus and Niklaus J. Gr&uuml;nwald
+</center>
+</p>
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Extract data</h1>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#extracting-data-matrices">Extracting data matrices</a></li>
+<li><a href="#querying-the-meta-data">Querying the meta data</a></li>
+<li><a href="#extract-depth-dp">Extract depth (DP)</a></li>
+</ul>
+</div>
+
+<div id="extracting-data-matrices" class="section level2">
+<h2>Extracting data matrices</h2>
+<p>The vcfR function <code>extract.gt()</code> is used to extract matrices of data from the GT portion of VCF data. The funtion <code>extract.gt()</code> provides a link between VCF data and R. Much of R is designed to operate on matrices of data and once <code>extract.gt()</code> provides this matrix the universe of R becomes available.</p>
+</div>
+<div id="querying-the-meta-data" class="section level2">
+<h2>Querying the meta data</h2>
+<p>As an example of how to use <code>extract.gt()</code> we will extract the depth (DP) data. Note that we use the ‘as.numeric=TRUE’ option here. We should only use this option when we are certain that we have numeric data. If you use it on non-numeric data R will do its best to do something, which is not likely to be what you expect. We can use the <code>queryMETA()</code> function remind us what this element is.</p>
+<pre class="r"><code>queryMETA(vcf, element = &#39;FORMAT.+DP&#39;)</code></pre>
+<pre><code>## [[1]]
+## [1] &quot;FORMAT=ID=DP&quot;                                                 
+## [2] &quot;Number=1&quot;                                                     
+## [3] &quot;Type=Integer&quot;                                                 
+## [4] &quot;Description=Read Depth (only filtered reads used for calling)&quot;</code></pre>
+<p>The <code>queryMETA()</code> function reports a description to tell us what the acronym ‘DP’ means. It also reports the type of data this is. Here we see that ‘DP’ is integer data. Because integers are a form of numerics we can safely use <code>as.numeric = TRUE</code>.</p>
+</div>
+<div id="extract-depth-dp" class="section level2">
+<h2>Extract depth (DP)</h2>
+<p>The GT portion of VCF data is not strictly tabular. We can observe this by accessing the <code>@gt</code> slot of the vcfR object.</p>
+<pre class="r"><code>vcf@gt[1:4,1:4]</code></pre>
+<pre><code>##      FORMAT           1                       10                       
+## [1,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0/0:5,0:5:96:0,15,180&quot; &quot;1/1:0,10:10:99:255,30,0&quot;
+## [2,] &quot;GT:AD:DP:GQ:PL&quot; &quot;1/1:0,1:1:66:36,3,0&quot;   &quot;0/0:4,0:4:94:0,12,144&quot;  
+## [3,] &quot;GT:AD:DP:GQ:PL&quot; NA                      NA                       
+## [4,] &quot;GT:AD:DP:GQ:PL&quot; &quot;1/1:0,5:5:96:180,15,0&quot; &quot;0/0:8,0:8:99:0,24,255&quot;  
+##      13                     
+## [1,] &quot;0/0:9,0:9:99:0,27,255&quot;
+## [2,] &quot;0/0:1,0:1:66:0,3,36&quot;  
+## [3,] &quot;0/0:3,0:3:88:0,9,108&quot; 
+## [4,] NA</code></pre>
+<p>The first column reports the format for subsequent columns. This is a colon delimited string containing abbreviations for the data that appear in subsequent columns, in the same order as they appear in subsequent columns. Different variants (rows) can have different formats, so these need to be processed independently. The <code>extract.gt()</code> function finds which position the data you’re interested in is in the format string and processes this position in the subsequent columns. Here we’ve also used the option to convert the data to numerical data. The default is to leave the data as character data.</p>
+<pre class="r"><code>dp &lt;- extract.gt(vcf, element = &quot;DP&quot;, as.numeric=TRUE)
+dp[1:4,1:3]</code></pre>
+<pre><code>##          1 10 13
+## S1_4509  5 10  9
+## S1_4657  1  4  1
+## S1_5193 NA NA  3
+## S1_5647  5  8 NA</code></pre>
+<p>We now have a matrix of numerical ‘DP’ data with the sample names as column names. Samples (columns) or variants (rows) can be accessed with the square brackets (<code>[,]</code>). If you need a matrix where the samples are in rows and the variants are in columns you can use the transpose function (<code>t()</code>). We have now taken our VCF data and extracted it into a form that makes it available to much of the broad spectrum of existing R packages and functions.</p>
+</div>
+
+<center>
+<hr class="style1">
+<p>Copyright &copy; 2017 Brian J. Knaus. All rights reserved.</p>
+<p>USDA Agricultural Research Service, Horticultural Crops Research Lab.</p>
+</center>
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
