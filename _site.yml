@@ -36,7 +36,7 @@ navbar:
         - text: "Censoring data"
           href: "censoring_data.html"
         - text: "Omitting data"
-          href: "Omitting_data.html"
+          href: "omitting_data.html"
         - text: "Quality filtering"
           href: "quality_filtering.html"
         - text: "Apply"

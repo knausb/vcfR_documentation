@@ -24,4 +24,6 @@ dp <- extract.gt(vcf, element = "DP", as.numeric=TRUE)
 
 
 
+## Omitting variants
+
 
