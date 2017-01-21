@@ -11,7 +11,7 @@
 
 
 
-<title>Missing data</title>
+<title>Censoring data</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -286,49 +286,42 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 
 
 
-<h1 class="title toc-ignore">Missing data</h1>
+<h1 class="title toc-ignore">Censoring data</h1>
 
 </div>
 
-<div id="TOC">
-<ul>
-<li><a href="#quantifying-missingness-one-sample">Quantifying missingness, one sample</a></li>
-<li><a href="#quantifying-missingness-all-samples">Quantifying missingness, all samples</a></li>
-</ul>
-</div>
 
-<p>As the size of our dataset grow in terms of samples and variants the size of our data matrix grows. As the size of our data matrix grows it also increases the opportunity to have missing data. Also, some of our quality filtering steps increased the degree of missingness in our data matrix by setting values that we determined to be of unusual quality to NA. One way of managing missing data is to use interpolation, a set of methods that attempts to infer what the most likely genotype should be and replaces the missing genotype with the interpolated genotype. However, if your data has a large degree of missingness you may want to attempt to mitigate missingness instead of interpolation or prior to an interpolation step. Missing data can frequently be due to samples (columns) or variants (rows) of low quality. Here we demonstrate how to identify samples and variants in the data set that have a high degree of missingness and omit them.</p>
-<div id="quantifying-missingness-one-sample" class="section level2">
-<h2>Quantifying missingness, one sample</h2>
-<p>To quantify missingness for a single sample we can use the fnction <code>is.na()</code>. This function uses a vector as an argument and returns a logical vector (TRUE and FALSE) indicating which values are NA. If we remind ourselves that TRUEs and FALSEs are numerically encoded as ones and zeros it reminds us we can take a sum of this logical vector to determine the degree of missingness.</p>
-<pre class="r"><code>as.numeric(TRUE)</code></pre>
-<pre><code>## [1] 1</code></pre>
-<pre class="r"><code>sum(is.na(dp[,1]))</code></pre>
-<pre><code>## [1] 11725</code></pre>
-<pre class="r"><code># apply(dp, MARGIN = 2, function(x){sum(is.na(x))})</code></pre>
-<p>This reports the number of missing variants in the first sample. We could similarly count the number of missing samples from a variant by accessing a row instead of a column. We could also convert this to a percentage by using <code>length()</code> to determine the total number of values in either the column or row and use this as a denominator.</p>
-</div>
-<div id="quantifying-missingness-all-samples" class="section level2">
-<h2>Quantifying missingness, all samples</h2>
-<p>This is illustrative of what we can accomplish for a single sample or variant. We typically have many samples an tens of thousand (or more) variants. We can extend the functionality of the above example to many columns or rows by using the <code>apply()</code> function. See the section on apply if you are unfamiliar with this function. Because we will be summarizing many samples we will use a barplot to visualize the results as opposed to trying to scrutinize the numerical information.</p>
-<pre class="r"><code>myMiss &lt;- apply(dp, MARGIN = 2, function(x){ sum(is.na(x)) })
-myMiss &lt;- myMiss/nrow(vcf)
+<div id="censoring-variants" class="section level2">
+<h2>Censoring variants</h2>
+<p>We see from our plot that there is a considerable amount of variation in depth within each sample. For example, if we sequenced a genome at 10X coverage we would expect most of our variants to be sequenced at this depth. Instead we see quite a range. Variants sequenced at low coverage may only observe one of two alleles in a diploid. Because of this, we may want to omit variants of low coverage. Variants sequenced at high coverage may be from repetetive regions that were assembled in our reference as a single region. This means that different alleles may be from different copied (loci), so we may want to omit these. Here we’ll censor the variants that we do not feel are of ‘typical’ coverage. When we censor variants we’ll score them as missing (NA) so let’s begin by reminding us how abundant NAs are in our dataset.</p>
+<pre class="r"><code>vcf</code></pre>
+<pre><code>## ***** Object of Class vcfR *****
+## 61 samples
+## 69,296 variants
+## Object size: 46.5 Mb
+## 37.62 percent missing data
+## *****        *****         *****</code></pre>
+<p>A number off methods can be used to create intervals that you may consider acceptable. I like to use quantiles because they are non-parametric and we can fit different intervals to different samples using <code>apply()</code>.</p>
+<pre class="r"><code>quants &lt;- apply(dp, MARGIN=2, quantile, probs=c(0.1, 0.8), na.rm=TRUE)</code></pre>
+<p>We can create a second matrix of depths where we subtract the lower threshold of each sample from its depth using the function <code>sweep()</code>. Now all depths in the matrix that are below zero are below our threshold. We can use this information to set these cell to NA in the original matrix. We can similarly subtract the upper threshold from our samples to create a second matrix. Now everything above zero is above our threshold and can be set to NA.</p>
+<pre class="r"><code>dp2 &lt;- sweep(dp, MARGIN=2, FUN = &quot;-&quot;, quants[1,])
+dp[dp2 &lt; 0] &lt;- NA
 
-library(RColorBrewer)
-palette(brewer.pal(n=12, name = &#39;Set3&#39;))
+dp2 &lt;- sweep(dp, MARGIN=2, FUN = &quot;-&quot;, quants[2,])
+dp[dp2 &gt; 0] &lt;- NA
 
-par(mar = c(12,4,4,2))
-barplot(myMiss, las = 2, col = 1:12)
-title(ylab = &quot;Missingness (%)&quot;)</code></pre>
-<p><img src="missing_data_files/figure-html/unnamed-chunk-3-1.png" width="1152" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>par(mar = c(5,4,4,2))</code></pre>
-<p>We see that there are two classes of samples. The samples with long names have a high degree of missingness (around 80%) while the samples with short names have a relatively low degree of missingness.</p>
-<p>We can do something similar to query the variants (rows) for missingness. However, our dataset has over 60 thousand variants, so we can’t visualize this with a barchart with 60 thousand bars. Instead of usung a barchart we’ll use a histogram.</p>
-<pre class="r"><code>myMiss &lt;- apply(dp, MARGIN = 1, function(x){ sum(is.na(x)) })
-myMiss &lt;- myMiss/ncol(vcf@gt[,-1])
-
-hist(myMiss, col = &quot;#8DD3C7&quot;, xlab = &quot;Missingness (%)&quot;)</code></pre>
-<p><img src="missing_data_files/figure-html/unnamed-chunk-4-1.png" width="480" style="display: block; margin: auto;" /></p>
+dp[dp &lt; 4] &lt;- NA</code></pre>
+<p>Now that we know which cells we want to censor as NA we can use this information to update the vcfR object. Don’t forget that the first column of the gt matrix is the ‘FORMAT’ column. We can omit this from our selection by using -1.</p>
+<pre class="r"><code>vcf@gt[,-1][ is.na(dp) == TRUE ] &lt;- NA</code></pre>
+<p>Now see how this has affected missingness in our vcfR object.</p>
+<pre class="r"><code>vcf</code></pre>
+<pre><code>## ***** Object of Class vcfR *****
+## 61 samples
+## 69,296 variants
+## Object size: 45.2 Mb
+## 66.63 percent missing data
+## *****        *****         *****</code></pre>
+<p>We’ve now used our depth information to censor variants that we feel are of unusual sequence depth. We’ve also used this information to update our vcfR object so that our data can remain in a constant format. This has resulted in a vcfR object with a greater degree of missing data. We’ll deal with mitigating missing data in another section. A similar approach can be used if there are parameters other than depth that a researcher would like to filter on. We now have a vcfR object that has variants that we feel are of higher quality than our original file.</p>
 </div>
 
 <center>

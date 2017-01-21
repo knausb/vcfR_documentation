@@ -294,7 +294,6 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 <ul>
 <li><a href="#base-barplot">Base barplot</a></li>
 <li><a href="#violin-plot">Violin plot</a></li>
-<li><a href="#censoring-variants-of-unusual-depth">Censoring variants of unusual depth</a></li>
 </ul>
 </div>
 
@@ -368,38 +367,6 @@ for(i in 1:myRows){
 plot_grid(plotlist = myPlots, nrow = myRows)</code></pre>
 <p><img src="depth_plot_files/figure-html/unnamed-chunk-5-1.png" width="1152" style="display: block; margin: auto;" /></p>
 <p>We can see that the log transformation stretches out the smaller values and compresses the larger values. This allows us to focus on where our data has the greatest density. We see that the samples with long names have more narrow plots than the samples with short names. This is because they have less data. This is another perspective on what we saw in the barplots. Things to look for in these plots are whether all samples are equally represented, whether there are a few samples of low quality that may need to be omitted from downstream analyses, or if therre are a small number of jackpot samples that received all the reads at the expense of the other samples. Here the samples appear to be eqaully represented with the exception of the issues noted with the samples with long names.</p>
-</div>
-<div id="censoring-variants-of-unusual-depth" class="section level2">
-<h2>Censoring variants of unusual depth</h2>
-<p>We see from our plot that there is a considerable amount of variation in depth within each sample. For example, if we sequenced a genome at 10X coverage we would expect most of our variants to be sequenced at this depth. Instead we see quite a range. Variants sequenced at low coverage may only observe one of two alleles in a diploid. Because of this, we may want to omit variants of low coverage. Variants sequenced at high coverage may be from repetetive regions that were assembled in our reference as a single region. This means that different alleles may be from different copied (loci), so we may want to omit these. Here we’ll censor the variants that we do not feel are of ‘typical’ coverage. When we censor variants we’ll score them as missing (NA) so let’s begin by reminding us how abundant NAs are in our dataset.</p>
-<pre class="r"><code>vcf</code></pre>
-<pre><code>## ***** Object of Class vcfR *****
-## 61 samples
-## 69,296 variants
-## Object size: 46.5 Mb
-## 37.62 percent missing data
-## *****        *****         *****</code></pre>
-<p>A number off methods can be used to create intervals that you may consider acceptable. I like to use quantiles because they are non-parametric and we can fit different intervals to different samples using <code>apply()</code>.</p>
-<pre class="r"><code>quants &lt;- apply(dp, MARGIN=2, quantile, probs=c(0.1, 0.8), na.rm=TRUE)</code></pre>
-<p>We can create a second matrix of depths where we subtract the lower threshold of each sample from its depth using the function <code>sweep()</code>. Now all depths in the matrix that are below zero are below our threshold. We can use this information to set these cell to NA in the original matrix. We can similarly subtract the upper threshold from our samples to create a second matrix. Now everything above zero is above our threshold and can be set to NA.</p>
-<pre class="r"><code>dp2 &lt;- sweep(dp, MARGIN=2, FUN = &quot;-&quot;, quants[1,])
-dp[dp2 &lt; 0] &lt;- NA
-
-dp2 &lt;- sweep(dp, MARGIN=2, FUN = &quot;-&quot;, quants[2,])
-dp[dp2 &gt; 0] &lt;- NA
-
-dp[dp &lt; 4] &lt;- NA</code></pre>
-<p>Now that we know which cells we want to censor as NA we can use this information to update the vcfR object. Don’t forget that the first column of the gt matrix is the ‘FORMAT’ column. We can omit this from our selection by using -1.</p>
-<pre class="r"><code>vcf@gt[,-1][ is.na(dp) == TRUE ] &lt;- NA</code></pre>
-<p>Now see how this has affected missingness in our vcfR object.</p>
-<pre class="r"><code>vcf</code></pre>
-<pre><code>## ***** Object of Class vcfR *****
-## 61 samples
-## 69,296 variants
-## Object size: 45.2 Mb
-## 66.63 percent missing data
-## *****        *****         *****</code></pre>
-<p>We’ve now used our depth information to censor variants that we feel are of unusual sequence depth. We’ve also used this information to update our vcfR object so that our data can remain in a constant format. This has resulted in a vcfR object with a greater degree of missing data. We’ll deal with mitigating missing data in another section. A similar approach can be used if there are parameters other than depth that a researcher would like to filter on. We now have a vcfR object that has variants that we feel are of higher quality than our original file.</p>
 </div>
 
 <center>

@@ -1,7 +1,8 @@
 ---
 title: "Missing data"
 output:
-  html_document
+  html_document:
+    toc: true
 ---
 
 
@@ -29,6 +30,63 @@ dp <- extract.gt(vcf, element = "DP", as.numeric=TRUE)
 ```
 
 
+## Quantifying missingness, one sample
+
+
+To quantify missingness for a single sample we can use the fnction `is.na()`.
+This function uses a vector as an argument and returns a logical vector (TRUE and FALSE) indicating which values are NA.
+If we remind ourselves that TRUEs and FALSEs are numerically encoded as ones and zeros it reminds us we can take a sum of this logical vector to determine the degree of missingness.
+
+
+```{r}
+as.numeric(TRUE)
+sum(is.na(dp[,1]))
+# apply(dp, MARGIN = 2, function(x){sum(is.na(x))})
+```
+
+
+This reports the number of missing variants in the first sample.
+We could similarly count the number of missing samples from a variant by accessing a row instead of a column.
+We could also convert this to a percentage by using `length()` to determine the total number of values in either the column or row and use this as a denominator.
+
+
+## Quantifying missingness, all samples
+
+
+This is illustrative of what we can accomplish for a single sample or variant.
+We typically have many samples an tens of thousand (or more) variants.
+We can extend the functionality of the above example to many columns or rows by using the `apply()` function.
+See the section on apply if you are unfamiliar with this function.
+Because we will be summarizing many samples we will use a barplot to visualize the results as opposed to trying to scrutinize the numerical information.
+
+
+```{r}
+myMiss <- apply(dp, MARGIN = 2, function(x){ sum(is.na(x)) })
+myMiss <- myMiss/nrow(vcf)
+
+library(RColorBrewer)
+palette(brewer.pal(n=12, name = 'Set3'))
+
+par(mar = c(12,4,4,2))
+barplot(myMiss, las = 2, col = 1:12)
+title(ylab = "Missingness (%)")
+par(mar = c(5,4,4,2))
+```
+
+
+We see that there are two classes of samples.
+The samples with long names have a high degree of missingness (around 80%) while the samples with short names have a relatively low degree of missingness.
+
+
+We can do something similar to query the variants (rows) for missingness.
+However, our dataset has over 60 thousand variants, so we can't visualize this with a barchart with 60 thousand bars.
+Instead of usung a barchart we'll use a histogram.
 
 
 
+```{r, fig.width=5}
+myMiss <- apply(dp, MARGIN = 1, function(x){ sum(is.na(x)) })
+myMiss <- myMiss/ncol(vcf@gt[,-1])
+
+hist(myMiss, col = "#8DD3C7", xlab = "Missingness (%)")
+```
