@@ -11,7 +11,7 @@
 
 
 
-<title>Creating DNAbin objects</title>
+<title>Missing data</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -286,16 +286,12 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 
 
 
-<h1 class="title toc-ignore">Creating DNAbin objects</h1>
+<h1 class="title toc-ignore">Missing data</h1>
 
 </div>
 
 
-<p>Within vcfR we use a vcfR object to contain our data. Once we have performed some manipulations we may want to convert the data to some other format for further analysis. Within vcfR we have several options.</p>
-<ul>
-<li>Output to VCF</li>
-<li>Convert to genind</li>
-</ul>
+<p>As the size of our dataset grow in terms of samples and variants the size of our data matrix grows. As the size of our data matrix grows it also increases the opportunity to have missing data. Also, some of our quality filtering steps increased the degree of missingness in our data matrix by setting values that we determined to be of unusual quality to NA. One way of managing missing data is to use interpolation, a set of methods that attempts to infer what the most likely genotype should be and replaces the missing genotype with the interpolated genotype. However, if your data has a large degree of missingness you may want to attempt to mitigate missingness instead of interpolation or prior to an interpolation step. Missing data can frequently be due to samples (columns) or variants (rows) of low quality. Here we demonstrate how to identify samples and variants in the data set that have a high degree of missingness and omit them.</p>
 
 <center>
 <hr class="style1">

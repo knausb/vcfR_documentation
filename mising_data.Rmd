@@ -1,0 +1,34 @@
+---
+title: "Missing data"
+output:
+  html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(fig.align = 'center')
+knitr::opts_chunk$set(fig.width = 12)
+```
+
+
+
+As the size of our dataset grow in terms of samples and variants the size of our data matrix grows.
+As the size of our data matrix grows it also increases the opportunity to have missing data.
+Also, some of our quality filtering steps increased the degree of missingness in our data matrix by setting values that we determined to be of unusual quality to NA.
+One way of managing missing data is to use interpolation, a set of methods that attempts to infer what the most likely genotype should be and replaces the missing genotype with the interpolated genotype.
+However, if your data has a large degree of missingness you may want to attempt to mitigate missingness instead of interpolation or prior to an interpolation step.
+Missing data can frequently be due to samples (columns) or variants (rows) of low quality.
+Here we demonstrate how to identify samples and variants in the data set that have a high degree of missingness and omit them.
+
+
+```{r, results='hide', echo = FALSE}
+suppressPackageStartupMessages( library(vcfR) )
+vcf <- read.vcfR('TASSEL_GBS0077.vcf.gz')
+dp <- extract.gt(vcf, element = "DP", as.numeric=TRUE)
+```
+
+
+
+
+

@@ -31,6 +31,8 @@ navbar:
           href: "extract_data.html"
         - text: "Depth plot"
           href: "depth_plot.html"
+        - text: "Missing data"
+          href: "missing_data.html"
         - text: "Quality filtering"
           href: "quality_filtering.html"
         - text: "Apply"
