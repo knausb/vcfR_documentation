@@ -1,0 +1,27 @@
+---
+title: "Omitting data"
+output:
+  html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(fig.align = 'center')
+knitr::opts_chunk$set(fig.width = 12)
+```
+
+
+```{r, results='hide', echo = FALSE}
+suppressPackageStartupMessages( library(vcfR) )
+vcf <- read.vcfR('TASSEL_GBS0077.vcf.gz')
+dp <- extract.gt(vcf, element = "DP", as.numeric=TRUE)
+```
+
+
+## Omitting variants
+
+
+
+
+
