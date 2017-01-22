@@ -518,6 +518,7 @@ vcf</code></pre>
 <div id="vcfr" class="section level2">
 <h2>vcfR</h2>
 <p>Using the R package vcfR, we can read VCF format files into memory using the function <code>read.vcfR()</code>. Once in memory we can use the <code>head()</code> method to summarize the information in the three VCF regions.</p>
+<pre class="r"><code>vcf &lt;- read.vcfR(&quot;myVCFdata.vcf.gz&quot;)</code></pre>
 <pre class="r"><code>head(vcf)</code></pre>
 <pre><code>## [1] &quot;***** Object of class &#39;vcfR&#39; *****&quot;
 ## [1] &quot;***** Meta section *****&quot;
@@ -565,6 +566,8 @@ vcf</code></pre>
 ## [1] &quot;Unique GT formats:&quot;
 ## [1] &quot;GT:AD:DP:GQ:PL&quot;
 ## [1]</code></pre>
+<p>After we have made any manipulations of the file we can save it as a VCF file with the function <code>write.vcf()</code>.</p>
+<pre class="r"><code>write.vcf(vcf, &quot;myVCFdata_filtered.vcf.gz&quot;)</code></pre>
 <p>We now have a summary of our VCF file which we can use to help understand what forms of information are contained within it. This information can be further explored with plotting functions and used to filter the VCF file for high quality variants.</p>
 </div>
 

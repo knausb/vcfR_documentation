@@ -296,12 +296,80 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 
 </div>
 
+<div id="TOC">
+<ul>
+<li><a href="#omitting-samples">Omitting samples</a></li>
+<li><a href="#omitting-variants">Omitting variants</a></li>
+<li><a href="#summary.">Summary.</a></li>
+</ul>
+</div>
 
+<p>In the section on depth we learned how we can visualize variant depth, or any other numeric value provided in the gt portion of VCF data. In the section on censoring data we learned how to rescore variants that were outside our acceptance criteria as missing. And in the section on missing data we learned how to quantify and visualize missingness in our dataset. Here we put all of these skills together in order to omit samples and variants that have been set as NA.</p>
+<pre class="r"><code>vcf</code></pre>
+<pre><code>## ***** Object of Class vcfR *****
+## 61 samples
+## 69,296 variants
+## Object size: 46.5 Mb
+## 37.62 percent missing data
+## *****        *****         *****</code></pre>
+<p>Because part of this exercise involves setting cells in our data matrix as NA we should begin by reminding ourselves of how abundant they are. By usung the show methods we see that we have over 35 percent missing data. We can now use what we learned previously to set variants that are outside our per samples inclusion threshold for depth as NA.</p>
+<pre class="r"><code>quants &lt;- apply(dp, MARGIN=2, quantile, probs=c(0.1, 0.8), na.rm=TRUE)
+dp2 &lt;- sweep(dp, MARGIN=2, FUN = &quot;-&quot;, quants[1,])
+dp[dp2 &lt; 0] &lt;- NA
+
+dp2 &lt;- sweep(dp, MARGIN=2, FUN = &quot;-&quot;, quants[2,])
+dp[dp2 &gt; 0] &lt;- NA
+
+dp[dp &lt; 4] &lt;- NA
+
+vcf@gt[,-1][ is.na(dp) == TRUE ] &lt;- NA</code></pre>
+<pre class="r"><code>vcf</code></pre>
+<pre><code>## ***** Object of Class vcfR *****
+## 61 samples
+## 69,296 variants
+## Object size: 45.2 Mb
+## 66.63 percent missing data
+## *****        *****         *****</code></pre>
+<p>We see that this censoring has increased the degree of missingness in our matrix to over 60 percent. Ideally we should visualize the results of this action. For brevity, we will not here. But you can return to the section on depth and reuse the code presented there to visualize how this change has affected the distribution of the data.</p>
+<pre class="r"><code>heatmap.bp(dp[1:1000,], rlabels = FALSE)</code></pre>
+<p><img src="omitting_data_files/figure-html/unnamed-chunk-5-1.png" width="1152" style="display: block; margin: auto;" /></p>
 <div id="omitting-samples" class="section level2">
 <h2>Omitting samples</h2>
+<p>We can see that some samples have a high degree of missingness. By omiting these samples we may reduce the overall missingness in the data set.</p>
+<pre class="r"><code>myMiss &lt;- apply(dp, MARGIN = 2, function(x){ sum( is.na(x) ) } )
+myMiss &lt;- myMiss / nrow(dp)
+vcf@gt &lt;- vcf@gt[, c(TRUE, myMiss &lt; 0.7)]
+vcf</code></pre>
+<pre><code>## ***** Object of Class vcfR *****
+## 41 samples
+## 69,296 variants
+## Object size: 34.6 Mb
+## 53.33 percent missing data
+## *****        *****         *****</code></pre>
+<pre class="r"><code>dp &lt;- extract.gt(vcf, element = &quot;DP&quot;, as.numeric=TRUE)
+heatmap.bp(dp[1:1000,], rlabels = FALSE)</code></pre>
+<p><img src="omitting_data_files/figure-html/unnamed-chunk-7-1.png" width="1152" style="display: block; margin: auto;" /></p>
 </div>
 <div id="omitting-variants" class="section level2">
 <h2>Omitting variants</h2>
+<p>We’ve also seen previously how to visualize and quantify missingness in our dataset. We can use this information to omit variants that have a high degreee of missingness.</p>
+<pre class="r"><code>myMiss &lt;- apply(dp, MARGIN = 1, function(x){ sum( is.na(x) ) } )
+myMiss &lt;- myMiss / ncol(dp)
+vcf &lt;- vcf[myMiss &lt; 0.2, ]
+vcf</code></pre>
+<pre><code>## ***** Object of Class vcfR *****
+## 41 samples
+## 18,782 variants
+## Object size: 9.8 Mb
+## 9.421 percent missing data
+## *****        *****         *****</code></pre>
+<pre class="r"><code>dp &lt;- extract.gt(vcf, element = &quot;DP&quot;, as.numeric=TRUE)
+heatmap.bp(dp[1:1000,], rlabels = FALSE)</code></pre>
+<p><img src="omitting_data_files/figure-html/unnamed-chunk-9-1.png" width="1152" style="display: block; margin: auto;" /></p>
+</div>
+<div id="summary." class="section level2">
+<h2>Summary.</h2>
+<p>Through omitting samples and variants with a high degree of missingness we have taken a dataset that was over 35 percent missing data to a dataset that is now below ten percent missing data. We’ve also reduced tha sample size from 61 samples to 41. And we’ve reduced the number of variants from over 60 thousand to just below 20 thousand. ow important any particular sample or variant is will have to be determined base on the specifics of any particular project. These actions have greatly improved the ratio of data to missing or low quality data in our dataset. Through exploring thresholds that are different from those implemented here one may be able to improve on this more. We can now proceed to downstream analyses of this dataset with greater confidence that the variants we are analyzing are of high quality.</p>
 </div>
 
 <center>

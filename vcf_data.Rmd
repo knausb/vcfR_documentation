@@ -183,12 +183,26 @@ Using the R package vcfR, we can read VCF format files into memory using the fun
 Once in memory we can use the `head()` method to summarize the information in the three VCF regions.
 
 
+```{r, eval = FALSE}
+vcf <- read.vcfR("myVCFdata.vcf.gz")
+```
+
 
 ```{r}
 head(vcf)
 ```
 
 
+After we have made any manipulations of the file we can save it as a VCF file with the function `write.vcf()`.
+
+
+```{r, eval = FALSE}
+write.vcf(vcf, "myVCFdata_filtered.vcf.gz")
+```
+
+
+
 We now have a summary of our VCF file which we can use to help understand what forms of information are contained within it.
 This information can be further explored with plotting functions and used to filter the VCF file for high quality variants.
+
 
