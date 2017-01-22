@@ -43,7 +43,6 @@ dp[1:4,1:6]
 
 We see that it is a large matrix containing lots of numbers, so viewing it directly is of little use.
 Here we'll demonstrate the use of barplots and violin plots to visualize this data.
-Once we have an idea of what the data look like, we'll see how we can censor data that we determine to be unusual.
 
 
 ## Base barplot
@@ -62,7 +61,7 @@ par(mar=c(5,4,4,2))
 ```
 
 
-We've generated a box and whisker plot for each sample where 50% of the data is contained within each colored box and outliers are presented at circles.
+We've generated a box and whisker plot for each sample where 50% of the data is contained within each colored box and outliers are presented as circles.
 One issue with this plot is that all of the data seem squished at the bottom of the plot.
 A log transformation could help this plot.
 Remember that log of zero is undefined, so if you persue a log transformation you may need to handle these cases.

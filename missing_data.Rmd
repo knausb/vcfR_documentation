@@ -18,9 +18,11 @@ As the size of our dataset grow in terms of samples and variants the size of our
 As the size of our data matrix grows it also increases the opportunity to have missing data.
 Also, some of our quality filtering steps increased the degree of missingness in our data matrix by setting values that we determined to be of unusual quality to NA.
 One way of managing missing data is to use interpolation, a set of methods that attempts to infer what the most likely genotype should be and replaces the missing genotype with the interpolated genotype.
-However, if your data has a large degree of missingness you may want to attempt to mitigate missingness instead of interpolation or prior to an interpolation step.
+However, if your data has a large degree of missingness you may want to attempt to mitigate missingness instead of interpolation
+Or you may want to implement a mitigation step prior to interpolation in the hope that this will improve the performance of the interpolation.
 Missing data can frequently be due to samples (columns) or variants (rows) of low quality.
-Here we demonstrate how to identify samples and variants in the data set that have a high degree of missingness and omit them.
+Here we demonstrate how to identify samples and variants in the data set that have a high degree of missingness.
+In another section we'll show how to omit them.
 
 
 ```{r, results='hide', echo = FALSE}
@@ -33,7 +35,7 @@ dp <- extract.gt(vcf, element = "DP", as.numeric=TRUE)
 ## Quantifying missingness, one sample
 
 
-To quantify missingness for a single sample we can use the fnction `is.na()`.
+To quantify missingness for a single sample we can use the function `is.na()`.
 This function uses a vector as an argument and returns a logical vector (TRUE and FALSE) indicating which values are NA.
 If we remind ourselves that TRUEs and FALSEs are numerically encoded as ones and zeros it reminds us we can take a sum of this logical vector to determine the degree of missingness.
 
@@ -41,7 +43,6 @@ If we remind ourselves that TRUEs and FALSEs are numerically encoded as ones and
 ```{r}
 as.numeric(TRUE)
 sum(is.na(dp[,1]))
-# apply(dp, MARGIN = 2, function(x){sum(is.na(x))})
 ```
 
 
@@ -79,7 +80,8 @@ The samples with long names have a high degree of missingness (around 80%) while
 
 
 We can do something similar to query the variants (rows) for missingness.
-However, our dataset has over 60 thousand variants, so we can't visualize this with a barchart with 60 thousand bars.
+However, our dataset has over 60 thousand variants, so we wouldn't want to visualize this with a barchart.
+It would require a barchart with 60 thousand bars.
 Instead of usung a barchart we'll use a histogram.
 
 
@@ -90,3 +92,10 @@ myMiss <- myMiss/ncol(vcf@gt[,-1])
 
 hist(myMiss, col = "#8DD3C7", xlab = "Missingness (%)")
 ```
+
+
+We've now seen how we can create summaries of our data matrix over both rows and columns.
+Once we have this knowlege in hand we may develop a plan for managing this data.
+Future sections will provide examples of mitigating data that has been determined to be undesireable.
+
+

@@ -238,9 +238,6 @@ $(document).ready(function () {
       <a href="omitting_data.html">Omitting data</a>
     </li>
     <li>
-      <a href="quality_filtering.html">Quality filtering</a>
-    </li>
-    <li>
       <a href="apply.html">Apply</a>
     </li>
   </ul>
@@ -304,7 +301,7 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 </ul>
 </div>
 
-<p>In the section on depth we learned how we can visualize variant depth, or any other numeric value provided in the gt portion of VCF data. In the section on censoring data we learned how to rescore variants that were outside our acceptance criteria as missing. And in the section on missing data we learned how to quantify and visualize missingness in our dataset. Here we put all of these skills together in order to omit samples and variants that have been set as NA.</p>
+<p>In the section on depth we learned how we can visualize variant depth, or any other numeric value provided in the gt portion of VCF data. In the section on censoring data we learned how to rescore variants that were outside our acceptance thershold as missing. And in the section on missing data we learned how to quantify and visualize missingness in our dataset. Here we put all of these skills together in order to omit samples and variants that have been set as missing (NA).</p>
 <pre class="r"><code>vcf</code></pre>
 <pre><code>## ***** Object of Class vcfR *****
 ## 61 samples
@@ -352,7 +349,7 @@ heatmap.bp(dp[1:1000,], rlabels = FALSE)</code></pre>
 </div>
 <div id="omitting-variants" class="section level2">
 <h2>Omitting variants</h2>
-<p>We’ve also seen previously how to visualize and quantify missingness in our dataset. We can use this information to omit variants that have a high degreee of missingness.</p>
+<p>Previously we have seen how to quantify and visualize missingness for variants in our dataset. We can use this information to omit variants that have a high degreee of missingness.</p>
 <pre class="r"><code>myMiss &lt;- apply(dp, MARGIN = 1, function(x){ sum( is.na(x) ) } )
 myMiss &lt;- myMiss / ncol(dp)
 vcf &lt;- vcf[myMiss &lt; 0.2, ]
@@ -369,7 +366,7 @@ heatmap.bp(dp[1:1000,], rlabels = FALSE)</code></pre>
 </div>
 <div id="summary." class="section level2">
 <h2>Summary.</h2>
-<p>Through omitting samples and variants with a high degree of missingness we have taken a dataset that was over 35 percent missing data to a dataset that is now below ten percent missing data. We’ve also reduced tha sample size from 61 samples to 41. And we’ve reduced the number of variants from over 60 thousand to just below 20 thousand. ow important any particular sample or variant is will have to be determined base on the specifics of any particular project. These actions have greatly improved the ratio of data to missing or low quality data in our dataset. Through exploring thresholds that are different from those implemented here one may be able to improve on this more. We can now proceed to downstream analyses of this dataset with greater confidence that the variants we are analyzing are of high quality.</p>
+<p>Through omitting samples and variants with a high degree of missingness we have taken a dataset that was over 35 percent missing data to a dataset that is now below ten percent missing data. We’ve also reduced tha sample size from 61 samples to 41. And we’ve reduced the number of variants from over 60 thousand to just below 20 thousand. How important any particular sample or variant is will have to be determined base on the specifics of any particular project. These actions have greatly improved the ratio of data to missing or low quality data in our dataset. Through exploring thresholds that are different from those implemented here one may be able to improve on this more. We can now proceed to downstream analyses of this dataset with greater confidence that the variants we are analyzing are of high quality.</p>
 </div>
 
 <center>

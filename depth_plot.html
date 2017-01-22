@@ -238,9 +238,6 @@ $(document).ready(function () {
       <a href="omitting_data.html">Omitting data</a>
     </li>
     <li>
-      <a href="quality_filtering.html">Quality filtering</a>
-    </li>
-    <li>
       <a href="apply.html">Apply</a>
     </li>
   </ul>
@@ -311,7 +308,7 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 ## S1_4657  1  4  1                      NA  7                       NA
 ## S1_5193 NA NA  3                      NA NA                       NA
 ## S1_5647  5  8 NA                      NA  3                       NA</code></pre>
-<p>We see that it is a large matrix containing lots of numbers, so viewing it directly is of little use. Here we’ll demonstrate the use of barplots and violin plots to visualize this data. Once we have an idea of what the data look like, we’ll see how we can censor data that we determine to be unusual.</p>
+<p>We see that it is a large matrix containing lots of numbers, so viewing it directly is of little use. Here we’ll demonstrate the use of barplots and violin plots to visualize this data.</p>
 <div id="base-barplot" class="section level2">
 <h2>Base barplot</h2>
 <p>Base R includes a great selection of graphical tools. One is <code>barplot()</code>. A few things nice about this function is that it is designed to work on matrices, such as the one we have, and that it is quick to execute.</p>
@@ -320,7 +317,7 @@ boxplot(dp, col=2:8, las=3)
 title(ylab = &quot;Depth (DP)&quot;)</code></pre>
 <p><img src="depth_plot_files/figure-html/unnamed-chunk-3-1.png" width="1152" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>par(mar=c(5,4,4,2))</code></pre>
-<p>We’ve generated a box and whisker plot for each sample where 50% of the data is contained within each colored box and outliers are presented at circles. One issue with this plot is that all of the data seem squished at the bottom of the plot. A log transformation could help this plot. Remember that log of zero is undefined, so if you persue a log transformation you may need to handle these cases. An observation to note is that the samples appear to exist as two classes. The samples with long names appear to have lower sequence depth. This is likely due to some form of batch effect.</p>
+<p>We’ve generated a box and whisker plot for each sample where 50% of the data is contained within each colored box and outliers are presented as circles. One issue with this plot is that all of the data seem squished at the bottom of the plot. A log transformation could help this plot. Remember that log of zero is undefined, so if you persue a log transformation you may need to handle these cases. An observation to note is that the samples appear to exist as two classes. The samples with long names appear to have lower sequence depth. This is likely due to some form of batch effect.</p>
 </div>
 <div id="violin-plot" class="section level2">
 <h2>Violin plot</h2>
