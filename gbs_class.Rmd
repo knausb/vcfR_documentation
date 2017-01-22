@@ -13,7 +13,11 @@ It is assumed that the audience understands the GBS method (i.e., how the data w
 ## Outline
 
 * VCF data
-* Data quality: missingness, judging quality
+* Extracting data matrices from VCF data
+* Plotting depth (or other parameters)
+* Quantifying data missingness
+* Censoring data outside an acceptance threshold
+* Omitting data outside an acceptance threshold
 * R's apply function
 
 
