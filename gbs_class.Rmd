@@ -21,3 +21,8 @@ It is assumed that the audience understands the GBS method (i.e., how the data w
 * R's apply function
 
 
+The dataset we will be using consists of samples of *Phytophthora rubi*, *P. syringae* and *P. plurivora* that are all mapped to a *P. rubi* reference.
+We'll see that the other species do not map well to the *P. rubi* genome.
+This will provide a good example for troubleshooting batch effects in datasets.
+
+
