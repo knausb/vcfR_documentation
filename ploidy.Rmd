@@ -1,0 +1,21 @@
+---
+title: "Ploidy"
+output:
+  html_document
+---
+
+
+Data contained in VCF files have been used to infer ploidy in organisms where ploidy is either unknown or where variation in ploidy is a research question.
+Only the variable positions are reported in a VCF file, so we do not have total information about a genome or any particular region.
+We should have all of the heterozygous sites in our VCF file and this can be used to infer ploidy.
+At a diploid heterozygous position we expect to observe each allele at a ratio of 1/2.
+For example, at a G/C polymorphism sequenced at 20X coverage we would expect to observe each all approximately 10 times.
+At a triploid  heterozygous position we would expect to observe alleles at a ratio of 1/3.
+For example, at a G/G/C polymorphism sequenced at 20X coverage we would expect to observe G approximately 13 times (we can not distinguish the two copies) and the C about 7 times.
+For tetraplods we would expect ratios of 1/4.
+This means that we can use the ratios of alleles observed at heterozygous positions to infer ploidy level.
+
+
+
+
+

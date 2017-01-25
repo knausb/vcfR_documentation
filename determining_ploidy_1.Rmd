@@ -1,0 +1,402 @@
+---
+title: "Determining ploidy 1"
+output:
+  html_document
+---
+
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(fig.align = 'center')
+knitr::opts_chunk$set(fig.width = 8)
+knitr::opts_chunk$set(fig.height = 8)
+```
+
+
+
+For some organisms ploidy information is unclear.
+This is important because current variant callers can need to have ploidy specified at the time of variant calling (i.e., they cannot infer ploidy).
+Here I explore a method to infer ploidy from VCF data.
+
+
+## Input data
+
+
+Data import is performed similar to other examples.
+
+
+```{r}
+# Load libraries
+library(vcfR)
+library(pinfsc50)
+
+# Determine file locations
+vcf_file <- system.file("extdata", "pinf_sc50.vcf.gz",
+                        package = "pinfsc50")
+
+# Read data into memory
+vcf <- read.vcfR(vcf_file, verbose = FALSE)
+vcf
+```
+
+
+
+## Allele balance
+
+
+In high throughput sequencing we sequence each allele multiple times.
+For heterozygotes it is assumed that we sequence each allele an equal number of times.
+For example, if we sequence a diploid heterozygote at 30X we would expect to sequence each allele 15 times.
+Some variation around this expectation may be due to sequencing error.
+If we sequence a triploid heterozygote with a genotype of A/A/T at 30X we would expect to sequence A 20 times and T 10 times.
+Because we can not determine which A was sequenced we can only report the sum of all sequences even though we expect to sequence both A alleles 10 times.
+For a triploid heterozygote with a genotype of A/C/T sequenced at 30X would expect to sequence A 10 times, C 10 times and T 10 times.
+
+
+```{r}
+knitr::kable(vcf@gt[c(1:2,11,30),1:4])
+```
+
+
+The 'AD' field in our VCF data includes the depth at which each allele was sequenced.
+We can extract this information with the function `extract.gt()`.
+
+
+```{r}
+ad <- extract.gt(vcf, element = 'AD')
+```
+
+
+```{r}
+knitr::kable(ad[c(1:2,11,30),1:4])
+```
+
+Note that these genotypes were called as diploids.
+This can be validated by confirming that the genotypes consist of two alleles.
+Allele depth appears to be independent of this parameterization.
+This is probably because this information can be gathered upstream of the process of genotype calling.
+Despite the specification of diploidy, the allele depth information can include the observation of multiple alleles.
+
+
+```{r}
+#knitr::kable(ad[grep("[^0],[^0],[^0]", ad[,'DDR7602']),1:4])
+knitr::kable(ad[grep("[^0],[^0],[^0]", ad[,'P13626'])[1:6],c(2:3,12)])
+```
+
+
+This can be seen in the VCF data along with the genotypes as well.
+
+
+```{r}
+#knitr::kable(vcf@gt[grep("[^0],[^0],[^0]", ad[,'P13626']),c(4:5,13)])
+knitr::kable(vcf@gt[grep("[^0],[^0],[^0]", ad[,'P13626'])[1:6],c(3:4,13)])
+```
+
+
+The genotypes are reported as diploid genotypes because this was specified as an argument for the variant caller.
+Despite this specification, we can see that more than two alleles can be observed for a sample at a variant.
+Here we've searched the sample P13626 for teh presented example.
+
+
+
+The function `extract.gt()` isolates the 'AD' data from the colon delimited string in the VCF data.
+We expect integer counts for the number of sequences observed.
+However, because this data is comma delimited we need another step before we have integers.
+We use the function `masplit()` to extract the first and second allele.
+At that point we have integers so we can use math to create allele frequencies from the counts.
+
+
+```{r}
+allele1 <- masplit(ad, record = 1)
+allele2 <- masplit(ad, record = 2)
+
+ad1 <- allele1 / (allele1 + allele2)
+ad2 <- allele2 / (allele1 + allele2)
+```
+
+
+Once we have our allele frequencies we can plot them with a histogram.
+
+
+```{r}
+hist(ad2[,"P17777us22"], breaks = seq(0,1,by=0.02), col = "#808080", xaxt="n")
+hist(ad1[,"P17777us22"], breaks = seq(0,1,by=0.02), col = "#C0C0C0", add = TRUE)
+axis(side=1, at=c(0,0.25,0.333,0.5,0.666,0.75,1), labels=c(0,"1/4","1/3","1/2","1/3","3/4",1))
+```
+
+
+
+
+The most common class of variant is the homozygote.
+This overwhelms the plot.
+We can remove these so we can focus on the heterozygotes.
+
+
+```{r}
+gt <- extract.gt(vcf, element = 'GT')
+hets <- is_het(gt)
+
+is.na( ad[ !hets ] ) <- TRUE
+
+allele1 <- masplit(ad, record = 1)
+allele2 <- masplit(ad, record = 2)
+
+ad1 <- allele1 / (allele1 + allele2)
+ad2 <- allele2 / (allele1 + allele2)
+
+hist(ad2[,"P17777us22"], breaks = seq(0,1,by=0.02), col = "#808080", xaxt="n")
+hist(ad1[,"P17777us22"], breaks = seq(0,1,by=0.02), col = "#C0C0C0", add = TRUE)
+axis(side=1, at=c(0,0.25,0.333,0.5,0.666,0.75,1), labels=c(0,"1/4","1/3","1/2","1/3","3/4",1))
+```
+
+
+This allows us to focus on the heterozygous variants and we observe a peak at 0.5 consistent with our expectation.
+However, the frequencies range almost completely from 0 to one.
+This suggests some improvement could be made.
+
+
+## Allele Depth
+
+
+To get an idea on how to improve our plots we can take a closer look at allele depth.
+
+
+```{r}
+ad <- extract.gt(vcf, element = 'AD')
+#ad[1:3,1:4]
+
+allele1 <- masplit(ad, record = 1)
+allele2 <- masplit(ad, record = 2)
+
+# Subset to a vector for manipulation.
+tmp <- allele1[,"P17777us22"]
+#sum(tmp == 0, na.rm = TRUE)
+#tmp <- tmp[tmp > 0]
+tmp <- tmp[tmp <= 100]
+
+hist(tmp, breaks=seq(0,100,by=1), col="#808080", main = "P17777us22")
+
+sums <- apply(allele1, MARGIN=2, quantile, probs=c(0.15, 0.95), na.rm=TRUE)
+sums[,"P17777us22"]
+abline(v=sums[,"P17777us22"], col=2, lwd=2)
+
+```
+
+
+Here we have presented the number of times the most abundant allele was sequenced as a histogram.
+We see two classes of calls resulting in peaks at just below 40 and just below 60.
+These peaks correspond to heterozygotes and homozygotes respectively.
+There are a substantial number of variants with exceptionally high coverage, here we've limited the presentation to just variants below 100.
+There is also a substantial peak near zero representing variants sequenced at low coverage.
+Filtering this data by imposing some sort of threshold may improve our other analyses.
+Here we've used the 15% and 95% quantiles.
+
+
+```{r, eval=FALSE, echo=FALSE}
+#gq <- extract.gt(vcf, element = 'GQ', as.numeric = TRUE)
+#plot(allele1[!hets[,"P17777us22"],"P17777us22"] + allele1[!hets[,"P17777us22"],"P17777us22"], gq[!hets[,"P17777us22"],"P17777us22"], pch = 20, col = "#8B451366")
+#plot(allele1[!hets[,"P17777us22"],"P17777us22"], gq[!hets[,"P17777us22"],"P17777us22"], pch = 20, col = "#8B451366")
+#abline(v=0:5*10, col="#808080")
+```
+
+
+We can see how this treatment looks on the second most abundant allele as well.
+
+
+```{r}
+tmp <- allele2[,"P17777us22"]
+tmp <- tmp[tmp>0]
+tmp <- tmp[tmp<=100]
+
+hist(tmp, breaks=seq(1,100,by=1), col="#808080", main="P17777us22")
+
+sums[,"P17777us22"]
+abline(v=sums[,"P17777us22"], col=2, lwd=2)
+```
+
+
+We can use this information to filter our data.
+First we'll look at the raw data.
+
+
+```{r}
+#vcf <- extract.indels(vcf)
+#gq <- extract.gt(vcf, element = 'GQ', as.numeric = TRUE)
+#vcf@gt[,-1][ gq < 99 ] <- NA
+
+ad <- extract.gt(vcf, element = 'AD')
+allele1 <- masplit(ad, record = 1)
+allele2 <- masplit(ad, record = 2)
+boxplot(allele1, las=3)
+#hist(allele1[,"P17777us22"], ylim=c(0,2000),
+#     breaks = seq(0,max(allele1[,"P17777us22"], na.rm = TRUE),by=5),
+#     xlim=c(0,100))
+
+# Subset to a vector for manipulation.
+#tmp <- allele1[,"P17777us22"]
+#tmp <- tmp[tmp <= 100]
+#hist(tmp, breaks=seq(0,100,by=1), col="#808080")
+```
+
+
+Now we can use our quantiles to censor variants outside of our desired range by setting them to NA.
+
+
+```{r}
+sums <- apply(allele1, MARGIN=2, quantile, probs=c(0.15, 0.95), na.rm=TRUE)
+# Allele 1
+dp2 <- sweep(allele1, MARGIN=2, FUN = "-", sums[1,])
+#allele1[dp2 < 0] <- NA
+vcf@gt[,-1][ dp2 < 0 & !is.na(vcf@gt[,-1]) ] <- NA
+dp2 <- sweep(allele1, MARGIN=2, FUN = "-", sums[2,])
+#allele1[dp2 > 0] <- NA
+vcf@gt[,-1][dp2 > 0] <- NA
+# Allele 2
+dp2 <- sweep(allele2, MARGIN=2, FUN = "-", sums[1,])
+vcf@gt[,-1][ dp2 < 0 & !is.na(vcf@gt[,-1]) ] <- NA
+dp2 <- sweep(allele2, MARGIN=2, FUN = "-", sums[2,])
+vcf@gt[,-1][dp2 > 0] <- NA
+
+# Hard filter
+#dp[dp < 4] <- NA
+#vcf@gt[,-1][allele1 < 8] <- NA
+#
+
+#adp <- adp[adp<=100]
+#adp <- adp[adp>=sums[,"P17777us22"][1]]
+#adp <- adp[adp<=sums[,"P17777us22"][2]]
+
+#hist(adp, breaks=seq(0, max(adp, na.rm = TRUE )+1, by=1), col="#C0C0C0", xlim = c(0,100))
+#axis(side=1,at=1:4*10)
+#abline(v=sums[,"P17777us22"], col=2, lwd = 2)
+
+#adp <- allele2[,"P17777us22"]
+#adp <- adp[adp>0]
+#adp <- adp[adp<=100]
+#hist(adp, breaks=seq(0, max(adp, na.rm = TRUE), by=1), col="#C0C0C0")
+#par(mfrow=c(1,1))
+#abline(v=sums[,"P17777us22"], col=2, lwd = 2)
+```
+
+
+
+Now we can check out work with another set of box and whisker plots.
+
+
+```{r}
+ad <- extract.gt(vcf, element = 'AD')
+allele1 <- masplit(ad, record = 1)
+allele2 <- masplit(ad, record = 2)
+boxplot(allele1, las=3)
+#hist(allele1[,"P17777us22"], ylim=c(0,2000), breaks = seq(0,100,by=5) )
+```
+
+
+Now we can see if our histogram of allele balance has been cleaned up.
+
+
+```{r}
+gt <- extract.gt(vcf, element = 'GT')
+hets <- is_het(gt)
+is.na( ad[ !hets ] ) <- TRUE
+
+allele1 <- masplit(ad, record = 1)
+allele2 <- masplit(ad, record = 2)
+
+ad1 <- allele1 / (allele1 + allele2)
+ad2 <- allele2 / (allele1 + allele2)
+
+hist(ad2[,"P17777us22"], breaks = seq(0,1,by=0.02), col = "#808080", xaxt="n", main="P17777us22")
+hist(ad1[,"P17777us22"], breaks = seq(0,1,by=0.02), col = "#C0C0C0", add = TRUE)
+axis(side=1, at=c(0,0.25,0.333,0.5,0.666,0.75,1), labels=c(0,"1/4","1/3","1/2","2/3","3/4",1))
+```
+
+
+We see that the shoulders that were present in the previous plot are almost entirely removed.
+This appears to be a dramatic improvement.
+
+
+
+
+
+## Estimation of allele balance
+
+
+
+```{r}
+sample <- "P17777us22"
+bp1 <- hist(ad1[,sample], breaks = seq(0,1,by=0.02), plot = TRUE, col="#808080")
+#bp2 <- hist(ad2[,sample], breaks = seq(0,1,by=0.02), plot = TRUE, add = TRUE, col="#C0C0C0")
+
+d1 <- bp1$counts[ -1 ] - bp1$counts[ -length(bp1$counts) ]
+
+segments(x0 = bp1$breaks[ -length(bp1$counts) ],
+         y0 = bp1$counts[ -length(bp1$counts) ] - d1/2, 
+         x1 = bp1$breaks[-1], 
+         y1 = bp1$counts[ -length(bp1$counts) ] + d1/2,
+         col = "#B22222", lwd = 3 )
+
+
+( bp1$counts[ -1 ] - bp1$counts[ -length(bp1$counts) ] ) #/ 0.02
+
+
+knitr::kable(cbind(bp1$mids[ -length(bp1$counts) ], bp1$counts[ -length(bp1$counts) ], d1))
+
+
+#abline(a=0,b=1000)
+
+```
+
+
+The difference among allele balances can be a test for deviation from diploidy.
+When both the major and minor allele are near 0.5 the difference should be near zero.
+When the major and minor allele differ from 0.5 there should be a larger difference among the frequencies.
+To test for a difference in ploidy among diploid and triploid a critical value of
+
+$$
+0.5 + (2/3-0.5)/2 = 0.583333
+$$
+
+Similarly, a critical value to test the difference among triploidy and tetraploidy could be calculates as
+
+$$
+2/3 + (0.75 - 2/3) / 2 = 0.7083333
+$$
+
+
+
+```{r}
+sample <- "P17777us22"
+bp1 <- hist(ad1[,sample], breaks = seq(0,1,by=0.02), plot = TRUE, col="#808080", xaxt='n')
+axis(side=1, at=c(0,0.25,0.333,0.5,0.666,0.75,1), labels=c(0,"1/4","1/3","1/2","2/3","3/4",1))
+abline(v=0.5, lwd=3, col="#228B22")
+abline(v=2/3, lwd=3, col="#228B22")
+abline(v=0.75, lwd=3, col="#228B22")
+
+abline(v=0.583333, lwd=3, col="#B22222")
+abline(v=0.708333, lwd=3, col="#B22222")
+
+```
+
+
+
+```{r}
+#colnames(ad1)
+sample <- "P13626"
+bp1 <- hist(ad1[,sample], breaks = seq(0,1,by=0.02), plot = TRUE, col="#808080", xaxt='n')
+d1 <- bp1$counts[ -1 ] - bp1$counts[ -length(bp1$counts) ]
+axis(side=1, at=c(0,0.25,0.333,0.5,0.666,0.75,1), labels=c(0,"1/4","1/3","1/2","2/3","3/4",1))
+segments(x0 = bp1$breaks[ -length(bp1$counts) ],
+         y0 = bp1$counts[ -length(bp1$counts) ] - d1/2, 
+         x1 = bp1$breaks[-1], 
+         y1 = bp1$counts[ -length(bp1$counts) ] + d1/2,
+         col = "#B22222", lwd = 3 )
+
+abline(v=0.5, lwd=3, col="#228B22")
+abline(v=2/3, lwd=3, col="#228B22")
+abline(v=0.75, lwd=3, col="#228B22")
+
+abline(v=0.583333, lwd=3, col="#B22222")
+abline(v=0.708333, lwd=3, col="#B22222")
+
+
+```

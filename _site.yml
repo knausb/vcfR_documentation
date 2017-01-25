@@ -39,6 +39,12 @@ navbar:
           href: "omitting_data.html"
         - text: "Apply"
           href: "apply.html"
+    - text: "Ploidy"
+      menu:
+        - text: "Ploidy"
+          href: "ploidy.html"
+        - text: "Determining ploidy 1"
+          href: "determining_ploidy_1.html"
     - text: "FAQ"
       menu:
         - text: "Subset to 1 chromosome"
