@@ -118,8 +118,8 @@ Once we have our allele frequencies we can plot them with a histogram.
 
 
 ```{r}
-hist(ad2[,"P17777us22"], breaks = seq(0,1,by=0.02), col = "#808080", xaxt="n")
-hist(ad1[,"P17777us22"], breaks = seq(0,1,by=0.02), col = "#C0C0C0", add = TRUE)
+hist(ad2[,"P17777us22"], breaks = seq(0,1,by=0.02), col = "#1f78b4", xaxt="n")
+hist(ad1[,"P17777us22"], breaks = seq(0,1,by=0.02), col = "#a6cee3", add = TRUE)
 axis(side=1, at=c(0,0.25,0.333,0.5,0.666,0.75,1), labels=c(0,"1/4","1/3","1/2","1/3","3/4",1))
 ```
 
@@ -143,8 +143,8 @@ allele2 <- masplit(ad, record = 2)
 ad1 <- allele1 / (allele1 + allele2)
 ad2 <- allele2 / (allele1 + allele2)
 
-hist(ad2[,"P17777us22"], breaks = seq(0,1,by=0.02), col = "#808080", xaxt="n")
-hist(ad1[,"P17777us22"], breaks = seq(0,1,by=0.02), col = "#C0C0C0", add = TRUE)
+hist(ad2[,"P17777us22"], breaks = seq(0,1,by=0.02), col = "#1f78b4", xaxt="n")
+hist(ad1[,"P17777us22"], breaks = seq(0,1,by=0.02), col = "#a6cee3", add = TRUE)
 axis(side=1, at=c(0,0.25,0.333,0.5,0.666,0.75,1), labels=c(0,"1/4","1/3","1/2","1/3","3/4",1))
 ```
 
@@ -305,8 +305,8 @@ allele2 <- masplit(ad, record = 2)
 ad1 <- allele1 / (allele1 + allele2)
 ad2 <- allele2 / (allele1 + allele2)
 
-hist(ad2[,"P17777us22"], breaks = seq(0,1,by=0.02), col = "#808080", xaxt="n", main="P17777us22")
-hist(ad1[,"P17777us22"], breaks = seq(0,1,by=0.02), col = "#C0C0C0", add = TRUE)
+hist(ad2[,"P17777us22"], breaks = seq(0,1,by=0.02), col = "#1f78b4", xaxt="n", main="P17777us22")
+hist(ad1[,"P17777us22"], breaks = seq(0,1,by=0.02), col = "#a6cee3", add = TRUE)
 axis(side=1, at=c(0,0.25,0.333,0.5,0.666,0.75,1), labels=c(0,"1/4","1/3","1/2","2/3","3/4",1))
 ```
 
@@ -315,88 +315,20 @@ We see that the shoulders that were present in the previous plot are almost enti
 This appears to be a dramatic improvement.
 
 
-
-
-
-## Estimation of allele balance
-
+While we've focused on one sample through most of this example its important to realize that we've been analyzing all of the samples in the dataset.
+This means that now that we have one sample that appears to to have been well processed we can now examine the other samples as well.
 
 
 ```{r}
-sample <- "P17777us22"
-bp1 <- hist(ad1[,sample], breaks = seq(0,1,by=0.02), plot = TRUE, col="#808080")
-#bp2 <- hist(ad2[,sample], breaks = seq(0,1,by=0.02), plot = TRUE, add = TRUE, col="#C0C0C0")
-
-d1 <- bp1$counts[ -1 ] - bp1$counts[ -length(bp1$counts) ]
-
-segments(x0 = bp1$breaks[ -length(bp1$counts) ],
-         y0 = bp1$counts[ -length(bp1$counts) ] - d1/2, 
-         x1 = bp1$breaks[-1], 
-         y1 = bp1$counts[ -length(bp1$counts) ] + d1/2,
-         col = "#B22222", lwd = 3 )
-
-
-( bp1$counts[ -1 ] - bp1$counts[ -length(bp1$counts) ] ) #/ 0.02
-
-
-knitr::kable(cbind(bp1$mids[ -length(bp1$counts) ], bp1$counts[ -length(bp1$counts) ], d1))
-
-
-#abline(a=0,b=1000)
-
-```
-
-
-The difference among allele balances can be a test for deviation from diploidy.
-When both the major and minor allele are near 0.5 the difference should be near zero.
-When the major and minor allele differ from 0.5 there should be a larger difference among the frequencies.
-To test for a difference in ploidy among diploid and triploid a critical value of
-
-$$
-0.5 + (2/3-0.5)/2 = 0.583333
-$$
-
-Similarly, a critical value to test the difference among triploidy and tetraploidy could be calculates as
-
-$$
-2/3 + (0.75 - 2/3) / 2 = 0.7083333
-$$
-
-
-
-```{r}
-sample <- "P17777us22"
-bp1 <- hist(ad1[,sample], breaks = seq(0,1,by=0.02), plot = TRUE, col="#808080", xaxt='n')
+hist(ad2[,"P13626"], breaks = seq(0,1,by=0.02), col = "#33a02c", xaxt="n", main="P13626")
+hist(ad1[,"P13626"], breaks = seq(0,1,by=0.02), col = "#b2df8a", add = TRUE)
 axis(side=1, at=c(0,0.25,0.333,0.5,0.666,0.75,1), labels=c(0,"1/4","1/3","1/2","2/3","3/4",1))
-abline(v=0.5, lwd=3, col="#228B22")
-abline(v=2/3, lwd=3, col="#228B22")
-abline(v=0.75, lwd=3, col="#228B22")
-
-abline(v=0.583333, lwd=3, col="#B22222")
-abline(v=0.708333, lwd=3, col="#B22222")
-
 ```
 
 
-
-```{r}
-#colnames(ad1)
-sample <- "P13626"
-bp1 <- hist(ad1[,sample], breaks = seq(0,1,by=0.02), plot = TRUE, col="#808080", xaxt='n')
-d1 <- bp1$counts[ -1 ] - bp1$counts[ -length(bp1$counts) ]
-axis(side=1, at=c(0,0.25,0.333,0.5,0.666,0.75,1), labels=c(0,"1/4","1/3","1/2","2/3","3/4",1))
-segments(x0 = bp1$breaks[ -length(bp1$counts) ],
-         y0 = bp1$counts[ -length(bp1$counts) ] - d1/2, 
-         x1 = bp1$breaks[-1], 
-         y1 = bp1$counts[ -length(bp1$counts) ] + d1/2,
-         col = "#B22222", lwd = 3 )
-
-abline(v=0.5, lwd=3, col="#228B22")
-abline(v=2/3, lwd=3, col="#228B22")
-abline(v=0.75, lwd=3, col="#228B22")
-
-abline(v=0.583333, lwd=3, col="#B22222")
-abline(v=0.708333, lwd=3, col="#B22222")
+This is an example of a sample that appears triploid.
+The greatest density of the allele frequencies are at 1/3 and 2/3 as we would expect from a triploid.
+This demonstrates how these methods can be used to infer ploidy among diploids, triploids and possibly higher ploids.
 
 
-```
+

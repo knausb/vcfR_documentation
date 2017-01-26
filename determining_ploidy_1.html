@@ -326,6 +326,7 @@ vcf &lt;- read.vcfR(vcf_file, verbose = FALSE)
 vcf</code></pre>
 <pre><code>## ***** Object of Class vcfR *****
 ## 18 samples
+## 1 CHROMs
 ## 22,031 variants
 ## Object size: 20.9 Mb
 ## 7.929 percent missing data
@@ -518,8 +519,8 @@ allele2 &lt;- masplit(ad, record = 2)
 ad1 &lt;- allele1 / (allele1 + allele2)
 ad2 &lt;- allele2 / (allele1 + allele2)</code></pre>
 <p>Once we have our allele frequencies we can plot them with a histogram.</p>
-<pre class="r"><code>hist(ad2[,&quot;P17777us22&quot;], breaks = seq(0,1,by=0.02), col = &quot;#808080&quot;, xaxt=&quot;n&quot;)
-hist(ad1[,&quot;P17777us22&quot;], breaks = seq(0,1,by=0.02), col = &quot;#C0C0C0&quot;, add = TRUE)
+<pre class="r"><code>hist(ad2[,&quot;P17777us22&quot;], breaks = seq(0,1,by=0.02), col = &quot;#1f78b4&quot;, xaxt=&quot;n&quot;)
+hist(ad1[,&quot;P17777us22&quot;], breaks = seq(0,1,by=0.02), col = &quot;#a6cee3&quot;, add = TRUE)
 axis(side=1, at=c(0,0.25,0.333,0.5,0.666,0.75,1), labels=c(0,&quot;1/4&quot;,&quot;1/3&quot;,&quot;1/2&quot;,&quot;1/3&quot;,&quot;3/4&quot;,1))</code></pre>
 <p><img src="determining_ploidy_1_files/figure-html/unnamed-chunk-8-1.png" width="768" style="display: block; margin: auto;" /></p>
 <p>The most common class of variant is the homozygote. This overwhelms the plot. We can remove these so we can focus on the heterozygotes.</p>
@@ -534,8 +535,8 @@ allele2 &lt;- masplit(ad, record = 2)
 ad1 &lt;- allele1 / (allele1 + allele2)
 ad2 &lt;- allele2 / (allele1 + allele2)
 
-hist(ad2[,&quot;P17777us22&quot;], breaks = seq(0,1,by=0.02), col = &quot;#808080&quot;, xaxt=&quot;n&quot;)
-hist(ad1[,&quot;P17777us22&quot;], breaks = seq(0,1,by=0.02), col = &quot;#C0C0C0&quot;, add = TRUE)
+hist(ad2[,&quot;P17777us22&quot;], breaks = seq(0,1,by=0.02), col = &quot;#1f78b4&quot;, xaxt=&quot;n&quot;)
+hist(ad1[,&quot;P17777us22&quot;], breaks = seq(0,1,by=0.02), col = &quot;#a6cee3&quot;, add = TRUE)
 axis(side=1, at=c(0,0.25,0.333,0.5,0.666,0.75,1), labels=c(0,&quot;1/4&quot;,&quot;1/3&quot;,&quot;1/2&quot;,&quot;1/3&quot;,&quot;3/4&quot;,1))</code></pre>
 <p><img src="determining_ploidy_1_files/figure-html/unnamed-chunk-9-1.png" width="768" style="display: block; margin: auto;" /></p>
 <p>This allows us to focus on the heterozygous variants and we observe a peak at 0.5 consistent with our expectation. However, the frequencies range almost completely from 0 to one. This suggests some improvement could be made.</p>
@@ -646,325 +647,17 @@ allele2 &lt;- masplit(ad, record = 2)
 ad1 &lt;- allele1 / (allele1 + allele2)
 ad2 &lt;- allele2 / (allele1 + allele2)
 
-hist(ad2[,&quot;P17777us22&quot;], breaks = seq(0,1,by=0.02), col = &quot;#808080&quot;, xaxt=&quot;n&quot;, main=&quot;P17777us22&quot;)
-hist(ad1[,&quot;P17777us22&quot;], breaks = seq(0,1,by=0.02), col = &quot;#C0C0C0&quot;, add = TRUE)
+hist(ad2[,&quot;P17777us22&quot;], breaks = seq(0,1,by=0.02), col = &quot;#1f78b4&quot;, xaxt=&quot;n&quot;, main=&quot;P17777us22&quot;)
+hist(ad1[,&quot;P17777us22&quot;], breaks = seq(0,1,by=0.02), col = &quot;#a6cee3&quot;, add = TRUE)
 axis(side=1, at=c(0,0.25,0.333,0.5,0.666,0.75,1), labels=c(0,&quot;1/4&quot;,&quot;1/3&quot;,&quot;1/2&quot;,&quot;2/3&quot;,&quot;3/4&quot;,1))</code></pre>
 <p><img src="determining_ploidy_1_files/figure-html/unnamed-chunk-16-1.png" width="768" style="display: block; margin: auto;" /></p>
 <p>We see that the shoulders that were present in the previous plot are almost entirely removed. This appears to be a dramatic improvement.</p>
-</div>
-<div id="estimation-of-allele-balance" class="section level2">
-<h2>Estimation of allele balance</h2>
-<pre class="r"><code>sample &lt;- &quot;P17777us22&quot;
-bp1 &lt;- hist(ad1[,sample], breaks = seq(0,1,by=0.02), plot = TRUE, col=&quot;#808080&quot;)
-#bp2 &lt;- hist(ad2[,sample], breaks = seq(0,1,by=0.02), plot = TRUE, add = TRUE, col=&quot;#C0C0C0&quot;)
-
-d1 &lt;- bp1$counts[ -1 ] - bp1$counts[ -length(bp1$counts) ]
-
-segments(x0 = bp1$breaks[ -length(bp1$counts) ],
-         y0 = bp1$counts[ -length(bp1$counts) ] - d1/2, 
-         x1 = bp1$breaks[-1], 
-         y1 = bp1$counts[ -length(bp1$counts) ] + d1/2,
-         col = &quot;#B22222&quot;, lwd = 3 )</code></pre>
+<p>While we’ve focused on one sample through most of this example its important to realize that we’ve been analyzing all of the samples in the dataset. This means that now that we have one sample that appears to to have been well processed we can now examine the other samples as well.</p>
+<pre class="r"><code>hist(ad2[,&quot;P13626&quot;], breaks = seq(0,1,by=0.02), col = &quot;#33a02c&quot;, xaxt=&quot;n&quot;, main=&quot;P13626&quot;)
+hist(ad1[,&quot;P13626&quot;], breaks = seq(0,1,by=0.02), col = &quot;#b2df8a&quot;, add = TRUE)
+axis(side=1, at=c(0,0.25,0.333,0.5,0.666,0.75,1), labels=c(0,&quot;1/4&quot;,&quot;1/3&quot;,&quot;1/2&quot;,&quot;2/3&quot;,&quot;3/4&quot;,1))</code></pre>
 <p><img src="determining_ploidy_1_files/figure-html/unnamed-chunk-17-1.png" width="768" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>( bp1$counts[ -1 ] - bp1$counts[ -length(bp1$counts) ] ) #/ 0.02</code></pre>
-<pre><code>##  [1]    0    0    0    0    0    0    0    0    0    0    0    0    0    0
-## [15]    0    0    0    0    0    0    0    0    0  111  304   14  -30 -113
-## [29]  -94  -61  -74  -17  -19    5  -14   -1   -4   -5   -2    0    0    0
-## [43]    0    0    0    0    0    0    0</code></pre>
-<pre class="r"><code>knitr::kable(cbind(bp1$mids[ -length(bp1$counts) ], bp1$counts[ -length(bp1$counts) ], d1))</code></pre>
-<table>
-<thead>
-<tr class="header">
-<th></th>
-<th></th>
-<th align="right">d1</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>0.01</td>
-<td>0</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td>0.03</td>
-<td>0</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td>0.05</td>
-<td>0</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td>0.07</td>
-<td>0</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td>0.09</td>
-<td>0</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td>0.11</td>
-<td>0</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td>0.13</td>
-<td>0</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td>0.15</td>
-<td>0</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td>0.17</td>
-<td>0</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td>0.19</td>
-<td>0</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td>0.21</td>
-<td>0</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td>0.23</td>
-<td>0</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td>0.25</td>
-<td>0</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td>0.27</td>
-<td>0</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td>0.29</td>
-<td>0</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td>0.31</td>
-<td>0</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td>0.33</td>
-<td>0</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td>0.35</td>
-<td>0</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td>0.37</td>
-<td>0</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td>0.39</td>
-<td>0</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td>0.41</td>
-<td>0</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td>0.43</td>
-<td>0</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td>0.45</td>
-<td>0</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td>0.47</td>
-<td>0</td>
-<td align="right">111</td>
-</tr>
-<tr class="odd">
-<td>0.49</td>
-<td>111</td>
-<td align="right">304</td>
-</tr>
-<tr class="even">
-<td>0.51</td>
-<td>415</td>
-<td align="right">14</td>
-</tr>
-<tr class="odd">
-<td>0.53</td>
-<td>429</td>
-<td align="right">-30</td>
-</tr>
-<tr class="even">
-<td>0.55</td>
-<td>399</td>
-<td align="right">-113</td>
-</tr>
-<tr class="odd">
-<td>0.57</td>
-<td>286</td>
-<td align="right">-94</td>
-</tr>
-<tr class="even">
-<td>0.59</td>
-<td>192</td>
-<td align="right">-61</td>
-</tr>
-<tr class="odd">
-<td>0.61</td>
-<td>131</td>
-<td align="right">-74</td>
-</tr>
-<tr class="even">
-<td>0.63</td>
-<td>57</td>
-<td align="right">-17</td>
-</tr>
-<tr class="odd">
-<td>0.65</td>
-<td>40</td>
-<td align="right">-19</td>
-</tr>
-<tr class="even">
-<td>0.67</td>
-<td>21</td>
-<td align="right">5</td>
-</tr>
-<tr class="odd">
-<td>0.69</td>
-<td>26</td>
-<td align="right">-14</td>
-</tr>
-<tr class="even">
-<td>0.71</td>
-<td>12</td>
-<td align="right">-1</td>
-</tr>
-<tr class="odd">
-<td>0.73</td>
-<td>11</td>
-<td align="right">-4</td>
-</tr>
-<tr class="even">
-<td>0.75</td>
-<td>7</td>
-<td align="right">-5</td>
-</tr>
-<tr class="odd">
-<td>0.77</td>
-<td>2</td>
-<td align="right">-2</td>
-</tr>
-<tr class="even">
-<td>0.79</td>
-<td>0</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td>0.81</td>
-<td>0</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td>0.83</td>
-<td>0</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td>0.85</td>
-<td>0</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td>0.87</td>
-<td>0</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td>0.89</td>
-<td>0</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td>0.91</td>
-<td>0</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td>0.93</td>
-<td>0</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td>0.95</td>
-<td>0</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td>0.97</td>
-<td>0</td>
-<td align="right">0</td>
-</tr>
-</tbody>
-</table>
-<pre class="r"><code>#abline(a=0,b=1000)</code></pre>
-<p>The difference among allele balances can be a test for deviation from diploidy. When both the major and minor allele are near 0.5 the difference should be near zero. When the major and minor allele differ from 0.5 there should be a larger difference among the frequencies. To test for a difference in ploidy among diploid and triploid a critical value of</p>
-<p><span class="math display">\[
-0.5 + (2/3-0.5)/2 = 0.583333
-\]</span></p>
-<p>Similarly, a critical value to test the difference among triploidy and tetraploidy could be calculates as</p>
-<p><span class="math display">\[
-2/3 + (0.75 - 2/3) / 2 = 0.7083333
-\]</span></p>
-<pre class="r"><code>sample &lt;- &quot;P17777us22&quot;
-bp1 &lt;- hist(ad1[,sample], breaks = seq(0,1,by=0.02), plot = TRUE, col=&quot;#808080&quot;, xaxt=&#39;n&#39;)
-axis(side=1, at=c(0,0.25,0.333,0.5,0.666,0.75,1), labels=c(0,&quot;1/4&quot;,&quot;1/3&quot;,&quot;1/2&quot;,&quot;2/3&quot;,&quot;3/4&quot;,1))
-abline(v=0.5, lwd=3, col=&quot;#228B22&quot;)
-abline(v=2/3, lwd=3, col=&quot;#228B22&quot;)
-abline(v=0.75, lwd=3, col=&quot;#228B22&quot;)
-
-abline(v=0.583333, lwd=3, col=&quot;#B22222&quot;)
-abline(v=0.708333, lwd=3, col=&quot;#B22222&quot;)</code></pre>
-<p><img src="determining_ploidy_1_files/figure-html/unnamed-chunk-18-1.png" width="768" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>#colnames(ad1)
-sample &lt;- &quot;P13626&quot;
-bp1 &lt;- hist(ad1[,sample], breaks = seq(0,1,by=0.02), plot = TRUE, col=&quot;#808080&quot;, xaxt=&#39;n&#39;)
-d1 &lt;- bp1$counts[ -1 ] - bp1$counts[ -length(bp1$counts) ]
-axis(side=1, at=c(0,0.25,0.333,0.5,0.666,0.75,1), labels=c(0,&quot;1/4&quot;,&quot;1/3&quot;,&quot;1/2&quot;,&quot;2/3&quot;,&quot;3/4&quot;,1))
-segments(x0 = bp1$breaks[ -length(bp1$counts) ],
-         y0 = bp1$counts[ -length(bp1$counts) ] - d1/2, 
-         x1 = bp1$breaks[-1], 
-         y1 = bp1$counts[ -length(bp1$counts) ] + d1/2,
-         col = &quot;#B22222&quot;, lwd = 3 )
-
-abline(v=0.5, lwd=3, col=&quot;#228B22&quot;)
-abline(v=2/3, lwd=3, col=&quot;#228B22&quot;)
-abline(v=0.75, lwd=3, col=&quot;#228B22&quot;)
-
-abline(v=0.583333, lwd=3, col=&quot;#B22222&quot;)
-abline(v=0.708333, lwd=3, col=&quot;#B22222&quot;)</code></pre>
-<p><img src="determining_ploidy_1_files/figure-html/unnamed-chunk-19-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>This is an example of a sample that appears triploid. The greatest density of the allele frequencies are at 1/3 and 2/3 as we would expect from a triploid. This demonstrates how these methods can be used to infer ploidy among diploids, triploids and possibly higher ploids.</p>
 </div>
 
 <center>
