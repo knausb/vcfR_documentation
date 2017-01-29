@@ -1,30 +1,164 @@
 ---
 title: "chromR objects"
+output:
+  html_document:
+    toc: true
 ---
 
 
-The chromR object was created to contain VCF, sequence and annotation data.
-Some of this is optional.
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(fig.align = 'center')
+knitr::opts_chunk$set(fig.width = 8)
+knitr::opts_chunk$set(fig.height = 8)
+```
+
+
+
+The chromR object was created to integrate variant (VCF), sequence (FASTA) and annotation data.
 By providing a perspective that integrates these data types it is hoped that the investigator may see new insights into their data.
+For example, references frequently contain regions where 'N' is called (an ambiguous nucleotide) and these regions may be large.
+Because current sequencing technologies typically call nucleotides (A, C, G or T) mapping to regions containing Ns may be poor.
+Consequently, no variants may be observed in these regions.
+If only the variant information is scrutinized than large stretches of chromosomes that contain no variants may be mysterious.
+Integration of the reference sequence may provide a simple explanation.
+Here we demonstrate how to construct and use a chromR object.
+
+
+## Creating chromR objects
+
+In this example we will begin by locating the example data from the pinfsc50 package.
+This is a seperate package from vcfR that you will need to install.
+If you haven't installed it already, you can install it with `install.packages('pinfsc50')`.
+For your the data from your own reasearch activities you may wany to omit the `system.file()` steps and directly use your filenames in the input steps.
+
+
+```{r}
+library(vcfR)
+
+# Find the files.
+vcf_file <- system.file("extdata", "pinf_sc50.vcf.gz", package = "pinfsc50")
+dna_file <- system.file("extdata", "pinf_sc50.fasta", package = "pinfsc50")
+gff_file <- system.file("extdata", "pinf_sc50.gff", package = "pinfsc50")
+
+# Input the files.
+vcf <- read.vcfR(vcf_file, verbose = FALSE)
+dna <- ape::read.dna(dna_file, format = "fasta")
+gff <- read.table(gff_file, sep="\t", quote="")
+
+# Create a chromR object.
+chrom <- create.chromR(name="Supercontig", vcf=vcf, seq=dna, ann=gff, verbose=TRUE)
+```
+
+
+Note that a warning message indicates that the names in all of the data sources do not match pefectly.
+It has been my experience that this is a frequent occurrence in genome projects.
+Instead of asking the user to create duplicate files that have the same data but standardized names I have allowed the user to exercise some judgement.
+If you see this message and feel the names are correct you can ignore this and proceed.
+
+
+Once we have created our chromR object we can verify that its contents are what we expect.
+By executing the object's name at the console, with no other arguments, we invoke the object's 'show' method.
+The show method for chromR objects presents counts for the data types used to create the chromR object and which are not a part of that object.
+
+
+```{r}
+chrom
+```
+
+
+There at least two ways to graphically view the chromR object.
+This first is `plot()` which plots histograms of some of the data summaries.
+
+
+```{r}
+plot(chrom)
+```
+
+
+The read depth here is a sum over all samples.
+We see a peak that represents the depth where most of our genomes were sequenced at.
+Low regions of sequence depth may indicatte variants where we may be concerned that there may not be enough information to call a genotype.
+Variants of high coverage may represent repetetive regions of genomes where the reference may not contain all the copies so the reads pile up on the fraction of repeates that were successfully assembled.
+These regions may violate the ploidy assumptions made by variant callers and therefore may be considered a target for quality filtering.
+Mapping quality is very peaked at 60 but also contains variants that deviate from this common value.
+Quality (QUAL) is less easily interpreted.
+It appears that most of our variants are of a low quality with very few of them being of high quality.
+It is important to remember that while everyone would like high quality, quality is frequently difficult to measure.
+The simplest interpretation here is that QUAL may not be a good parameter to use to judge your variants.
+The last panel for SNP densities is empty becuase this data is created during the processing of chromR objects, which we will discuss below.
+
+
+```{r}
+chromoqc(chrom)
+```
+
+
+Our second plot, I call it a chromo plot, displays the same information as the plot method only it distributes the data along its chomosomal coordinates.
+It also includes a representation of the annotation data.
+The contents of this plot are somewhat flexible in that it depends on what data is present in the chromR object.
+
+
+## Processing chromR objects
+
+
+Creation and processing of a chromR object has been divided into seperate tasks.
+Creation loads the data into the chromR object and should typically only be required once.
+Processing the chromR object generates summaries of the data.
+Some of these summaries will need to be updated as the chromR object is updated.
+For example, if the size of the sliding window used to summarize variant density and GC content is changed the chromR object will need to be processed to update this information.
+
+
+```{r}
+chrom <- proc.chromR(chrom, verbose = TRUE)
+```
+
+
+```{r}
+plot(chrom)
+```
+
+
+Subsequent to processing our plot function is identical to its previous presentation except that we now have variant densities.
+When we observe the chromoqc plot we see that we now have variant densities, nucleotide content as well as a representation of where in our reference we have nucleotides (A, C, G or T) or where we have ambiguous nucleotides.
+
+
+```{r}
+chromoqc(chrom)
+```
 
 
 
-## create.chromR()
+## Masking low quality variants
 
 
-
-## masker()
-
-
-
-## proc.chromR()
-
-
-## Summarization
+Now that we have gained some perspective on our data we're ready to make some decisions.
+We can use the `masker()` function to mask out variants we deem to be undesireable.
+By masking the variants we retain the geometry of the data matrices.
+This may help facilitate subsequent actions that may depend on the position of variants in the data matrices.
+Because this affects which variants we want to use in our analyses we'll need to process tha chromR object subsequent to masking.
 
 
+```{r}
+chrom <- masker(chrom, min_QUAL=0, min_DP=350, max_DP=650, min_MQ=59.5, max_MQ=60.5)
+chrom <- proc.chromR(chrom, verbose = TRUE)
+```
 
-## Visualization
+
+```{r}
+plot(chrom)
+```
+
+
+```{r}
+chromoqc(chrom)
+```
+
+
+These actions have allowed us to focus on variants of relatively uniform depth and mapping quality.
+We can see this in the chromoqc plot to validate how our actions have affected the retained data.
+In practice this may require several choices of parameterizations and visualization before a desireable result is obtained.
+Through visualization of these changes it is hoped to help the researcher make informaed decisions on how these changes affect the data.
 
 
 
