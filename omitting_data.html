@@ -326,6 +326,9 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 </div>
 
 <p>In the section on depth we learned how we can visualize variant depth, or any other numeric value provided in the gt portion of VCF data. In the section on censoring data we learned how to rescore variants that were outside our acceptance thershold as missing. And in the section on missing data we learned how to quantify and visualize missingness in our dataset. Here we put all of these skills together in order to omit samples and variants that have been set as missing (NA).</p>
+<pre class="r"><code>library(vcfR)
+vcf &lt;- read.vcfR(&#39;TASSEL_GBS0077.vcf.gz&#39;)
+dp &lt;- extract.gt(vcf, element = &quot;DP&quot;, as.numeric=TRUE)</code></pre>
 <pre class="r"><code>vcf</code></pre>
 <pre><code>## ***** Object of Class vcfR *****
 ## 61 samples

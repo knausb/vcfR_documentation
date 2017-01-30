@@ -14,18 +14,17 @@ knitr::opts_chunk$set(fig.height = 12)
 ```
 
 
-```{r, results='hide', echo = FALSE}
-suppressPackageStartupMessages( library(vcfR) )
-vcf <- read.vcfR('TASSEL_GBS0077.vcf.gz')
-dp <- extract.gt(vcf, element = "DP", as.numeric=TRUE)
-```
-
-
 In the section on depth we learned how we can visualize variant depth, or any other numeric value provided in the gt portion of VCF data.
 In the section on censoring data we learned how to rescore variants that were outside our acceptance thershold as missing.
 And in the section on missing data we learned how to quantify and visualize missingness in our dataset.
 Here we put all of these skills together in order to omit samples and variants that have been set as missing (NA).
 
+
+```{r, results='hide', echo = TRUE}
+library(vcfR)
+vcf <- read.vcfR('TASSEL_GBS0077.vcf.gz')
+dp <- extract.gt(vcf, element = "DP", as.numeric=TRUE)
+```
 
 
 ```{r}

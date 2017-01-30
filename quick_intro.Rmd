@@ -7,6 +7,15 @@ output:
 ---
 
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(fig.align = 'center')
+knitr::opts_chunk$set(fig.width = 12)
+palette('default')
+```
+
+
+
 vcfR is a package intended to help visualize, manipulate and quality filter VCF data.
 
 
