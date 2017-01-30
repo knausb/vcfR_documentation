@@ -385,15 +385,15 @@ chrom &lt;- create.chromR(name=&quot;Supercontig&quot;, vcf=vcf, seq=dna, ann=gf
 <p>Creation and processing of a chromR object has been divided into seperate tasks. Creation loads the data into the chromR object and should typically only be required once. Processing the chromR object generates summaries of the data. Some of these summaries will need to be updated as the chromR object is updated. For example, if the size of the sliding window used to summarize variant density and GC content is changed the chromR object will need to be processed to update this information.</p>
 <pre class="r"><code>chrom &lt;- proc.chromR(chrom, verbose = TRUE)</code></pre>
 <pre><code>## Nucleotide regions complete.</code></pre>
-<pre><code>##   elapsed time:  0.239</code></pre>
+<pre><code>##   elapsed time:  0.24</code></pre>
 <pre><code>## N regions complete.</code></pre>
-<pre><code>##   elapsed time:  0.228</code></pre>
+<pre><code>##   elapsed time:  0.229</code></pre>
 <pre><code>## Population summary complete.</code></pre>
 <pre><code>##   elapsed time:  0.188</code></pre>
 <pre><code>## window_init complete.</code></pre>
 <pre><code>##   elapsed time:  0</code></pre>
 <pre><code>## windowize_fasta complete.</code></pre>
-<pre><code>##   elapsed time:  0.149</code></pre>
+<pre><code>##   elapsed time:  0.153</code></pre>
 <pre><code>## windowize_annotations complete.</code></pre>
 <pre><code>##   elapsed time:  0.011</code></pre>
 <pre><code>## windowize_variants complete.</code></pre>
@@ -410,15 +410,15 @@ chrom &lt;- create.chromR(name=&quot;Supercontig&quot;, vcf=vcf, seq=dna, ann=gf
 <pre class="r"><code>chrom &lt;- masker(chrom, min_QUAL=0, min_DP=350, max_DP=650, min_MQ=59.5, max_MQ=60.5)
 chrom &lt;- proc.chromR(chrom, verbose = TRUE)</code></pre>
 <pre><code>## Nucleotide regions complete.</code></pre>
-<pre><code>##   elapsed time:  0.235</code></pre>
+<pre><code>##   elapsed time:  0.237</code></pre>
 <pre><code>## N regions complete.</code></pre>
 <pre><code>##   elapsed time:  0.228</code></pre>
 <pre><code>## Population summary complete.</code></pre>
-<pre><code>##   elapsed time:  0.159</code></pre>
+<pre><code>##   elapsed time:  0.161</code></pre>
 <pre><code>## window_init complete.</code></pre>
 <pre><code>##   elapsed time:  0.001</code></pre>
 <pre><code>## windowize_fasta complete.</code></pre>
-<pre><code>##   elapsed time:  0.149</code></pre>
+<pre><code>##   elapsed time:  0.151</code></pre>
 <pre><code>## windowize_annotations complete.</code></pre>
 <pre><code>##   elapsed time:  0.011</code></pre>
 <pre><code>## windowize_variants complete.</code></pre>
