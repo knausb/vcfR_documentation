@@ -3,7 +3,7 @@ title: "Export to genind and genclone"
 ---
 
 
-The R packages *adegenet* and *poppr* are popular tools for population genetic analysis.
+The R packages **adegenet** and **poppr** are popular tools for population genetic analysis.
 Here we describe how to convert a vcfR object to a genind and genclone object.
 
 

@@ -3,7 +3,7 @@ title: "Export to genlight and snpclone"
 ---
 
 
-The R packages *adegenet* and *poppr* are popular tools for population genetic analysis.
+The R packages **adegenet** and **poppr** are popular tools for population genetic analysis.
 The genlight objects, and poppr's snpclone object, were designed to handle high throughput sequencing datasets.
 Here we describe how to convert a vcfR object to a genlight and snpclone object.
 
