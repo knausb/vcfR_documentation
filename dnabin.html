@@ -309,11 +309,72 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 </div>
 
 
-<p>Within vcfR we use a vcfR object to contain our data. Once we have performed some manipulations we may want to convert the data to some other format for further analysis. Within vcfR we have several options.</p>
+<p>Some applications require the conversion of variant data into sequence data. We’ve provided a conversion from vcfR to a DNAbin object which was created by the R package ape. The DNAbin object can be output to the FASTA format, as well as several others, for conversion to popular file formats recognized by other software. A number of decisions will need to be made in order to facilitate the conversion from vcfR to DNAbin. Here we attempt to address these decisions and convert our vcfR object to a DNAbin object.</p>
+<div id="data-import" class="section level2">
+<h2>Data import</h2>
+<p>We will use the example dataset provided by vcfR.</p>
+<pre class="r"><code>library(vcfR)</code></pre>
+<pre><code>## 
+##    *****       ***   vcfR   ***       *****
+##    This is vcfR 1.4.0.9000 
+##      browseVignettes(&#39;vcfR&#39;) # Documentation
+##      citation(&#39;vcfR&#39;) # Citation
+##    *****       *****      *****       *****</code></pre>
+<pre class="r"><code>data(vcfR_example)</code></pre>
+</div>
+<div id="creating-dnabin-objects" class="section level2">
+<h2>Creating DNAbin objects</h2>
+<p>The package <strong>ape</strong> handles sequence data using objects of class <strong>DNAbin</strong>. The VCF file only contains information on variant positions. Omitting invariant data provides for a more efficient representation of the data than including the invariant sites. Converting VCF data to sequence data presents a challenge in that these invariant sites may need to be included. This means that these objects can easily occupy large amounts of memory, and may exceed the physical memory when long sequences with many samples are included. In order to accomodate these issues, we’ve taken an approach which attempts to create DNAbin objects from portions of a chomosome, such as a gene. This means we’ll need a little more information than we’ve needed for other conversions. First, we’ll need to locate and read in our VCF file, a reference sequence and a gff file that has the coordinates for a gene.</p>
+<pre class="r"><code># Find the files.
+vcf_file &lt;- system.file(&quot;extdata&quot;, &quot;pinf_sc50.vcf.gz&quot;, package = &quot;pinfsc50&quot;)
+dna_file &lt;- system.file(&quot;extdata&quot;, &quot;pinf_sc50.fasta&quot;, package = &quot;pinfsc50&quot;)
+gff_file &lt;- system.file(&quot;extdata&quot;, &quot;pinf_sc50.gff&quot;, package = &quot;pinfsc50&quot;)
+# Read in data.
+vcf &lt;- read.vcfR(vcf_file, verbose = FALSE)
+dna &lt;- ape::read.dna(dna_file, format=&quot;fasta&quot;)
+gff &lt;- read.table(gff_file, sep=&quot;\t&quot;, quote = &quot;&quot;)</code></pre>
+<p>We can use information from the annotation file (gff) to extract a gene. Here we have specifically chosen one which has variants. We can use IUPAC ambiguity codes to convert heterozygous sites into a one character encoding. This results in a single sequence per individual. Alternatively, we can create two haplotypes for each diploid sample, resulting in two sequences per individual.</p>
+<pre class="r"><code>record &lt;- 130
+# my_dnabin1 &lt;- vcfR2DNAbin(vcf, consensus = TRUE, extract.haps = FALSE,
+# gt.split=&#39;|&#39;, ref.seq=dna[,gff[record,4]:gff[record,5]],
+# start.pos=gff[record,4], verbose=FALSE)
+my_dnabin1 &lt;- vcfR2DNAbin(vcf, consensus = TRUE, extract.haps = FALSE, ref.seq = dna[, 
+    gff[record, 4]:gff[record, 5]], start.pos = gff[record, 4], verbose = FALSE)
+my_dnabin1</code></pre>
+<pre><code>## 18 DNA sequences in binary format stored in a matrix.
+## 
+## All sequences of same length: 1043 
+## 
+## Labels: BL2009P4_us23 DDR7602 IN2009T1_us22 LBUS5 NL07434 P10127 ...
+## 
+## Base composition:
+##     a     c     g     t 
+## 0.238 0.295 0.272 0.194</code></pre>
+<p>We can visualize the variable sites using tools from the package ‘ape.’</p>
+<pre class="r"><code>par(mar=c(5,8,4,2))
+ape::image.DNAbin(my_dnabin1[,ape::seg.sites(my_dnabin1)])</code></pre>
+<p><img src="dnabin_files/figure-html/image_DNAbin1-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>par(mar=c(5,4,4,2))</code></pre>
+<p>Here, the ambiguous sites are visualized as ‘other.’ While the DNAbin object can include the ambiguity codes, not all downstream software handle these codes well. So the user should excercise prudence when using this option.</p>
+<p>If we instead create two haplotypes for each diploid sample, it results in a DNAbin object which includes only unambiguous nucleotides(A, C, G and T). This typically requires the data to be phased (I use <a href="https://faculty.washington.edu/browning/beagle/beagle.html">beagle4</a>). In VCF files this is indicated by delimiting the alleles of the genotype with a pipe (‘|’) for phased data, while unphased data are delimited with a forward slash (‘/’).</p>
+<pre class="r"><code># my_dnabin1 &lt;- vcfR2DNAbin(vcf, consensus=FALSE, extract.haps=TRUE,
+# gt.split=&#39;|&#39;, ref.seq=dna[,gff[record,4]:gff[record,5]],
+# start.pos=gff[record,4], verbose=FALSE)
+my_dnabin1 &lt;- vcfR2DNAbin(vcf, consensus = FALSE, extract.haps = TRUE, ref.seq = dna[, 
+    gff[record, 4]:gff[record, 5]], start.pos = gff[record, 4], verbose = FALSE)</code></pre>
+<pre class="r"><code>par(mar=c(5,8,4,2))
+ape::image.DNAbin(my_dnabin1[,ape::seg.sites(my_dnabin1)])</code></pre>
+<p><img src="dnabin_files/figure-html/image_DNAbin_2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>par(mar=c(5,4,4,2))</code></pre>
+<p>Once we have a DNAbin object, it can be analysed in a number of R packages, such as ape and pegas. We can also output a fasta file for other softwares to use.</p>
+<pre class="r"><code>write.dna( my_dnabin1, file = &#39;my_gene.fasta&#39;, format = &#39;fasta&#39; )
+unlink(&#39;my_gene.fasta&#39;) # Clean up after we&#39;re done with the example.</code></pre>
+<p>Also see:</p>
 <ul>
-<li>Output to VCF</li>
-<li>Convert to genind</li>
+<li>Heng Li’s <a href="https://github.com/lh3/seqtk">seqtk</a></li>
+<li><a href="https://www.broadinstitute.org/gatk/">GATK’s</a> FastaAlternateReferenceMaker</li>
 </ul>
+</div>
 
 <center>
 <hr class="style1">
