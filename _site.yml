@@ -45,12 +45,6 @@ navbar:
           href: "ploidy.html"
         - text: "Determining ploidy 1"
           href: "determining_ploidy_1.html"
-    - text: "FAQ"
-      menu:
-        - text: "Subset to 1 chromosome"
-          href: "subset_data_to_1chrom.html"
-        - text: "VCF software"
-          href: "vcf_software.html"
     - text: "Export"
       menu:
         - text: "Overview"
@@ -63,6 +57,12 @@ navbar:
           href: "export_genlight_snpclone.html"
         - text: "DNAbin"
           href: "dnabin.html"
+    - text: "FAQ"
+      menu:
+        - text: "Subset to 1 chromosome"
+          href: "subset_data_to_1chrom.html"
+        - text: "VCF software"
+          href: "vcf_software.html"
 output:
   html_document:
     theme: sandstone
