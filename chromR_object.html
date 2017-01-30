@@ -280,6 +280,15 @@ $(document).ready(function () {
       <a href="export.html">Overview</a>
     </li>
     <li>
+      <a href="export_vcfgz.html">Export to *vcf.gz</a>
+    </li>
+    <li>
+      <a href="export_genind_genclone.html">Genind and Genclone</a>
+    </li>
+    <li>
+      <a href="export_genlight_snpclone.html">Genlight and SNPclone</a>
+    </li>
+    <li>
       <a href="dnabin.html">DNAbin</a>
     </li>
   </ul>
@@ -373,19 +382,19 @@ chrom &lt;- create.chromR(name=&quot;Supercontig&quot;, vcf=vcf, seq=dna, ann=gf
 <p>Creation and processing of a chromR object has been divided into seperate tasks. Creation loads the data into the chromR object and should typically only be required once. Processing the chromR object generates summaries of the data. Some of these summaries will need to be updated as the chromR object is updated. For example, if the size of the sliding window used to summarize variant density and GC content is changed the chromR object will need to be processed to update this information.</p>
 <pre class="r"><code>chrom &lt;- proc.chromR(chrom, verbose = TRUE)</code></pre>
 <pre><code>## Nucleotide regions complete.</code></pre>
-<pre><code>##   elapsed time:  0.299</code></pre>
+<pre><code>##   elapsed time:  0.24</code></pre>
 <pre><code>## N regions complete.</code></pre>
-<pre><code>##   elapsed time:  0.286</code></pre>
+<pre><code>##   elapsed time:  0.229</code></pre>
 <pre><code>## Population summary complete.</code></pre>
-<pre><code>##   elapsed time:  0.239</code></pre>
+<pre><code>##   elapsed time:  0.188</code></pre>
 <pre><code>## window_init complete.</code></pre>
-<pre><code>##   elapsed time:  0</code></pre>
-<pre><code>## windowize_fasta complete.</code></pre>
-<pre><code>##   elapsed time:  0.169</code></pre>
-<pre><code>## windowize_annotations complete.</code></pre>
-<pre><code>##   elapsed time:  0.013</code></pre>
-<pre><code>## windowize_variants complete.</code></pre>
 <pre><code>##   elapsed time:  0.001</code></pre>
+<pre><code>## windowize_fasta complete.</code></pre>
+<pre><code>##   elapsed time:  0.15</code></pre>
+<pre><code>## windowize_annotations complete.</code></pre>
+<pre><code>##   elapsed time:  0.01</code></pre>
+<pre><code>## windowize_variants complete.</code></pre>
+<pre><code>##   elapsed time:  0</code></pre>
 <pre class="r"><code>plot(chrom)</code></pre>
 <p><img src="chromR_object_files/figure-html/unnamed-chunk-6-1.png" width="768" style="display: block; margin: auto;" /></p>
 <p>Subsequent to processing our plot function is identical to its previous presentation except that we now have variant densities. When we observe the chromoqc plot we see that we now have variant densities, nucleotide content as well as a representation of where in our reference we have nucleotides (A, C, G or T) or where we have ambiguous nucleotides.</p>
@@ -398,19 +407,19 @@ chrom &lt;- create.chromR(name=&quot;Supercontig&quot;, vcf=vcf, seq=dna, ann=gf
 <pre class="r"><code>chrom &lt;- masker(chrom, min_QUAL=0, min_DP=350, max_DP=650, min_MQ=59.5, max_MQ=60.5)
 chrom &lt;- proc.chromR(chrom, verbose = TRUE)</code></pre>
 <pre><code>## Nucleotide regions complete.</code></pre>
-<pre><code>##   elapsed time:  0.299</code></pre>
+<pre><code>##   elapsed time:  0.237</code></pre>
 <pre><code>## N regions complete.</code></pre>
-<pre><code>##   elapsed time:  0.286</code></pre>
+<pre><code>##   elapsed time:  0.229</code></pre>
 <pre><code>## Population summary complete.</code></pre>
-<pre><code>##   elapsed time:  0.201</code></pre>
+<pre><code>##   elapsed time:  0.16</code></pre>
 <pre><code>## window_init complete.</code></pre>
 <pre><code>##   elapsed time:  0</code></pre>
 <pre><code>## windowize_fasta complete.</code></pre>
-<pre><code>##   elapsed time:  0.169</code></pre>
+<pre><code>##   elapsed time:  0.151</code></pre>
 <pre><code>## windowize_annotations complete.</code></pre>
-<pre><code>##   elapsed time:  0.013</code></pre>
+<pre><code>##   elapsed time:  0.011</code></pre>
 <pre><code>## windowize_variants complete.</code></pre>
-<pre><code>##   elapsed time:  0.001</code></pre>
+<pre><code>##   elapsed time:  0</code></pre>
 <pre class="r"><code>plot(chrom)</code></pre>
 <p><img src="chromR_object_files/figure-html/unnamed-chunk-9-1.png" width="768" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>chromoqc(chrom)</code></pre>

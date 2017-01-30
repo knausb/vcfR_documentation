@@ -280,6 +280,15 @@ $(document).ready(function () {
       <a href="export.html">Overview</a>
     </li>
     <li>
+      <a href="export_vcfgz.html">Export to *vcf.gz</a>
+    </li>
+    <li>
+      <a href="export_genind_genclone.html">Genind and Genclone</a>
+    </li>
+    <li>
+      <a href="export_genlight_snpclone.html">Genlight and SNPclone</a>
+    </li>
+    <li>
       <a href="dnabin.html">DNAbin</a>
     </li>
   </ul>
@@ -313,14 +322,8 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 <div id="data-import" class="section level2">
 <h2>Data import</h2>
 <p>We will use the example dataset provided by vcfR.</p>
-<pre class="r"><code>library(vcfR)</code></pre>
-<pre><code>## 
-##    *****       ***   vcfR   ***       *****
-##    This is vcfR 1.4.0.9000 
-##      browseVignettes(&#39;vcfR&#39;) # Documentation
-##      citation(&#39;vcfR&#39;) # Citation
-##    *****       *****      *****       *****</code></pre>
-<pre class="r"><code>data(vcfR_example)</code></pre>
+<pre class="r"><code>library(vcfR)
+data(vcfR_example)</code></pre>
 </div>
 <div id="creating-dnabin-objects" class="section level2">
 <h2>Creating DNAbin objects</h2>

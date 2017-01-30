@@ -53,6 +53,12 @@ navbar:
       menu:
         - text: "Overview"
           href: "export.html"
+        - text: "Export to *vcf.gz"
+          href: "export_vcfgz.html"
+        - text: "Genind and Genclone"
+          href: "export_genind_genclone.html"
+        - text: "Genlight and SNPclone"
+          href: "export_genlight_snpclone.html"
         - text: "DNAbin"
           href: "dnabin.html"
 output:

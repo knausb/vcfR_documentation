@@ -8,10 +8,8 @@ Once we have performed some manipulations we may want to convert the data to som
 Within vcfR we have several options.
 
 * Output to VCF (gzipped)
-* Convert to genind object
-* Convert to genclone object
-* Convert to genlight object
-* Convert to snpclone object
+* Convert to genind and genclone objects
+* Convert to genlight and snpclone objects
 * Convert to DNAbin object
 * Convert to loci object
 
