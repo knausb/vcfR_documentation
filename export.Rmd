@@ -11,5 +11,5 @@ Within vcfR we have several options.
 * Convert to genind and genclone objects
 * Convert to genlight and snpclone objects
 * Convert to DNAbin object
-* Convert to loci object
+
 
