@@ -1,0 +1,55 @@
+---
+title: "Export to genind and genclone"
+---
+
+
+The R packages *adegenet* and *poppr* are popular tools for population genetic analysis.
+Here we describe how to convert a vcfR object to a genind and genclone object.
+
+
+## Data import
+
+We will use the example dataset provided by vcfR.
+
+
+```{r}
+library(vcfR)
+data(vcfR_example)
+```
+
+
+## Creating genind objects
+
+The packages **adegenet** and **poppr** use objects of class **genind**.
+We can create genind objects with the function **vcfR2genind()**.
+
+
+```{r genind, eval=TRUE}
+my_genind <- vcfR2genind(vcf)
+class(my_genind)
+my_genind
+```
+
+
+The function `vcfR2genind()` calls `extract.gt()` to create a matrix of genotypes.
+This matrix is converted into a genind object with the adegenet function `df2genind()`.
+
+
+Currently, this function does not scale well to large quantities of data.
+This appears to be due  a call to the function adegenet::df2genind (this function was produced prior to high throughput sequencing).
+The genlight object is designed to perform better for larger datasets.
+
+
+## Creating genclone objects
+
+
+The package **poppr** uses objects of class genclone as well as genind.
+Once a genind object has been created, it is fairly straight forward to create a genclone object.
+
+
+```{r genclone, eval=TRUE}
+my_genclone <- poppr::as.genclone(my_genind)
+class(my_genclone)
+my_genclone
+```
+

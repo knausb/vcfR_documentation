@@ -1,0 +1,67 @@
+---
+title: "Export to genlight and snpclone"
+---
+
+
+The R packages *adegenet* and *poppr* are popular tools for population genetic analysis.
+The genlight objects, and poppr's snpclone object, were designed to handle high throughput sequencing datasets.
+Here we describe how to convert a vcfR object to a genlight and snpclone object.
+
+
+
+## Data import
+
+We will use the example dataset provided by vcfR.
+
+
+```{r}
+library(vcfR)
+data(vcfR_example)
+```
+
+
+## Creating genlight objects
+
+The **genlight** object is used by **adegenet** and **poppr**.
+It was designed specifically to handle high-throughput genotype data.
+At present it appears to only support two alleles at a locus, but varying levels of ploidy.
+Variant callers such as FreeBayes and the GATK's haplotype caller currently support more than two alleles per locus.
+To address this incompatibility, vcfR2genelight omits loci that include more than two alleles.
+The benefit of the genlight object is that the genlight object is much more efficient to use than the genind object as it was designed with high throughput sequencing in mind.
+When verbose is set to TRUE the function vcfR2genlight will throw a warning and report how many loci it has omitted.
+When verbose is set to FALSE the loci will be omitted silently.
+
+
+
+```{r genlight, eval=TRUE}
+vcf_file <- system.file("extdata", "pinf_sc50.vcf.gz", package = "pinfsc50")
+vcf <- read.vcfR(vcf_file, verbose = FALSE)
+x <- vcfR2genlight(vcf)
+x
+```
+
+
+A warning was thrown because our vcfR object included variants that include more than two alleles.
+The genlight object was designed to handle variants with only two alleles.
+This warning is intended to inform the user that the data was subset to only variants with two allele so they can proceed to analysis in adegenet or poppr.
+
+
+## Creating snpclone objects
+
+The **genlight** object is extended by the **snpclone** object for analysis of clonal and partially clonal populations in **poppr**.
+The genlight object can be converted to a snpclone object with functions in the poppr package.
+
+
+```{r snpclone}
+library(poppr)
+x <- as.snpclone(x)
+x
+```
+
+
+Note that we now have a **mlg** slot to hold multilocus genotype indicators.
+
+
+
+
+

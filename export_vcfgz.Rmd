@@ -1,0 +1,28 @@
+---
+title: "Export to *.vcf.gz"
+---
+
+
+## Data import
+
+We will use the example dataset provided by vcfR.
+
+
+```{r}
+library(vcfR)
+data(vcfR_example)
+```
+
+
+## Creating *.vcf.gz format files.
+
+
+The function **write.vcf()** can be used to create *.vcf.gz files (gzipped VCF files) from objects of class vcfR or chromR.
+These VCF files can be used for any downstream analysis which uses VCF files as input.
+
+
+```{r write.vcf, eval=FALSE}
+write.vcf(vcf, "test.vcf.gz")
+```
+
+
