@@ -23,17 +23,16 @@ Make sure to check your variant caller documentation if you do not see this info
 Here we visualize the depth information from a VCF file to provide a perspective on sequence quality.
 
 
-
-```{r, results='hide', echo = FALSE}
-suppressPackageStartupMessages( library(vcfR) )
-vcf <- read.vcfR('TASSEL_GBS0077.vcf.gz')
-dp <- extract.gt(vcf, element = "DP", as.numeric=TRUE)
-```
-
-
 We can extract the depth data (DP) as explained elsewhere.
 This results in a matrix of depth data.
 We can take a quick peak at this to remind us what it looks like.
+
+
+```{r, results='hide', echo = TRUE}
+library(vcfR)
+vcf <- read.vcfR('TASSEL_GBS0077.vcf.gz')
+dp <- extract.gt(vcf, element = "DP", as.numeric=TRUE)
+```
 
 
 ```{r}
