@@ -4,16 +4,53 @@ title: "tidy vcfR"
 
 
 Much of the functionality of vcfR was built around R and it's base graphics system.
-More recently, the concept of 'tidy data' has been described in the [tidy data](http://vita.had.co.nz/papers/tidy-data.html) article and implemented in the CRAN package [tidyr](https://CRAN.R-project.org/package=tidyr) (and an increasing number of packages).
+More recently, the concept of 'tidy data' has been described in the [tidy data](http://vita.had.co.nz/papers/tidy-data.html) article and implemented in the CRAN package [tidyr](https://CRAN.R-project.org/package=tidyr) (and an increasing number of other packages).
 In order to accomodate the audience that is interested in working with vcfR in a 'tidy' framework, several functions have been added. (Thank you Eric!)
 
 
+
+For our example we will load an example data set provided in vcfR.
+
+
 ```{r}
-#vcfR2tidy()
-#extract_info_tidy()
-#extract_gt_tidy()
-#vcf_field_names()
+library(vcfR)
+data("vcfR_test")
+vcfR_test
 ```
+
+
+The function `vcfR2tidy()` will convert all of the data in the vcfR object to a 'tibble.'
+A 'tibble' is a trimmed down version of a data.frame.
+(See `?tibble::tibble` for more information.)
+This could result in the creation of a large data structure.
+We can also specify what parts of the VCF data we want to have converted into our tibble.
+The funciton `vcf_field_names()` can remind us of what data are contained in our vcfR object.
+
+
+```{r}
+vcf_field_names(vcfR_test, tag = "FORMAT")
+Z <- vcfR2tidy(vcfR_test, format_fields = c("GT", "DP"))
+names(Z)
+```
+
+
+The result is a list containing three elements named 'fix, 'gt' and 'meta.'
+This is analogous to the three slots in the vcfR object.
+Each element of the list is a tibble that we can examine as we would any other list element.
+
+
+```{r}
+Z$meta
+Z$fix
+Z$gt
+```
+
+
+Note that the fix and gt elements have a 'ChromKey' to help coordinate the variants in both structures.
+Also, the information from the meta region has been used to assign a type to each column (e.g., integer, character, etc.).
+These data structures should now be in a format that other packages in the 'tidyverse' can work with.
+More information about `vcfR2tidy()` can be found in its manual page (`?vcfR2tidy`).
+
 
 
 
