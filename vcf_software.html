@@ -11,7 +11,7 @@
 
 
 
-<title>The R language and environment</title>
+<title>VCF software</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -316,19 +316,48 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 
 
 
-<h1 class="title toc-ignore">The R language and environment</h1>
+<h1 class="title toc-ignore">VCF software</h1>
 
 </div>
 
 
-<p>vcfR is an R package. Packages are collections of code that extend functionality to the basic R language. Because of this, users will need a familiartiy with the R language before they will be successful with vcfR. Here I’ve attempted to aggregate some links to help new R users familiarize themselves with the language.</p>
+<div id="software-that-produce-vcf-files" class="section level2">
+<h2>Software that produce VCF files</h2>
+<p>A fun part of this project has been learning about how people use vcfR. One facet of this is learning about the software that create VCF files. So I’ve decided to make a list of these software. If you know of a software that I have not included on this list, particularly if you can report that vcfR works with its files, feel free to let me know!</p>
+<p><strong>Genomic variant callers:</strong></p>
 <ul>
-<li><p><a href="http://www.springer.com/us/book/9780387790534">Introductory Statistics with R</a> by Peter Dalgaard. This is part of how I learned R. One thing I like about it is that it is relatively short, so it only covers the basics and allows you to subsequently pusue your focus.</p></li>
-<li><p><a href="https://www.r-bloggers.com/how-to-learn-r-2/">Tutorials for learning R</a> from the R-bloggers. The R-bloggers are a good source for all sorts of R information. Here they’ve put together a list of links.</p></li>
-<li><p><a href="http://swirlstats.com/">swirl</a> a colleague recommended this.</p></li>
-<li><p><a href="http://www.wiley.com/WileyCDA/WileyTitle/productCd-0470973927.html">The R Book</a> by Michael J. Crawley. I don’t have a lot of personal experience with this book, but it appears quite popular. This is an attempt to be more comprehensive than the Dalgaard book above.</p></li>
-<li><p><a href="http://r4ds.had.co.nz/">R for Data Science</a> An introduction to R, data science and ‘tidy data.’</p></li>
+<li><a href="http://cortexassembler.sourceforge.net/">Cortex</a></li>
+<li><a href="https://github.com/ekg/freebayes">freebayes</a></li>
+<li><a href="https://www.broadinstitute.org/gatk/guide/tooldocs/org_broadinstitute_gatk_tools_walkers_haplotypecaller_HaplotypeCaller.php">GATK haplotype caller</a></li>
+<li><a href="https://www.broadinstitute.org/gatk/guide/tooldocs/org_broadinstitute_gatk_tools_walkers_cancer_m2_MuTect2.php">GATK MuTect2</a></li>
+<li><a href="https://www.broadinstitute.org/gatk/guide/tooldocs/org_broadinstitute_gatk_tools_walkers_variantutils_GenotypeGVCFs.php">GATK GenotypeGVCFs</a></li>
+<li><a href="http://csb5.github.io/lofreq/">LoFreq</a></li>
+<li><a href="http://www.well.ox.ac.uk/platypus">Platypus</a></li>
+<li><a href="http://www.htslib.org/">Samtools</a></li>
+<li><a href="http://dkoboldt.github.io/varscan/">VarScan2</a></li>
 </ul>
+<p><strong>Restriction site associated DNA markers (e.g., RADseq, GBS):</strong></p>
+<ul>
+<li><a href="http://catchenlab.life.illinois.edu/stacks/">Stacks</a></li>
+<li><a href="http://www.maizegenetics.net/#!tassel/c17q9">Tassel</a></li>
+</ul>
+<p>**Manipulation of VCF <a href="data:**" class="uri">data:**</a></p>
+<ul>
+<li><a href="https://faculty.washington.edu/browning/beagle/beagle.html">Beagle v4.1</a> Inputs VCF genotypes and outputs phased genotypes to VCF format</li>
+<li><a href="https://cran.r-project.org/package=pegas">pegas::read.vcf</a> Population and Evolutionary Genetics Analysis System</li>
+<li><a href="https://pyvcf.readthedocs.io/en/latest/">PyVCF</a></li>
+<li><a href="http://snpeff.sourceforge.net/">SnpEff</a> Genetic variant annotation and effect prediction toolbox</li>
+<li><a href="http://broadinstitute.github.io/picard/index.html">Picard</a> A set of command line tools (in Java) for manipulating high-throughput sequencing (HTS) data and formats such as SAM/BAM/CRAM and VCF</li>
+<li><a href="https://github.com/AndersenLab/VCF-kit">VCF-kit</a> VCF-kit is a command-line based collection of utilities for performing analysis on Variant Call Format (VCF) files.</li>
+<li><a href="https://vcftools.github.io/">VCFtools</a> General manipulation and analysis</li>
+<li><a href="https://bioconductor.org/packages/release/bioc/html/VariantAnnotation.html">VariantAnnotation::readVcf</a> Bioconductor package for annotating variants</li>
+</ul>
+<p><strong>R packages that read VCF data</strong></p>
+<ul>
+<li><a href="https://bioconductor.org/packages/release/bioc/html/VariantAnnotation.html">VariantAnnotation</a></li>
+<li><a href="https://cran.r-project.org/package=pegas">pegas</a></li>
+</ul>
+</div>
 
 <center>
 <hr class="style1">

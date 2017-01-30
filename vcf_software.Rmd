@@ -1,0 +1,50 @@
+---
+title: "VCF software"
+output:
+  html_document
+---
+
+
+
+## Software that produce VCF files
+
+
+A fun part of this project has been learning about how people use vcfR.
+One facet of this is learning about the software that create VCF files.
+So I've decided to make a list of these software.
+If you know of a software that I have not included on this list, particularly if you can report that vcfR works with its files, feel free to let me know!
+
+
+**Genomic variant callers:**
+
+* [Cortex](http://cortexassembler.sourceforge.net/)
+* [freebayes](https://github.com/ekg/freebayes)
+* [GATK haplotype caller](https://www.broadinstitute.org/gatk/guide/tooldocs/org_broadinstitute_gatk_tools_walkers_haplotypecaller_HaplotypeCaller.php)
+* [GATK MuTect2](https://www.broadinstitute.org/gatk/guide/tooldocs/org_broadinstitute_gatk_tools_walkers_cancer_m2_MuTect2.php)
+* [GATK GenotypeGVCFs](https://www.broadinstitute.org/gatk/guide/tooldocs/org_broadinstitute_gatk_tools_walkers_variantutils_GenotypeGVCFs.php)
+* [LoFreq](http://csb5.github.io/lofreq/)
+* [Platypus](http://www.well.ox.ac.uk/platypus)
+* [Samtools](http://www.htslib.org/)
+* [VarScan2](http://dkoboldt.github.io/varscan/)
+
+
+**Restriction site associated DNA markers (e.g., RADseq, GBS):**
+
+* [Stacks](http://catchenlab.life.illinois.edu/stacks/)
+* [Tassel](http://www.maizegenetics.net/#!tassel/c17q9)
+
+**Manipulation of VCF data:**
+
+* [Beagle v4.1](https://faculty.washington.edu/browning/beagle/beagle.html) Inputs VCF genotypes and outputs phased genotypes to VCF format
+* [pegas::read.vcf](https://cran.r-project.org/package=pegas) Population and Evolutionary Genetics Analysis System
+* [PyVCF](https://pyvcf.readthedocs.io/en/latest/)
+* [SnpEff](http://snpeff.sourceforge.net/) Genetic variant annotation and effect prediction toolbox
+* [Picard](http://broadinstitute.github.io/picard/index.html) A set of command line tools (in Java) for manipulating high-throughput sequencing (HTS) data and formats such as SAM/BAM/CRAM and VCF
+* [VCF-kit](https://github.com/AndersenLab/VCF-kit) VCF-kit is a command-line based collection of utilities for performing analysis on Variant Call Format (VCF) files.
+* [VCFtools](https://vcftools.github.io/) General manipulation and analysis
+* [VariantAnnotation::readVcf](https://bioconductor.org/packages/release/bioc/html/VariantAnnotation.html) Bioconductor package for annotating variants
+
+**R packages that read VCF data**
+
+* [VariantAnnotation](https://bioconductor.org/packages/release/bioc/html/VariantAnnotation.html)
+* [pegas](https://cran.r-project.org/package=pegas)

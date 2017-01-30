@@ -49,6 +49,8 @@ navbar:
       menu:
         - text: "Subset to 1 chromosome"
           href: "subset_data_to_1chrom.html"
+        - text: "VCF software"
+          href: "vcf_software.html"
     - text: "Export"
       menu:
         - text: "Overview"
