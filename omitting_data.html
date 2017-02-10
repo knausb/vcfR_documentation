@@ -335,12 +335,11 @@ dp &lt;- extract.gt(vcf, element = &quot;DP&quot;, as.numeric=TRUE)</code></pre>
 <pre class="r"><code>vcf</code></pre>
 <pre><code>## ***** Object of Class vcfR *****
 ## 61 samples
-## 7171 CHROMs
 ## 69,296 variants
 ## Object size: 46.5 Mb
 ## 37.62 percent missing data
 ## *****        *****         *****</code></pre>
-<p>Because part of this exercise involves setting cells in our data matrix as NA we should begin by reminding ourselves of how abundant they are. By usung the show methods we see that we have over 35 percent missing data. We can now use what we learned previously to set variants that are outside our per samples inclusion threshold for depth as NA.</p>
+<p>Because part of this exercise involves setting cells in our data matrix as NA we should begin by reminding ourselves of how abundant they are. By using the show method we see that we have over 35 percent missing data. We can now use what we learned previously to set variants that are outside our per sample inclusion threshold as NA.</p>
 <pre class="r"><code>quants &lt;- apply(dp, MARGIN=2, quantile, probs=c(0.1, 0.8), na.rm=TRUE)
 dp2 &lt;- sweep(dp, MARGIN=2, FUN = &quot;-&quot;, quants[1,])
 dp[dp2 &lt; 0] &lt;- NA
@@ -354,7 +353,6 @@ vcf@gt[,-1][ is.na(dp) == TRUE ] &lt;- NA</code></pre>
 <pre class="r"><code>vcf</code></pre>
 <pre><code>## ***** Object of Class vcfR *****
 ## 61 samples
-## 7171 CHROMs
 ## 69,296 variants
 ## Object size: 45.2 Mb
 ## 66.63 percent missing data
@@ -371,7 +369,6 @@ vcf@gt &lt;- vcf@gt[, c(TRUE, myMiss &lt; 0.7)]
 vcf</code></pre>
 <pre><code>## ***** Object of Class vcfR *****
 ## 41 samples
-## 7171 CHROMs
 ## 69,296 variants
 ## Object size: 34.6 Mb
 ## 53.33 percent missing data
@@ -382,14 +379,13 @@ heatmap.bp(dp[1:1000,], rlabels = FALSE)</code></pre>
 </div>
 <div id="omitting-variants" class="section level2">
 <h2>Omitting variants</h2>
-<p>Previously we have seen how to quantify and visualize missingness for variants in our dataset. We can use this information to omit variants that have a high degreee of missingness.</p>
+<p>Previously we have seen how to quantify and visualize missingness for variants in our dataset. We can use this information to omit variants that have a high degree of missingness.</p>
 <pre class="r"><code>myMiss &lt;- apply(dp, MARGIN = 1, function(x){ sum( is.na(x) ) } )
 myMiss &lt;- myMiss / ncol(dp)
 vcf &lt;- vcf[myMiss &lt; 0.2, ]
 vcf</code></pre>
 <pre><code>## ***** Object of Class vcfR *****
 ## 41 samples
-## 4563 CHROMs
 ## 18,782 variants
 ## Object size: 9.8 Mb
 ## 9.421 percent missing data
