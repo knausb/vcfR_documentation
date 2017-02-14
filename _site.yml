@@ -45,6 +45,8 @@ navbar:
           href: "ploidy.html"
         - text: "Determining ploidy 1"
           href: "determining_ploidy_1.html"
+        - text: "Determining ploidy 2"
+          href: "determining_ploidy_2.html"
     - text: "Export"
       menu:
         - text: "Overview"
