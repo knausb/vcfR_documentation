@@ -8,70 +8,320 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<meta name="author" content="Brian J. Knaus" />
 
-<meta name="date" content="2017-02-13" />
 
 <title>Determining ploidy 2</title>
 
-
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-1.1/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-1.1/highlight.js"></script>
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
 </style>
 
-
-
-<link rel="stylesheet" href="/home/local/USDA-ARS/knausb/R/x86_64-pc-linux-gnu-library/3.3/rmarkdown/rmarkdown/templates/html_vignette/resources/vignette.css" type="text/css" />
+<link rel="stylesheet" href="styles.css" type="text/css" />
 
 </head>
 
 <body>
 
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 61px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+
+.section h2 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+.section h3 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+.section h4 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+.section h5 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+.section h6 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">vcfR</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="rlanguage.html">R language</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Tutorial
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="quick_intro.html">A quick introduction</a>
+    </li>
+    <li>
+      <a href="vcf_data.html">VCF data</a>
+    </li>
+    <li>
+      <a href="vcfR_object.html">vcfR objects</a>
+    </li>
+    <li>
+      <a href="matrices.html">Extracting matrices</a>
+    </li>
+    <li>
+      <a href="tidy_vcfR.html">Tidy vcfR</a>
+    </li>
+    <li>
+      <a href="chromR_object.html">chromR objects</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    GBS class
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="gbs_class.html">GBS class</a>
+    </li>
+    <li>
+      <a href="vcf_data.html">VCF data</a>
+    </li>
+    <li>
+      <a href="extract_data.html">Extract data</a>
+    </li>
+    <li>
+      <a href="depth_plot.html">Depth plot</a>
+    </li>
+    <li>
+      <a href="missing_data.html">Missing data</a>
+    </li>
+    <li>
+      <a href="censoring_data.html">Censoring data</a>
+    </li>
+    <li>
+      <a href="omitting_data.html">Omitting data</a>
+    </li>
+    <li>
+      <a href="apply.html">Apply</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Ploidy
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="ploidy.html">Ploidy</a>
+    </li>
+    <li>
+      <a href="determining_ploidy_1.html">Determining ploidy 1</a>
+    </li>
+    <li>
+      <a href="determining_ploidy_2.html">Determining ploidy 2</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Export
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="export.html">Overview</a>
+    </li>
+    <li>
+      <a href="export_vcfgz.html">Export to *vcf.gz</a>
+    </li>
+    <li>
+      <a href="export_genind_genclone.html">Genind and Genclone</a>
+    </li>
+    <li>
+      <a href="export_genlight_snpclone.html">Genlight and SNPclone</a>
+    </li>
+    <li>
+      <a href="dnabin.html">DNAbin</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    FAQ
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="subset_data_to_1chrom.html">Subset to 1 chromosome</a>
+    </li>
+    <li>
+      <a href="vcf_software.html">VCF software</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+<p>
+<center>
+<h3>vcfR documentation</h3>
+by
+<br>
+Brian J. Knaus and Niklaus J. Gr&uuml;nwald
+</center>
+</p>
+
+<div class="fluid-row" id="header">
 
 
 
 <h1 class="title toc-ignore">Determining ploidy 2</h1>
-<h4 class="author"><em>Brian J. Knaus</em></h4>
-<h4 class="date"><em>2017-02-13</em></h4>
 
+</div>
 
 
 <p>Previously we showed how to create histograms based on the ratio of alleles observed at heterozygous positions. These histograms may present desireable perspectives when a constant ploidy is expected. Investigators interested in whether there is variation in copy number along a chromosome may require a more detailed perspective. Here we present a perspective of copy number variation along the length of a chromosome.</p>
@@ -79,17 +329,23 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="input-data" class="section level2">
 <h2>Input data</h2>
 <p>Data import is performed similar to other examples.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Load libraries</span>
-<span class="kw">library</span>(vcfR)
-<span class="kw">library</span>(pinfsc50)
+<pre class="r"><code># Load libraries
+library(vcfR)</code></pre>
+<pre><code>## 
+##    *****       ***   vcfR   ***       *****
+##    This is vcfR 1.4.0 
+##      browseVignettes(&#39;vcfR&#39;) # Documentation
+##      citation(&#39;vcfR&#39;) # Citation
+##    *****       *****      *****       *****</code></pre>
+<pre class="r"><code>library(pinfsc50)
 
-<span class="co"># Determine file locations</span>
-vcf_file &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;pinf_sc50.vcf.gz&quot;</span>,
-                        <span class="dt">package =</span> <span class="st">&quot;pinfsc50&quot;</span>)
+# Determine file locations
+vcf_file &lt;- system.file(&quot;extdata&quot;, &quot;pinf_sc50.vcf.gz&quot;,
+                        package = &quot;pinfsc50&quot;)
 
-<span class="co"># Read data into memory</span>
-vcf &lt;-<span class="st"> </span><span class="kw">read.vcfR</span>(vcf_file, <span class="dt">verbose =</span> <span class="ot">FALSE</span>)
-vcf</code></pre></div>
+# Read data into memory
+vcf &lt;- read.vcfR(vcf_file, verbose = FALSE)
+vcf</code></pre>
 <pre><code>## ***** Object of Class vcfR *****
 ## 18 samples
 ## 22,031 variants
@@ -101,263 +357,284 @@ vcf</code></pre></div>
 <h2>Depth filtering</h2>
 <p>We’ll also filter on depth by removng high and low coverage variants. The thresholds for this filtering will be determined by quantiles. Researchers may want to explore other methods available in R (e.g., fit a distribution, mixture models, etc.).</p>
 <p>First we extract the alleles and create frequencies</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ad &lt;-<span class="st"> </span><span class="kw">extract.gt</span>(vcf, <span class="dt">element =</span> <span class="st">&#39;AD&#39;</span>)
+<pre class="r"><code>ad &lt;- extract.gt(vcf, element = &#39;AD&#39;)
 
-allele1 &lt;-<span class="st"> </span><span class="kw">masplit</span>(ad, <span class="dt">record =</span> <span class="dv">1</span>)
-allele2 &lt;-<span class="st"> </span><span class="kw">masplit</span>(ad, <span class="dt">record =</span> <span class="dv">2</span>)
+allele1 &lt;- masplit(ad, record = 1)
+allele2 &lt;- masplit(ad, record = 2)
 
-ad1 &lt;-<span class="st"> </span>allele1 /<span class="st"> </span>(allele1 +<span class="st"> </span>allele2)
-ad2 &lt;-<span class="st"> </span>allele2 /<span class="st"> </span>(allele1 +<span class="st"> </span>allele2)</code></pre></div>
+ad1 &lt;- allele1 / (allele1 + allele2)
+ad2 &lt;- allele2 / (allele1 + allele2)</code></pre>
 <p>We create thresholds based on the most abundant allele as follows.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dp &lt;-<span class="st"> </span>allele1
-<span class="co">#sums &lt;- apply(dp, MARGIN=2, quantile, probs=c(0.15, 0.95), na.rm=TRUE)</span>
-sums &lt;-<span class="st"> </span><span class="kw">apply</span>(dp, <span class="dt">MARGIN=</span><span class="dv">2</span>, quantile, <span class="dt">probs=</span><span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>), <span class="dt">na.rm=</span><span class="ot">TRUE</span>)
+<pre class="r"><code>dp &lt;- allele1
+#sums &lt;- apply(dp, MARGIN=2, quantile, probs=c(0.15, 0.95), na.rm=TRUE)
+sums &lt;- apply(dp, MARGIN=2, quantile, probs=c(0.1, 0.9), na.rm=TRUE)
 
-<span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">4</span>,<span class="dv">3</span>))
-<span class="kw">par</span>(<span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">1</span>))
-<span class="kw">par</span>(<span class="dt">oma=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>))
+par(mfrow=c(4,3))
+par(mar=c(2,2,1,1))
+par(oma=c(1,1,0,0))
 
-for(i in <span class="dv">1</span>:<span class="dv">12</span>){
-  <span class="kw">hist</span>(allele1[,i], <span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">0</span>,<span class="fl">1e3</span>,<span class="dt">by=</span><span class="dv">1</span>), <span class="dt">xlim=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">100</span>), <span class="dt">col=</span><span class="dv">8</span>, <span class="dt">main=</span><span class="st">&quot;&quot;</span>, <span class="dt">xlab=</span><span class="st">&quot;&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;&quot;</span>)
-  <span class="kw">title</span>(<span class="dt">main =</span> <span class="kw">colnames</span>(allele1)[i])
-  <span class="kw">abline</span>(<span class="dt">v=</span>sums[,i], <span class="dt">col=</span><span class="dv">2</span>)
+for(i in 1:12){
+  hist(allele1[,i], breaks = seq(0,1e3,by=1), xlim=c(0,100), col=8, main=&quot;&quot;, xlab=&quot;&quot;, ylab=&quot;&quot;)
+  title(main = colnames(allele1)[i])
+  abline(v=sums[,i], col=2)
 }
-<span class="kw">title</span>(<span class="dt">xlab =</span> <span class="st">&quot;Depth&quot;</span>, <span class="dt">line=</span><span class="dv">0</span>, <span class="dt">outer =</span> <span class="ot">TRUE</span>, <span class="dt">font=</span><span class="dv">2</span>)
-<span class="kw">title</span>(<span class="dt">ylab =</span> <span class="st">&quot;Count&quot;</span>, <span class="dt">line=</span><span class="dv">0</span>, <span class="dt">outer =</span> <span class="ot">TRUE</span>, <span class="dt">font=</span><span class="dv">2</span>)</code></pre></div>
-<p><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-3-1.png" style="display: block; margin: auto;" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">2</span>))
-<span class="kw">par</span>(<span class="dt">oma=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>))</code></pre></div>
+title(xlab = &quot;Depth&quot;, line=0, outer = TRUE, font=2)
+title(ylab = &quot;Count&quot;, line=0, outer = TRUE, font=2)</code></pre>
+<p><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-3-1.png" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>par(mar=c(5,4,4,2))
+par(oma=c(0,0,0,0))</code></pre>
 <p>We performa similar operation for the second most abundant allele.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">4</span>,<span class="dv">3</span>))
-<span class="kw">par</span>(<span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">1</span>))
-<span class="kw">par</span>(<span class="dt">oma=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>))
+<pre class="r"><code>par(mfrow=c(4,3))
+par(mar=c(2,2,1,1))
+par(oma=c(1,1,0,0))
 
-for(i in <span class="dv">1</span>:<span class="dv">12</span>){
-  tmp &lt;-<span class="st"> </span>allele2[,i]
-  tmp &lt;-<span class="st"> </span>tmp[ tmp &gt;<span class="st"> </span><span class="dv">0</span> ]
-  <span class="kw">hist</span>(tmp, <span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">0</span>,<span class="fl">1e3</span>,<span class="dt">by=</span><span class="dv">1</span>), <span class="dt">xlim=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">100</span>), 
-<span class="co">#       ylim=c(0,1000),</span>
-       <span class="dt">col=</span><span class="dv">8</span>, <span class="dt">main=</span><span class="st">&quot;&quot;</span>, <span class="dt">xlab=</span><span class="st">&quot;&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;&quot;</span>)
-  <span class="kw">title</span>(<span class="dt">main =</span> <span class="kw">colnames</span>(allele1)[i])
+for(i in 1:12){
+  tmp &lt;- allele2[,i]
+  tmp &lt;- tmp[ tmp &gt; 0 ]
+  hist(tmp, breaks = seq(0,1e3,by=1), xlim=c(0,100), 
+#       ylim=c(0,1000),
+       col=8, main=&quot;&quot;, xlab=&quot;&quot;, ylab=&quot;&quot;)
+  title(main = colnames(allele1)[i])
 }
-<span class="kw">title</span>(<span class="dt">xlab =</span> <span class="st">&quot;Depth&quot;</span>, <span class="dt">line=</span><span class="dv">0</span>, <span class="dt">outer =</span> <span class="ot">TRUE</span>, <span class="dt">font=</span><span class="dv">2</span>)
-<span class="kw">title</span>(<span class="dt">ylab =</span> <span class="st">&quot;Count&quot;</span>, <span class="dt">line=</span><span class="dv">0</span>, <span class="dt">outer =</span> <span class="ot">TRUE</span>, <span class="dt">font=</span><span class="dv">2</span>)</code></pre></div>
-<p><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))
-<span class="kw">par</span>(<span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">2</span>))
-<span class="kw">par</span>(<span class="dt">oma=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>))</code></pre></div>
+title(xlab = &quot;Depth&quot;, line=0, outer = TRUE, font=2)
+title(ylab = &quot;Count&quot;, line=0, outer = TRUE, font=2)</code></pre>
+<p><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-4-1.png" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>par(mfrow=c(1,1))
+par(mar=c(5,4,4,2))
+par(oma=c(0,0,0,0))</code></pre>
 </div>
 <div id="find-peaks-of-density" class="section level2">
 <h2>Find peaks of density</h2>
 <p>In order to avoid assumptions about the distribution of the allele balance ratios we employ a non-parametric method. The data are binned into bins of user specified widths and the bin with the highest density is chosen as the frequency. This is our numerical summary of our peak density and will be retained in a matrix of samples and windows.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Filter on depth quantiles.</span>
-sums &lt;-<span class="st"> </span><span class="kw">apply</span>(allele1, <span class="dt">MARGIN=</span><span class="dv">2</span>, quantile, <span class="dt">probs=</span><span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>), <span class="dt">na.rm=</span><span class="ot">TRUE</span>)
-<span class="co"># Allele 1</span>
-dp2 &lt;-<span class="st"> </span><span class="kw">sweep</span>(allele1, <span class="dt">MARGIN=</span><span class="dv">2</span>, <span class="dt">FUN =</span> <span class="st">&quot;-&quot;</span>, sums[<span class="dv">1</span>,])
-<span class="co">#allele1[dp2 &lt; 0] &lt;- NA</span>
-vcf@gt[,-<span class="dv">1</span>][ dp2 &lt;<span class="st"> </span><span class="dv">0</span> &amp;<span class="st"> </span>!<span class="kw">is.na</span>(vcf@gt[,-<span class="dv">1</span>]) ] &lt;-<span class="st"> </span><span class="ot">NA</span>
-dp2 &lt;-<span class="st"> </span><span class="kw">sweep</span>(allele1, <span class="dt">MARGIN=</span><span class="dv">2</span>, <span class="dt">FUN =</span> <span class="st">&quot;-&quot;</span>, sums[<span class="dv">2</span>,])
-<span class="co">#allele1[dp2 &gt; 0] &lt;- NA</span>
-vcf@gt[,-<span class="dv">1</span>][dp2 &gt;<span class="st"> </span><span class="dv">0</span>] &lt;-<span class="st"> </span><span class="ot">NA</span>
-<span class="co"># Allele 2</span>
-dp2 &lt;-<span class="st"> </span><span class="kw">sweep</span>(allele2, <span class="dt">MARGIN=</span><span class="dv">2</span>, <span class="dt">FUN =</span> <span class="st">&quot;-&quot;</span>, sums[<span class="dv">1</span>,])
-vcf@gt[,-<span class="dv">1</span>][ dp2 &lt;<span class="st"> </span><span class="dv">0</span> &amp;<span class="st"> </span>!<span class="kw">is.na</span>(vcf@gt[,-<span class="dv">1</span>]) ] &lt;-<span class="st"> </span><span class="ot">NA</span>
-dp2 &lt;-<span class="st"> </span><span class="kw">sweep</span>(allele2, <span class="dt">MARGIN=</span><span class="dv">2</span>, <span class="dt">FUN =</span> <span class="st">&quot;-&quot;</span>, sums[<span class="dv">2</span>,])
-vcf@gt[,-<span class="dv">1</span>][dp2 &gt;<span class="st"> </span><span class="dv">0</span>] &lt;-<span class="st"> </span><span class="ot">NA</span>
+<pre class="r"><code># Filter on depth quantiles.
+sums &lt;- apply(allele1, MARGIN=2, quantile, probs=c(0.1, 0.9), na.rm=TRUE)
+# Allele 1
+dp2 &lt;- sweep(allele1, MARGIN=2, FUN = &quot;-&quot;, sums[1,])
+#allele1[dp2 &lt; 0] &lt;- NA
+vcf@gt[,-1][ dp2 &lt; 0 &amp; !is.na(vcf@gt[,-1]) ] &lt;- NA
+dp2 &lt;- sweep(allele1, MARGIN=2, FUN = &quot;-&quot;, sums[2,])
+#allele1[dp2 &gt; 0] &lt;- NA
+vcf@gt[,-1][dp2 &gt; 0] &lt;- NA
+# Allele 2
+dp2 &lt;- sweep(allele2, MARGIN=2, FUN = &quot;-&quot;, sums[1,])
+vcf@gt[,-1][ dp2 &lt; 0 &amp; !is.na(vcf@gt[,-1]) ] &lt;- NA
+dp2 &lt;- sweep(allele2, MARGIN=2, FUN = &quot;-&quot;, sums[2,])
+vcf@gt[,-1][dp2 &gt; 0] &lt;- NA
 
-<span class="co"># Censor homozygotes.</span>
-gt &lt;-<span class="st"> </span><span class="kw">extract.gt</span>(vcf, <span class="dt">element =</span> <span class="st">&#39;GT&#39;</span>)
-hets &lt;-<span class="st"> </span><span class="kw">is_het</span>(gt)
-<span class="kw">is.na</span>( vcf@gt[,-<span class="dv">1</span>][ !hets ] ) &lt;-<span class="st"> </span><span class="ot">TRUE</span>
-
-
+# Censor homozygotes.
+gt &lt;- extract.gt(vcf, element = &#39;GT&#39;)
+hets &lt;- is_het(gt)
+is.na( vcf@gt[,-1][ !hets ] ) &lt;- TRUE
 
 
-<span class="co"># Extract allele depths</span>
-ad &lt;-<span class="st"> </span><span class="kw">extract.gt</span>(vcf, <span class="dt">element =</span> <span class="st">&#39;AD&#39;</span>)
-allele1 &lt;-<span class="st"> </span><span class="kw">masplit</span>(ad, <span class="dt">record =</span> <span class="dv">1</span>)
-allele2 &lt;-<span class="st"> </span><span class="kw">masplit</span>(ad, <span class="dt">record =</span> <span class="dv">2</span>)
-ad1 &lt;-<span class="st"> </span>allele1 /<span class="st"> </span>(allele1 +<span class="st"> </span>allele2)
-ad2 &lt;-<span class="st"> </span>allele2 /<span class="st"> </span>(allele1 +<span class="st"> </span>allele2)
-
-<span class="co"># Parameters</span>
-<span class="co">#winsize &lt;- 1e5</span>
-<span class="co">#</span>
-winsize &lt;-<span class="st"> </span><span class="fl">2e5</span>
-<span class="co">#bin_width &lt;- 0.1</span>
-<span class="co">#bin_width &lt;- 0.05</span>
-<span class="co">#bin_width &lt;- 0.025</span>
-<span class="co">#</span>
-bin_width &lt;-<span class="st"> </span><span class="fl">0.02</span>
-<span class="co">#bin_width &lt;- 0.01</span>
 
 
-<span class="co"># Find peaks</span>
-freq1 &lt;-<span class="st"> </span>ad1/(ad1+ad2)
-freq2 &lt;-<span class="st"> </span>ad2/(ad1+ad2)
-myPeaks1 &lt;-<span class="st"> </span><span class="kw">freq_peak</span>(freq1, <span class="kw">getPOS</span>(vcf), <span class="dt">winsize =</span> winsize, <span class="dt">bin_width =</span> bin_width)
-<span class="co">#myCounts1 &lt;- freq_peak(freq1, getPOS(vcf), winsize = winsize, bin_width = bin_width, count = TRUE)</span>
-<span class="kw">is.na</span>(myPeaks1$peaks[myPeaks1$counts &lt;<span class="st"> </span><span class="dv">20</span>]) &lt;-<span class="st"> </span><span class="ot">TRUE</span>
-myPeaks2 &lt;-<span class="st"> </span><span class="kw">freq_peak</span>(freq2, <span class="kw">getPOS</span>(vcf), <span class="dt">winsize =</span> winsize, <span class="dt">bin_width =</span> bin_width, <span class="dt">lhs =</span> <span class="ot">FALSE</span>)
-<span class="co">#myCounts2 &lt;- freq_peak(freq2, getPOS(vcf), winsize = winsize, bin_width = bin_width, count = TRUE)</span>
-<span class="kw">is.na</span>(myPeaks2$peaks[myPeaks2$counts &lt;<span class="st"> </span><span class="dv">20</span>]) &lt;-<span class="st"> </span><span class="ot">TRUE</span></code></pre></div>
+# Extract allele depths
+ad &lt;- extract.gt(vcf, element = &#39;AD&#39;)
+allele1 &lt;- masplit(ad, record = 1)
+allele2 &lt;- masplit(ad, record = 2)
+ad1 &lt;- allele1 / (allele1 + allele2)
+ad2 &lt;- allele2 / (allele1 + allele2)
+
+# Parameters
+#winsize &lt;- 1e5
+#
+winsize &lt;- 2e5
+#bin_width &lt;- 0.1
+#bin_width &lt;- 0.05
+#bin_width &lt;- 0.025
+#
+bin_width &lt;- 0.02
+#bin_width &lt;- 0.01
+
+
+# Find peaks
+freq1 &lt;- ad1/(ad1+ad2)
+freq2 &lt;- ad2/(ad1+ad2)
+myPeaks1 &lt;- freq_peak(freq1, getPOS(vcf), winsize = winsize, bin_width = bin_width)
+#myCounts1 &lt;- freq_peak(freq1, getPOS(vcf), winsize = winsize, bin_width = bin_width, count = TRUE)
+is.na(myPeaks1$peaks[myPeaks1$counts &lt; 20]) &lt;- TRUE
+myPeaks2 &lt;- freq_peak(freq2, getPOS(vcf), winsize = winsize, bin_width = bin_width, lhs = FALSE)
+#myCounts2 &lt;- freq_peak(freq2, getPOS(vcf), winsize = winsize, bin_width = bin_width, count = TRUE)
+is.na(myPeaks2$peaks[myPeaks2$counts &lt; 20]) &lt;- TRUE</code></pre>
 <p>As a proof of concep we can visualize plots of the major allele with a red horizontal line at our predicted peak. We repeat this for the minor allele.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">4</span>,<span class="dv">4</span>))
-<span class="kw">par</span>(<span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">1</span>))
-<span class="kw">par</span>(<span class="dt">oma=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>))
+<pre class="r"><code>par(mfrow=c(4,4))
+par(mar=c(2,2,1,1))
+par(oma=c(1,1,0,0))
 
-mySample &lt;-<span class="st"> &quot;BL2009P4_us23&quot;</span>
-for(i in <span class="dv">1</span>:<span class="dv">4</span>){
-  <span class="kw">hist</span>(freq1[ myPeaks1$wins[i,<span class="st">&#39;START_row&#39;</span>]:myPeaks1$wins[i,<span class="st">&#39;END_row&#39;</span>], mySample ],
-       <span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dt">by=</span>bin_width), <span class="dt">xlim=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="dt">col=</span><span class="dv">8</span>, <span class="dt">main =</span> <span class="st">&quot;&quot;</span>, <span class="dt">xaxt=</span><span class="st">&#39;n&#39;</span>)
-  <span class="kw">axis</span>(<span class="dt">side=</span><span class="dv">1</span>, <span class="dt">at=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="fl">0.25</span>,<span class="fl">0.333</span>,<span class="fl">0.5</span>,<span class="fl">0.666</span>,<span class="fl">0.75</span>,<span class="dv">1</span>),
-     <span class="dt">labels=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="st">&#39;1/4&#39;</span>,<span class="st">&#39;1/3&#39;</span>,<span class="st">&#39;1/2&#39;</span>,<span class="st">&#39;2/3&#39;</span>,<span class="st">&#39;3/4&#39;</span>,<span class="dv">1</span>), <span class="dt">las=</span><span class="dv">1</span>)
-  <span class="kw">abline</span>(<span class="dt">v=</span>myPeaks1$peaks[i,mySample], <span class="dt">col=</span><span class="dv">2</span>)
-  if(i==<span class="dv">2</span>){ <span class="kw">title</span>(<span class="dt">main=</span>mySample) }
+mySample &lt;- &quot;BL2009P4_us23&quot;
+for(i in 1:4){
+  hist(freq1[ myPeaks1$wins[i,&#39;START_row&#39;]:myPeaks1$wins[i,&#39;END_row&#39;], mySample ],
+       breaks = seq(0,1,by=bin_width), xlim=c(0,1), col=8, main = &quot;&quot;, xaxt=&#39;n&#39;)
+  axis(side=1, at=c(0,0.25,0.333,0.5,0.666,0.75,1),
+     labels=c(0,&#39;1/4&#39;,&#39;1/3&#39;,&#39;1/2&#39;,&#39;2/3&#39;,&#39;3/4&#39;,1), las=1)
+  abline(v=myPeaks1$peaks[i,mySample], col=2)
+  if(i==2){ title(main=mySample) }
 }
 
-mySample &lt;-<span class="st"> &quot;DDR7602&quot;</span>
-for(i in <span class="dv">1</span>:<span class="dv">4</span>){
-  <span class="kw">hist</span>(freq1[ myPeaks1$wins[i,<span class="st">&#39;START_row&#39;</span>]:myPeaks1$wins[i,<span class="st">&#39;END_row&#39;</span>], mySample ], 
-       <span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dt">by=</span>bin_width), <span class="dt">xlim=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="dt">col=</span><span class="dv">8</span>, <span class="dt">main =</span> <span class="st">&quot;&quot;</span>, <span class="dt">xaxt=</span><span class="st">&#39;n&#39;</span>)
-  <span class="kw">axis</span>(<span class="dt">side=</span><span class="dv">1</span>, <span class="dt">at=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="fl">0.25</span>,<span class="fl">0.333</span>,<span class="fl">0.5</span>,<span class="fl">0.666</span>,<span class="fl">0.75</span>,<span class="dv">1</span>),
-     <span class="dt">labels=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="st">&#39;1/4&#39;</span>,<span class="st">&#39;1/3&#39;</span>,<span class="st">&#39;1/2&#39;</span>,<span class="st">&#39;2/3&#39;</span>,<span class="st">&#39;3/4&#39;</span>,<span class="dv">1</span>), <span class="dt">las=</span><span class="dv">1</span>)
-  <span class="kw">abline</span>(<span class="dt">v=</span>myPeaks1$peaks[i,mySample], <span class="dt">col=</span><span class="dv">2</span>)
-  if(i==<span class="dv">2</span>){ <span class="kw">title</span>(<span class="dt">main=</span>mySample) }
+mySample &lt;- &quot;DDR7602&quot;
+for(i in 1:4){
+  hist(freq1[ myPeaks1$wins[i,&#39;START_row&#39;]:myPeaks1$wins[i,&#39;END_row&#39;], mySample ], 
+       breaks = seq(0,1,by=bin_width), xlim=c(0,1), col=8, main = &quot;&quot;, xaxt=&#39;n&#39;)
+  axis(side=1, at=c(0,0.25,0.333,0.5,0.666,0.75,1),
+     labels=c(0,&#39;1/4&#39;,&#39;1/3&#39;,&#39;1/2&#39;,&#39;2/3&#39;,&#39;3/4&#39;,1), las=1)
+  abline(v=myPeaks1$peaks[i,mySample], col=2)
+  if(i==2){ title(main=mySample) }
 }
 
-mySample &lt;-<span class="st"> &quot;IN2009T1_us22&quot;</span>
-for(i in <span class="dv">1</span>:<span class="dv">4</span>){
-  <span class="kw">hist</span>(freq1[ myPeaks1$wins[i,<span class="st">&#39;START_row&#39;</span>]:myPeaks1$wins[i,<span class="st">&#39;END_row&#39;</span>], mySample ],
-       <span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dt">by=</span>bin_width), <span class="dt">xlim=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="dt">col=</span><span class="dv">8</span>, <span class="dt">main =</span> <span class="st">&quot;&quot;</span>, <span class="dt">xaxt=</span><span class="st">&#39;n&#39;</span>)
-  <span class="kw">axis</span>(<span class="dt">side=</span><span class="dv">1</span>, <span class="dt">at=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="fl">0.25</span>,<span class="fl">0.333</span>,<span class="fl">0.5</span>,<span class="fl">0.666</span>,<span class="fl">0.75</span>,<span class="dv">1</span>),
-     <span class="dt">labels=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="st">&#39;1/4&#39;</span>,<span class="st">&#39;1/3&#39;</span>,<span class="st">&#39;1/2&#39;</span>,<span class="st">&#39;2/3&#39;</span>,<span class="st">&#39;3/4&#39;</span>,<span class="dv">1</span>), <span class="dt">las=</span><span class="dv">1</span>)
-  <span class="kw">abline</span>(<span class="dt">v=</span>myPeaks1$peaks[i,mySample], <span class="dt">col=</span><span class="dv">2</span>)
-  if(i==<span class="dv">2</span>){ <span class="kw">title</span>(<span class="dt">main=</span>mySample) }
+mySample &lt;- &quot;IN2009T1_us22&quot;
+for(i in 1:4){
+  hist(freq1[ myPeaks1$wins[i,&#39;START_row&#39;]:myPeaks1$wins[i,&#39;END_row&#39;], mySample ],
+       breaks = seq(0,1,by=bin_width), xlim=c(0,1), col=8, main = &quot;&quot;, xaxt=&#39;n&#39;)
+  axis(side=1, at=c(0,0.25,0.333,0.5,0.666,0.75,1),
+     labels=c(0,&#39;1/4&#39;,&#39;1/3&#39;,&#39;1/2&#39;,&#39;2/3&#39;,&#39;3/4&#39;,1), las=1)
+  abline(v=myPeaks1$peaks[i,mySample], col=2)
+  if(i==2){ title(main=mySample) }
 }
 
-mySample &lt;-<span class="st"> &quot;P17777us22&quot;</span>
-for(i in <span class="dv">1</span>:<span class="dv">4</span>){
-  <span class="kw">hist</span>(freq1[ myPeaks1$wins[i,<span class="st">&#39;START_row&#39;</span>]:myPeaks1$wins[i,<span class="st">&#39;END_row&#39;</span>], mySample ],
-       <span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dt">by=</span>bin_width), <span class="dt">xlim=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="dt">col=</span><span class="dv">8</span>, <span class="dt">main =</span> <span class="st">&quot;&quot;</span>, <span class="dt">xaxt=</span><span class="st">&#39;n&#39;</span>)
-  <span class="kw">axis</span>(<span class="dt">side=</span><span class="dv">1</span>, <span class="dt">at=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="fl">0.25</span>,<span class="fl">0.333</span>,<span class="fl">0.5</span>,<span class="fl">0.666</span>,<span class="fl">0.75</span>,<span class="dv">1</span>),
-     <span class="dt">labels=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="st">&#39;1/4&#39;</span>,<span class="st">&#39;1/3&#39;</span>,<span class="st">&#39;1/2&#39;</span>,<span class="st">&#39;2/3&#39;</span>,<span class="st">&#39;3/4&#39;</span>,<span class="dv">1</span>), <span class="dt">las=</span><span class="dv">1</span>)
-  <span class="kw">abline</span>(<span class="dt">v=</span>myPeaks1$peaks[i,mySample], <span class="dt">col=</span><span class="dv">2</span>)
-  if(i==<span class="dv">2</span>){ <span class="kw">title</span>(<span class="dt">main=</span>mySample) }
-}</code></pre></div>
-<p><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))
-<span class="kw">par</span>(<span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">2</span>))
-<span class="kw">par</span>(<span class="dt">oma=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>))</code></pre></div>
+mySample &lt;- &quot;P17777us22&quot;
+for(i in 1:4){
+  hist(freq1[ myPeaks1$wins[i,&#39;START_row&#39;]:myPeaks1$wins[i,&#39;END_row&#39;], mySample ],
+       breaks = seq(0,1,by=bin_width), xlim=c(0,1), col=8, main = &quot;&quot;, xaxt=&#39;n&#39;)
+  axis(side=1, at=c(0,0.25,0.333,0.5,0.666,0.75,1),
+     labels=c(0,&#39;1/4&#39;,&#39;1/3&#39;,&#39;1/2&#39;,&#39;2/3&#39;,&#39;3/4&#39;,1), las=1)
+  abline(v=myPeaks1$peaks[i,mySample], col=2)
+  if(i==2){ title(main=mySample) }
+}</code></pre>
+<p><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-5-1.png" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>par(mfrow=c(1,1))
+par(mar=c(5,4,4,2))
+par(oma=c(0,0,0,0))</code></pre>
 <p>Second most abundant allele.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">4</span>,<span class="dv">4</span>))
-<span class="kw">par</span>(<span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">1</span>))
-<span class="kw">par</span>(<span class="dt">oma=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>))
+<pre class="r"><code>par(mfrow=c(4,4))
+par(mar=c(2,2,1,1))
+par(oma=c(1,1,0,0))
 
-mySample &lt;-<span class="st"> &quot;BL2009P4_us23&quot;</span>
-for(i in <span class="dv">1</span>:<span class="dv">4</span>){
-  <span class="kw">hist</span>(freq2[ myPeaks1$wins[i,<span class="st">&#39;START_row&#39;</span>]:myPeaks1$wins[i,<span class="st">&#39;END_row&#39;</span>], mySample ],
-       <span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dt">by=</span>bin_width), <span class="dt">xlim=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="dt">col=</span><span class="dv">8</span>, <span class="dt">main =</span> <span class="st">&quot;&quot;</span>, <span class="dt">xaxt=</span><span class="st">&#39;n&#39;</span>)
-  <span class="kw">axis</span>(<span class="dt">side=</span><span class="dv">1</span>, <span class="dt">at=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="fl">0.25</span>,<span class="fl">0.333</span>,<span class="fl">0.5</span>,<span class="fl">0.666</span>,<span class="fl">0.75</span>,<span class="dv">1</span>),
-     <span class="dt">labels=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="st">&#39;1/4&#39;</span>,<span class="st">&#39;1/3&#39;</span>,<span class="st">&#39;1/2&#39;</span>,<span class="st">&#39;2/3&#39;</span>,<span class="st">&#39;3/4&#39;</span>,<span class="dv">1</span>), <span class="dt">las=</span><span class="dv">1</span>)
-  <span class="kw">abline</span>(<span class="dt">v=</span>myPeaks2$peaks[i,mySample], <span class="dt">col=</span><span class="dv">2</span>)
-  if(i==<span class="dv">2</span>){ <span class="kw">title</span>(<span class="dt">main=</span>mySample) }
+mySample &lt;- &quot;BL2009P4_us23&quot;
+for(i in 1:4){
+  hist(freq2[ myPeaks1$wins[i,&#39;START_row&#39;]:myPeaks1$wins[i,&#39;END_row&#39;], mySample ],
+       breaks = seq(0,1,by=bin_width), xlim=c(0,1), col=8, main = &quot;&quot;, xaxt=&#39;n&#39;)
+  axis(side=1, at=c(0,0.25,0.333,0.5,0.666,0.75,1),
+     labels=c(0,&#39;1/4&#39;,&#39;1/3&#39;,&#39;1/2&#39;,&#39;2/3&#39;,&#39;3/4&#39;,1), las=1)
+  abline(v=myPeaks2$peaks[i,mySample], col=2)
+  if(i==2){ title(main=mySample) }
 }
 
-mySample &lt;-<span class="st"> &quot;DDR7602&quot;</span>
-for(i in <span class="dv">1</span>:<span class="dv">4</span>){
-  <span class="kw">hist</span>(freq2[ myPeaks1$wins[i,<span class="st">&#39;START_row&#39;</span>]:myPeaks1$wins[i,<span class="st">&#39;END_row&#39;</span>], mySample ],
-       <span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dt">by=</span>bin_width), <span class="dt">xlim=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="dt">col=</span><span class="dv">8</span>, <span class="dt">main =</span> <span class="st">&quot;&quot;</span>, <span class="dt">xaxt=</span><span class="st">&#39;n&#39;</span>)
-  <span class="kw">axis</span>(<span class="dt">side=</span><span class="dv">1</span>, <span class="dt">at=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="fl">0.25</span>,<span class="fl">0.333</span>,<span class="fl">0.5</span>,<span class="fl">0.666</span>,<span class="fl">0.75</span>,<span class="dv">1</span>),
-     <span class="dt">labels=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="st">&#39;1/4&#39;</span>,<span class="st">&#39;1/3&#39;</span>,<span class="st">&#39;1/2&#39;</span>,<span class="st">&#39;2/3&#39;</span>,<span class="st">&#39;3/4&#39;</span>,<span class="dv">1</span>), <span class="dt">las=</span><span class="dv">1</span>)
-  <span class="kw">abline</span>(<span class="dt">v=</span>myPeaks2$peaks[i,mySample], <span class="dt">col=</span><span class="dv">2</span>)
-  if(i==<span class="dv">2</span>){ <span class="kw">title</span>(<span class="dt">main=</span>mySample) }
+mySample &lt;- &quot;DDR7602&quot;
+for(i in 1:4){
+  hist(freq2[ myPeaks1$wins[i,&#39;START_row&#39;]:myPeaks1$wins[i,&#39;END_row&#39;], mySample ],
+       breaks = seq(0,1,by=bin_width), xlim=c(0,1), col=8, main = &quot;&quot;, xaxt=&#39;n&#39;)
+  axis(side=1, at=c(0,0.25,0.333,0.5,0.666,0.75,1),
+     labels=c(0,&#39;1/4&#39;,&#39;1/3&#39;,&#39;1/2&#39;,&#39;2/3&#39;,&#39;3/4&#39;,1), las=1)
+  abline(v=myPeaks2$peaks[i,mySample], col=2)
+  if(i==2){ title(main=mySample) }
 }
 
-mySample &lt;-<span class="st"> &quot;IN2009T1_us22&quot;</span>
-for(i in <span class="dv">1</span>:<span class="dv">4</span>){
-  <span class="kw">hist</span>(freq2[ myPeaks1$wins[i,<span class="st">&#39;START_row&#39;</span>]:myPeaks1$wins[i,<span class="st">&#39;END_row&#39;</span>], mySample ],
-       <span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dt">by=</span>bin_width), <span class="dt">xlim=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="dt">col=</span><span class="dv">8</span>, <span class="dt">main =</span> <span class="st">&quot;&quot;</span>, <span class="dt">xaxt=</span><span class="st">&#39;n&#39;</span>)
-  <span class="kw">axis</span>(<span class="dt">side=</span><span class="dv">1</span>, <span class="dt">at=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="fl">0.25</span>,<span class="fl">0.333</span>,<span class="fl">0.5</span>,<span class="fl">0.666</span>,<span class="fl">0.75</span>,<span class="dv">1</span>),
-     <span class="dt">labels=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="st">&#39;1/4&#39;</span>,<span class="st">&#39;1/3&#39;</span>,<span class="st">&#39;1/2&#39;</span>,<span class="st">&#39;2/3&#39;</span>,<span class="st">&#39;3/4&#39;</span>,<span class="dv">1</span>), <span class="dt">las=</span><span class="dv">1</span>)
-  <span class="kw">abline</span>(<span class="dt">v=</span>myPeaks2$peaks[i,mySample], <span class="dt">col=</span><span class="dv">2</span>)
-  if(i==<span class="dv">2</span>){ <span class="kw">title</span>(<span class="dt">main=</span>mySample) }
+mySample &lt;- &quot;IN2009T1_us22&quot;
+for(i in 1:4){
+  hist(freq2[ myPeaks1$wins[i,&#39;START_row&#39;]:myPeaks1$wins[i,&#39;END_row&#39;], mySample ],
+       breaks = seq(0,1,by=bin_width), xlim=c(0,1), col=8, main = &quot;&quot;, xaxt=&#39;n&#39;)
+  axis(side=1, at=c(0,0.25,0.333,0.5,0.666,0.75,1),
+     labels=c(0,&#39;1/4&#39;,&#39;1/3&#39;,&#39;1/2&#39;,&#39;2/3&#39;,&#39;3/4&#39;,1), las=1)
+  abline(v=myPeaks2$peaks[i,mySample], col=2)
+  if(i==2){ title(main=mySample) }
 }
 
-mySample &lt;-<span class="st"> &quot;P17777us22&quot;</span>
-for(i in <span class="dv">1</span>:<span class="dv">4</span>){
-  <span class="kw">hist</span>(freq2[ myPeaks2$wins[i,<span class="st">&#39;START_row&#39;</span>]:myPeaks1$wins[i,<span class="st">&#39;END_row&#39;</span>], mySample ],
-       <span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dt">by=</span>bin_width), <span class="dt">xlim=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="dt">col=</span><span class="dv">8</span>, <span class="dt">main =</span> <span class="st">&quot;&quot;</span>, <span class="dt">xaxt=</span><span class="st">&#39;n&#39;</span>)
-  <span class="kw">axis</span>(<span class="dt">side=</span><span class="dv">1</span>, <span class="dt">at=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="fl">0.25</span>,<span class="fl">0.333</span>,<span class="fl">0.5</span>,<span class="fl">0.666</span>,<span class="fl">0.75</span>,<span class="dv">1</span>),
-     <span class="dt">labels=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="st">&#39;1/4&#39;</span>,<span class="st">&#39;1/3&#39;</span>,<span class="st">&#39;1/2&#39;</span>,<span class="st">&#39;2/3&#39;</span>,<span class="st">&#39;3/4&#39;</span>,<span class="dv">1</span>), <span class="dt">las=</span><span class="dv">1</span>)
-  <span class="kw">abline</span>(<span class="dt">v=</span>myPeaks2$peaks[i,mySample], <span class="dt">col=</span><span class="dv">2</span>)
-  if(i==<span class="dv">2</span>){ <span class="kw">title</span>(<span class="dt">main=</span>mySample) }
-}</code></pre></div>
-<p><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))
-<span class="kw">par</span>(<span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">2</span>))
-<span class="kw">par</span>(<span class="dt">oma=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>))</code></pre></div>
+mySample &lt;- &quot;P17777us22&quot;
+for(i in 1:4){
+  hist(freq2[ myPeaks2$wins[i,&#39;START_row&#39;]:myPeaks1$wins[i,&#39;END_row&#39;], mySample ],
+       breaks = seq(0,1,by=bin_width), xlim=c(0,1), col=8, main = &quot;&quot;, xaxt=&#39;n&#39;)
+  axis(side=1, at=c(0,0.25,0.333,0.5,0.666,0.75,1),
+     labels=c(0,&#39;1/4&#39;,&#39;1/3&#39;,&#39;1/2&#39;,&#39;2/3&#39;,&#39;3/4&#39;,1), las=1)
+  abline(v=myPeaks2$peaks[i,mySample], col=2)
+  if(i==2){ title(main=mySample) }
+}</code></pre>
+<p><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-6-1.png" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>par(mfrow=c(1,1))
+par(mar=c(5,4,4,2))
+par(oma=c(0,0,0,0))</code></pre>
 </div>
 <div id="visualization" class="section level2">
 <h2>Visualization</h2>
 <p>There are a number of ways to visualize this data. One way is to turn our histogram on its side, as a form of marginal summary, and plot our window summaries.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">i &lt;-<span class="st"> </span><span class="dv">2</span>
+<pre class="r"><code>i &lt;- 2
 
-<span class="kw">layout</span>(<span class="kw">matrix</span>(<span class="dv">1</span>:<span class="dv">2</span>, <span class="dt">nrow=</span><span class="dv">1</span>), <span class="dt">widths =</span> <span class="kw">c</span>(<span class="dv">4</span>,<span class="dv">1</span>))
-<span class="kw">par</span>(<span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">0</span>))
+layout(matrix(1:2, nrow=1), widths = c(4,1))
+par(mar=c(5,4,4,0))
 
-mySample &lt;-<span class="st"> </span><span class="kw">colnames</span>(freq1)[i]
-<span class="kw">plot</span>(<span class="kw">getPOS</span>(vcf), freq1[,mySample], <span class="dt">ylim=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="dt">type=</span><span class="st">&quot;n&quot;</span>, <span class="dt">yaxt=</span><span class="st">&#39;n&#39;</span>, 
-     <span class="dt">main =</span> mySample, <span class="dt">xlab =</span> <span class="st">&quot;POS&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Allele balance&quot;</span>)
-<span class="kw">axis</span>(<span class="dt">side=</span><span class="dv">2</span>, <span class="dt">at=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="fl">0.25</span>,<span class="fl">0.333</span>,<span class="fl">0.5</span>,<span class="fl">0.666</span>,<span class="fl">0.75</span>,<span class="dv">1</span>), 
-     <span class="dt">labels=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="st">&#39;1/4&#39;</span>,<span class="st">&#39;1/3&#39;</span>,<span class="st">&#39;1/2&#39;</span>,<span class="st">&#39;2/3&#39;</span>,<span class="st">&#39;3/4&#39;</span>,<span class="dv">1</span>), <span class="dt">las=</span><span class="dv">1</span>)
-<span class="kw">abline</span>(<span class="dt">h=</span><span class="kw">c</span>(<span class="fl">0.25</span>,<span class="fl">0.333</span>,<span class="fl">0.5</span>,<span class="fl">0.666</span>,<span class="fl">0.75</span>), <span class="dt">col=</span><span class="dv">8</span>)
-<span class="kw">points</span>(<span class="kw">getPOS</span>(vcf), freq1[,mySample], <span class="dt">pch =</span> <span class="dv">20</span>, <span class="dt">col=</span> <span class="st">&quot;#A6CEE344&quot;</span>)
-<span class="kw">points</span>(<span class="kw">getPOS</span>(vcf), freq2[,mySample], <span class="dt">pch =</span> <span class="dv">20</span>, <span class="dt">col=</span> <span class="st">&quot;#1F78B444&quot;</span>)
-<span class="kw">segments</span>(<span class="dt">x0=</span>myPeaks1$wins[,<span class="st">&#39;START_pos&#39;</span>], <span class="dt">y0=</span>myPeaks1$peaks[,mySample],
-         <span class="dt">x1=</span>myPeaks1$wins[,<span class="st">&#39;END_pos&#39;</span>], <span class="dt">lwd=</span><span class="dv">3</span>)
-<span class="kw">segments</span>(<span class="dt">x0=</span>myPeaks1$wins[,<span class="st">&#39;START_pos&#39;</span>], <span class="dt">y0=</span>myPeaks2$peaks[,mySample],
-         <span class="dt">x1=</span>myPeaks1$wins[,<span class="st">&#39;END_pos&#39;</span>], <span class="dt">lwd=</span><span class="dv">3</span>)
+mySample &lt;- colnames(freq1)[i]
+plot(getPOS(vcf), freq1[,mySample], ylim=c(0,1), type=&quot;n&quot;, yaxt=&#39;n&#39;, 
+     main = mySample, xlab = &quot;POS&quot;, ylab = &quot;Allele balance&quot;)
+axis(side=2, at=c(0,0.25,0.333,0.5,0.666,0.75,1), 
+     labels=c(0,&#39;1/4&#39;,&#39;1/3&#39;,&#39;1/2&#39;,&#39;2/3&#39;,&#39;3/4&#39;,1), las=1)
+abline(h=c(0.25,0.333,0.5,0.666,0.75), col=8)
+points(getPOS(vcf), freq1[,mySample], pch = 20, col= &quot;#A6CEE344&quot;)
+points(getPOS(vcf), freq2[,mySample], pch = 20, col= &quot;#1F78B444&quot;)
+segments(x0=myPeaks1$wins[,&#39;START_pos&#39;], y0=myPeaks1$peaks[,mySample],
+         x1=myPeaks1$wins[,&#39;END_pos&#39;], lwd=3)
+segments(x0=myPeaks1$wins[,&#39;START_pos&#39;], y0=myPeaks2$peaks[,mySample],
+         x1=myPeaks1$wins[,&#39;END_pos&#39;], lwd=3)
 
-bp1 &lt;-<span class="st"> </span><span class="kw">hist</span>(freq1[,mySample], <span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dt">by=</span>bin_width), <span class="dt">plot =</span> <span class="ot">FALSE</span>)
-bp2 &lt;-<span class="st"> </span><span class="kw">hist</span>(freq2[,mySample], <span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dt">by=</span>bin_width), <span class="dt">plot =</span> <span class="ot">FALSE</span>)
+bp1 &lt;- hist(freq1[,mySample], breaks = seq(0,1,by=bin_width), plot = FALSE)
+bp2 &lt;- hist(freq2[,mySample], breaks = seq(0,1,by=bin_width), plot = FALSE)
 
-<span class="kw">par</span>(<span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">1</span>,<span class="dv">4</span>,<span class="dv">2</span>))
-<span class="kw">barplot</span>(<span class="dt">height=</span>bp1$counts, <span class="dt">width=</span><span class="fl">0.02</span>,  <span class="dt">space =</span> <span class="dv">0</span>, <span class="dt">horiz =</span> T, <span class="dt">add =</span> <span class="ot">FALSE</span>, <span class="dt">col=</span><span class="st">&quot;#A6CEE3&quot;</span>)
-<span class="kw">barplot</span>(<span class="dt">height=</span>bp2$counts, <span class="dt">width=</span><span class="fl">0.02</span>,  <span class="dt">space =</span> <span class="dv">0</span>, <span class="dt">horiz =</span> T, <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col=</span><span class="st">&quot;#1F78B4&quot;</span>)</code></pre></div>
-<p><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">2</span>))
-<span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</code></pre></div>
+par(mar=c(5,1,4,2))
+barplot(height=bp1$counts, width=0.02,  space = 0, horiz = T, add = FALSE, col=&quot;#A6CEE3&quot;)
+barplot(height=bp2$counts, width=0.02,  space = 0, horiz = T, add = TRUE, col=&quot;#1F78B4&quot;)</code></pre>
+<p><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-7-1.png" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>par(mar=c(5,4,4,2))
+par(mfrow=c(1,1))</code></pre>
 <p>Once we determine how to make one plot we can loop over all the samples.</p>
-<p><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-2.png" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-3.png" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-4.png" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-5.png" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-6.png" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-7.png" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-8.png" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-9.png" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-10.png" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-11.png" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-12.png" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-13.png" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-14.png" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-15.png" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-16.png" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-17.png" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-18.png" style="display: block; margin: auto;" /></p>
+<p><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-1.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-2.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-3.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-4.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-5.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-6.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-7.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-8.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-9.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-10.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-11.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-12.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-13.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-14.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-15.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-16.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-17.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-18.png" width="768" style="display: block; margin: auto;" /></p>
 <p>We can also create a matrix of plots.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">4</span>,<span class="dv">3</span>))
-<span class="kw">par</span>(<span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">1</span>))
-<span class="kw">par</span>(<span class="dt">oma=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>))
+<pre class="r"><code>par(mfrow=c(4,3))
+par(mar=c(2,2,1,1))
+par(oma=c(1,1,0,0))
 
 
-for(i in <span class="dv">1</span>:<span class="dv">12</span>){
-mySample &lt;-<span class="st"> </span><span class="kw">colnames</span>(freq1)[i]
-<span class="kw">plot</span>(<span class="kw">getPOS</span>(vcf), freq1[,mySample], <span class="dt">ylim=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="dt">type=</span><span class="st">&quot;n&quot;</span>, <span class="dt">yaxt=</span><span class="st">&#39;n&#39;</span>, 
-     <span class="dt">main =</span> mySample, <span class="dt">xlab =</span> <span class="st">&quot;POS&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Allele balance&quot;</span>)
-<span class="kw">axis</span>(<span class="dt">side=</span><span class="dv">2</span>, <span class="dt">at=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="fl">0.25</span>,<span class="fl">0.333</span>,<span class="fl">0.5</span>,<span class="fl">0.666</span>,<span class="fl">0.75</span>,<span class="dv">1</span>), 
-     <span class="dt">labels=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="st">&#39;1/4&#39;</span>,<span class="st">&#39;1/3&#39;</span>,<span class="st">&#39;1/2&#39;</span>,<span class="st">&#39;2/3&#39;</span>,<span class="st">&#39;3/4&#39;</span>,<span class="dv">1</span>), <span class="dt">las=</span><span class="dv">1</span>)
-<span class="kw">abline</span>(<span class="dt">h=</span><span class="kw">c</span>(<span class="fl">0.25</span>,<span class="fl">0.333</span>,<span class="fl">0.5</span>,<span class="fl">0.666</span>,<span class="fl">0.75</span>), <span class="dt">col=</span><span class="dv">8</span>)
-<span class="kw">points</span>(<span class="kw">getPOS</span>(vcf), freq1[,mySample], <span class="dt">pch =</span> <span class="dv">20</span>, <span class="dt">col=</span> <span class="st">&quot;#A6CEE344&quot;</span>)
-<span class="kw">points</span>(<span class="kw">getPOS</span>(vcf), freq2[,mySample], <span class="dt">pch =</span> <span class="dv">20</span>, <span class="dt">col=</span> <span class="st">&quot;#1F78B444&quot;</span>)
-<span class="kw">segments</span>(<span class="dt">x0=</span>myPeaks1$wins[,<span class="st">&#39;START_pos&#39;</span>], <span class="dt">y0=</span>myPeaks1$peaks[,mySample],
-         <span class="dt">x1=</span>myPeaks1$wins[,<span class="st">&#39;END_pos&#39;</span>], <span class="dt">lwd=</span><span class="dv">3</span>)
-<span class="kw">segments</span>(<span class="dt">x0=</span>myPeaks1$wins[,<span class="st">&#39;START_pos&#39;</span>], <span class="dt">y0=</span>myPeaks2$peaks[,mySample],
-         <span class="dt">x1=</span>myPeaks1$wins[,<span class="st">&#39;END_pos&#39;</span>], <span class="dt">lwd=</span><span class="dv">3</span>)
-}</code></pre></div>
-<p><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))
-<span class="kw">par</span>(<span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">2</span>))
-<span class="kw">par</span>(<span class="dt">oma=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>))</code></pre></div>
+for(i in 1:12){
+mySample &lt;- colnames(freq1)[i]
+plot(getPOS(vcf), freq1[,mySample], ylim=c(0,1), type=&quot;n&quot;, yaxt=&#39;n&#39;, 
+     main = mySample, xlab = &quot;POS&quot;, ylab = &quot;Allele balance&quot;)
+axis(side=2, at=c(0,0.25,0.333,0.5,0.666,0.75,1), 
+     labels=c(0,&#39;1/4&#39;,&#39;1/3&#39;,&#39;1/2&#39;,&#39;2/3&#39;,&#39;3/4&#39;,1), las=1)
+abline(h=c(0.25,0.333,0.5,0.666,0.75), col=8)
+points(getPOS(vcf), freq1[,mySample], pch = 20, col= &quot;#A6CEE344&quot;)
+points(getPOS(vcf), freq2[,mySample], pch = 20, col= &quot;#1F78B444&quot;)
+segments(x0=myPeaks1$wins[,&#39;START_pos&#39;], y0=myPeaks1$peaks[,mySample],
+         x1=myPeaks1$wins[,&#39;END_pos&#39;], lwd=3)
+segments(x0=myPeaks1$wins[,&#39;START_pos&#39;], y0=myPeaks2$peaks[,mySample],
+         x1=myPeaks1$wins[,&#39;END_pos&#39;], lwd=3)
+}</code></pre>
+<p><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-9-1.png" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>par(mfrow=c(1,1))
+par(mar=c(5,4,4,2))
+par(oma=c(0,0,0,0))</code></pre>
 <p>We now have a way to create windows of allele balance ratios. We also have several ways to visualize this data. Perhaps most importantly, we have a numerical summary of the peak in each window so we can loop over all of the chromosomes in our reference.</p>
 </div>
 
+<center>
+<hr class="style1">
+<p>Copyright &copy; 2017 Brian J. Knaus. All rights reserved.</p>
+<p>USDA Agricultural Research Service, Horticultural Crops Research Lab.</p>
+</center>
 
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

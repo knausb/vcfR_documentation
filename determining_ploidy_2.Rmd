@@ -1,14 +1,6 @@
 ---
 title: "Determining ploidy 2"
-author: "Brian J. Knaus"
-date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{Determining ploidy 3}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
 ---
-
 
 
 ```{r global_options, include=FALSE}
