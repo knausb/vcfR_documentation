@@ -483,15 +483,15 @@ plot(chrom)</code></pre>
 <p>The function <code>var.win()</code> performs windowing analyses on the data. Currently it summarizes variant count per window as well as G/C content per window.</p>
 <pre class="r"><code>chrom &lt;- proc.chromR(chrom, verbose=TRUE)</code></pre>
 <pre><code>## Nucleotide regions complete.</code></pre>
-<pre><code>##   elapsed time:  0.248</code></pre>
+<pre><code>##   elapsed time:  0.24</code></pre>
 <pre><code>## N regions complete.</code></pre>
-<pre><code>##   elapsed time:  0.233</code></pre>
+<pre><code>##   elapsed time:  0.226</code></pre>
 <pre><code>## Population summary complete.</code></pre>
-<pre><code>##   elapsed time:  0.171</code></pre>
+<pre><code>##   elapsed time:  0.164</code></pre>
 <pre><code>## window_init complete.</code></pre>
-<pre><code>##   elapsed time:  0.001</code></pre>
+<pre><code>##   elapsed time:  0</code></pre>
 <pre><code>## windowize_fasta complete.</code></pre>
-<pre><code>##   elapsed time:  0.154</code></pre>
+<pre><code>##   elapsed time:  0.15</code></pre>
 <pre><code>## windowize_annotations complete.</code></pre>
 <pre><code>##   elapsed time:  0.011</code></pre>
 <pre><code>## windowize_variants complete.</code></pre>
@@ -506,7 +506,7 @@ plot(chrom)</code></pre>
 <p>The function <code>chromoqc()</code> uses the R function <code>layout()</code> to make composite plots of the data. These plots can include barplots as well as scatterplots which have chromosomal coordinates.</p>
 <pre class="r"><code>chromoqc(chrom, dp.alpha=20)</code></pre>
 <p><img src="quick_intro_files/figure-html/chromoqc1-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>We can also zoom in on a feature of interest by using the <code>xlim</code> parameter.</p>
+<p>We can also zoom in on a feature of interest by using the <code>xlim()</code> parameter.</p>
 <pre class="r"><code>chromoqc(chrom, xlim=c(5e+05, 6e+05))</code></pre>
 <p><img src="quick_intro_files/figure-html/chromoqc2-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>

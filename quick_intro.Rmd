@@ -223,7 +223,7 @@ chromoqc(chrom, dp.alpha=20)
 ```
 
 
-We can also zoom in on a feature of interest by using the `xlim` parameter.
+We can also zoom in on a feature of interest by using the `xlim()` parameter.
 
 
 ```{r chromoqc2, fig.align='center', fig.height=7, fig.width=7}
