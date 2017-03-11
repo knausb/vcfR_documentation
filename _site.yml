@@ -65,6 +65,8 @@ navbar:
           href: "subset_data_to_1chrom.html"
         - text: "VCF software"
           href: "vcf_software.html"
+        - text: "Haploidizing diploid data"
+          href: "dip_to_hap.html"
 output:
   html_document:
     theme: sandstone
