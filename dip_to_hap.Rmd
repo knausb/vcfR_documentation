@@ -1,0 +1,66 @@
+---
+title: "Haploidizing diploid data"
+author: "Brian J. Knaus"
+date: "February 7, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+Load example data set and extract the genotypes.
+
+
+```{r}
+library(vcfR)
+data(vcfR_test)
+head(vcfR_test)
+gt <- extract.gt(vcfR_test)
+head(gt)
+```
+
+
+Use `is_het()` to identify heterozygous positions and censor as NA.
+
+
+```{r}
+is.na(vcfR_test@gt[,-1][is_het(gt)]) <- TRUE
+vcfR_test
+```
+
+
+Extract the remaining genotypes and use `unique()` to query for the unique genotypes.
+
+
+```{r}
+gt <- extract.gt(vcfR_test)
+unique(as.vector(gt))
+```
+
+
+We can now manually set each genotype to a haploid state.
+Note that your genotypes will be different!
+
+
+```{r}
+gt[gt=="0|0"] <- 0
+gt[gt=="0/0"] <- 0
+gt[gt=="1/1"] <- 1
+gt[gt=="2/2"] <- 2
+head(gt)
+```
+
+
+Now extract everything but the genotype from the vcfR object, paste our haploid genotypes to it and update the vcfR object.
+
+
+```{r}
+gt2 <- extract.gt(vcfR_test, extract = FALSE)
+head(gt2)
+gt <- matrix( paste(gt, gt2, sep=":"), nrow=nrow(gt), dimnames=dimnames(gt) )
+is.na(gt[gt == "NA:NA"]) <- TRUE
+vcfR_test@gt[,-1] <- gt
+head(vcfR_test)
+```
