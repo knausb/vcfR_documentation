@@ -13,11 +13,17 @@ knitr::opts_chunk$set(fig.width = 12)
 ```
 
 
+```{r, results='hide', echo = FALSE}
+suppressPackageStartupMessages( library(vcfR) )
+vcf <- read.vcfR('TASSEL_GBS0077.vcf.gz')
+dp <- extract.gt(vcf, element = "DP", as.numeric=TRUE)
+```
+
 
 As the size of our dataset grow in terms of samples and variants the size of our data matrix grows.
 As the size of our data matrix grows it also increases the opportunity to have missing data.
 Also, some of our quality filtering steps increased the degree of missingness in our data matrix by setting values that we determined to be of unusual quality to NA.
-One way of managing missing data is to use interpolation, a set of methods that attempts to infer what the most likely genotype should be and replaces the missing genotype with the interpolated genotype.
+One way of managing missing data is to use imputation, a set of methods that attempts to infer what the most likely genotype should be and replaces the missing genotype with the interpolated genotype.
 However, if your data has a large degree of missingness you may want to attempt to mitigate missingness instead of interpolation
 Or you may want to implement a mitigation step prior to interpolation in the hope that this will improve the performance of the interpolation.
 Missing data can frequently be due to samples (columns) or variants (rows) of low quality.
@@ -25,11 +31,35 @@ Here we demonstrate how to identify samples and variants in the data set that ha
 In another section we'll show how to omit them.
 
 
-```{r, results='hide', echo = FALSE}
-suppressPackageStartupMessages( library(vcfR) )
-vcf <- read.vcfR('TASSEL_GBS0077.vcf.gz')
-dp <- extract.gt(vcf, element = "DP", as.numeric=TRUE)
+## Overall missingness
+
+
+A first perspective on how complete our dataset is can be provided by the `show` method for the vcfR object.
+When you invoke the name of an object with no arguments it invokes the show method.
+
+
+```{r}
+vcf
 ```
+
+
+The show method for an object typically reports a summary of what is contained in the object.
+Here we see the number of samples and variants in our data.
+We also see a report of what the percentage of missing data is in our object.
+In the context of vcfR this is the proportion of variants scored as NA.
+Note that if a variant includes some data associated with a missing genotype it will not be recognized as missing.
+For example, a missing genotype could be associated with a depth information as follows.
+
+
+```{r, eval=FALSE}
+GT:DP ./.:1
+```
+
+
+Because this variant does include some data it will not be recognized as missing until the genotypes are extracted and queried for missingness.
+This means that the degree of missingness reported by the `show` method may be an underrepresentation.
+It does provide an easily accessed first perspective on the proportion of missing data.
+To determine the cause of this missing data (e.g., are there particular samples or variants of poor quality) we will look further.
 
 
 ## Quantifying missingness, one sample

@@ -45,6 +45,8 @@ navbar:
           href: "ploidy.html"
         - text: "Determining ploidy 1"
           href: "determining_ploidy_1.html"
+        - text: "Determining ploidy 2"
+          href: "determining_ploidy_2.html"
     - text: "Export"
       menu:
         - text: "Overview"
@@ -63,6 +65,8 @@ navbar:
           href: "subset_data_to_1chrom.html"
         - text: "VCF software"
           href: "vcf_software.html"
+        - text: "Haploidizing diploid data"
+          href: "dip_to_hap.html"
         - text: "Compiling vcfR"
           href: "compiling_vcfR.html"
 output:

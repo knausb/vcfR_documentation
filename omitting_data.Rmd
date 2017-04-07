@@ -33,8 +33,8 @@ vcf
 
 
 Because part of this exercise involves setting cells in our data matrix as NA we should begin by reminding ourselves of how abundant they are.
-By usung the show methods we see that we have over 35 percent missing data.
-We can now use what we learned previously to set variants that are outside our per samples inclusion threshold for depth as NA.
+By using the show method we see that we have over 35 percent missing data.
+We can now use what we learned previously to set variants that are outside our per sample inclusion threshold as NA.
 
 
 ```{r}
@@ -94,8 +94,7 @@ heatmap.bp(dp[1:1000,], rlabels = FALSE)
 
 
 Previously we have seen how to quantify and visualize missingness for variants in our dataset.
-We can use this information to omit variants that have a high degreee of missingness.
-
+We can use this information to omit variants that have a high degree of missingness.
 
 
 ```{r}

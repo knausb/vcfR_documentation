@@ -353,6 +353,9 @@ div.tocify {
     <li>
       <a href="determining_ploidy_1.html">Determining ploidy 1</a>
     </li>
+    <li>
+      <a href="determining_ploidy_2.html">Determining ploidy 2</a>
+    </li>
   </ul>
 </li>
 <li class="dropdown">
@@ -391,6 +394,9 @@ div.tocify {
     </li>
     <li>
       <a href="vcf_software.html">VCF software</a>
+    </li>
+    <li>
+      <a href="dip_to_hap.html">Haploidizing diploid data</a>
     </li>
     <li>
       <a href="compiling_vcfR.html">Compiling vcfR</a>
@@ -483,17 +489,17 @@ plot(chrom)</code></pre>
 <p>The function <code>var.win()</code> performs windowing analyses on the data. Currently it summarizes variant count per window as well as G/C content per window.</p>
 <pre class="r"><code>chrom &lt;- proc.chromR(chrom, verbose=TRUE)</code></pre>
 <pre><code>## Nucleotide regions complete.</code></pre>
-<pre><code>##   elapsed time:  0.251</code></pre>
+<pre><code>##   elapsed time:  0.249</code></pre>
 <pre><code>## N regions complete.</code></pre>
-<pre><code>##   elapsed time:  0.224</code></pre>
+<pre><code>##   elapsed time:  0.227</code></pre>
 <pre><code>## Population summary complete.</code></pre>
-<pre><code>##   elapsed time:  0.256</code></pre>
+<pre><code>##   elapsed time:  0.253</code></pre>
 <pre><code>## window_init complete.</code></pre>
-<pre><code>##   elapsed time:  0.001</code></pre>
+<pre><code>##   elapsed time:  0</code></pre>
 <pre><code>## windowize_fasta complete.</code></pre>
-<pre><code>##   elapsed time:  0.11</code></pre>
+<pre><code>##   elapsed time:  0.109</code></pre>
 <pre><code>## windowize_annotations complete.</code></pre>
-<pre><code>##   elapsed time:  0.012</code></pre>
+<pre><code>##   elapsed time:  0.011</code></pre>
 <pre><code>## windowize_variants complete.</code></pre>
 <pre><code>##   elapsed time:  0.001</code></pre>
 <pre class="r"><code>plot(chrom)</code></pre>
@@ -506,7 +512,7 @@ plot(chrom)</code></pre>
 <p>The function <code>chromoqc()</code> uses the R function <code>layout()</code> to make composite plots of the data. These plots can include barplots as well as scatterplots which have chromosomal coordinates.</p>
 <pre class="r"><code>chromoqc(chrom, dp.alpha=20)</code></pre>
 <p><img src="quick_intro_files/figure-html/chromoqc1-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>We can also zoom in on a feature of interest by using the <code>xlim</code> parameter.</p>
+<p>We can also zoom in on a feature of interest by using the <code>xlim()</code> parameter.</p>
 <pre class="r"><code>chromoqc(chrom, xlim=c(5e+05, 6e+05))</code></pre>
 <p><img src="quick_intro_files/figure-html/chromoqc2-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
