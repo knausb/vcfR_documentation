@@ -1,0 +1,77 @@
+---
+title: "Compiling vcfR"
+output:
+  html_document:
+    toc: true
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(fig.align = 'center')
+knitr::opts_chunk$set(fig.width = 12)
+```
+
+
+The package vcfR includes compiled code to increase it's performance.
+For Windows and OSX precompiled binaries are available at CRAN and should always be your first choice.
+If you do want to compile vcfR yourself you need to make sure you have cupport for C++11.
+C++11 is an extension of C++, similar to how R packages extend the functionality of R.
+If you're having problems compiling it may be good to validate your system has this functionality.
+We can test for this functionality by creating a small C++ function (this is entirely independent of R).
+
+
+Copy the below code into a text file named `myTest.cpp`.
+
+
+```{r, eval=FALSE}
+#include <iostream>
+// http://stackoverflow.com/a/34681870
+
+int main()
+{
+  if(__cplusplus==201402L){
+    std::cout << "C++14" << std::endl;
+  } else if(__cplusplus==201103L){
+    std::cout << "C++11" << std::endl;
+  } else if(__cplusplus == 199711L){
+    std::cout << "C++" << std::endl;
+  } else {
+    std::cout << "Unexpected result.\n";
+  }
+
+return 0;
+}
+```
+
+
+First, let's compile our program without C++11 support.
+
+
+```{r, eval=FALSE}
+g++ myTest.cpp
+```
+
+And execute.
+
+```{r, eval=FALSE}
+./a.out
+C++
+```
+
+Now we can compile with C++11 support.
+
+```{r, eval=FALSE}
+g++ -std=c++11 myTest.cpp 
+```
+
+
+```{r, eval=FALSE}
+./a.out
+C++11
+```
+
+
+Your results should be the same as above.
+If not, you may not have C++ support on your system.
+

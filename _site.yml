@@ -63,6 +63,8 @@ navbar:
           href: "subset_data_to_1chrom.html"
         - text: "VCF software"
           href: "vcf_software.html"
+        - text: "Compiling vcfR"
+          href: "compiling_vcfR.html"
 output:
   html_document:
     theme: sandstone
