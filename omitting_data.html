@@ -344,7 +344,6 @@ dp &lt;- extract.gt(vcf, element = &quot;DP&quot;, as.numeric=TRUE)</code></pre>
 <pre class="r"><code>vcf</code></pre>
 <pre><code>## ***** Object of Class vcfR *****
 ## 61 samples
-## 7171 CHROMs
 ## 69,296 variants
 ## Object size: 46.5 Mb
 ## 37.62 percent missing data
@@ -363,7 +362,6 @@ vcf@gt[,-1][ is.na(dp) == TRUE ] &lt;- NA</code></pre>
 <pre class="r"><code>vcf</code></pre>
 <pre><code>## ***** Object of Class vcfR *****
 ## 61 samples
-## 7171 CHROMs
 ## 69,296 variants
 ## Object size: 45.2 Mb
 ## 66.63 percent missing data
@@ -380,7 +378,6 @@ vcf@gt &lt;- vcf@gt[, c(TRUE, myMiss &lt; 0.7)]
 vcf</code></pre>
 <pre><code>## ***** Object of Class vcfR *****
 ## 41 samples
-## 7171 CHROMs
 ## 69,296 variants
 ## Object size: 34.6 Mb
 ## 53.33 percent missing data
@@ -398,7 +395,6 @@ vcf &lt;- vcf[myMiss &lt; 0.2, ]
 vcf</code></pre>
 <pre><code>## ***** Object of Class vcfR *****
 ## 41 samples
-## 4563 CHROMs
 ## 18,782 variants
 ## Object size: 9.8 Mb
 ## 9.421 percent missing data

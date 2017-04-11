@@ -345,7 +345,6 @@ vcf &lt;- read.vcfR( vcf_file, verbose = FALSE )</code></pre>
 <pre class="r"><code>vcf</code></pre>
 <pre><code>## ***** Object of Class vcfR *****
 ## 18 samples
-## 1 CHROMs
 ## 22,031 variants
 ## Object size: 20.9 Mb
 ## 7.929 percent missing data
@@ -421,7 +420,6 @@ vcf &lt;- read.vcfR( vcf_file, verbose = FALSE )</code></pre>
 <pre class="r"><code>vcf[,1:4]</code></pre>
 <pre><code>## ***** Object of Class vcfR *****
 ## 3 samples
-## 1 CHROMs
 ## 22,031 variants
 ## Object size: 11.2 Mb
 ## 2.875 percent missing data
@@ -429,7 +427,6 @@ vcf &lt;- read.vcfR( vcf_file, verbose = FALSE )</code></pre>
 <pre class="r"><code>vcf[1:4,]</code></pre>
 <pre><code>## ***** Object of Class vcfR *****
 ## 18 samples
-## 1 CHROMs
 ## 4 variants
 ## Object size: 0 Mb
 ## 6.944 percent missing data
@@ -437,7 +434,6 @@ vcf &lt;- read.vcfR( vcf_file, verbose = FALSE )</code></pre>
 <pre class="r"><code>vcf[is.biallelic(vcf),]</code></pre>
 <pre><code>## ***** Object of Class vcfR *****
 ## 18 samples
-## 1 CHROMs
 ## 21,719 variants
 ## Object size: 20.3 Mb
 ## 7.991 percent missing data
