@@ -35,7 +35,7 @@ int main()
   // Introduction.
   std::cout << "Querying for g++: ";
   std::cout << __cplusplus;
-  std::cout << "\n";
+  std::cout << std::endl;
   
   // Determine support.
   if(__cplusplus==201402L){
