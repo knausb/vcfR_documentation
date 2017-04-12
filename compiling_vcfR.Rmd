@@ -45,10 +45,10 @@ int main()
   } else if(__cplusplus == 199711L){
     std::cout << "C++" << std::endl;
   } else {
-    std::cout << "Unexpected result.\n";
+    std::cout << "Unexpected result." << std::endl;
   }
 
-return 0;
+  return 0;
 }
 ```
 
