@@ -344,6 +344,7 @@ dp &lt;- extract.gt(vcf, element = &quot;DP&quot;, as.numeric=TRUE)</code></pre>
 <pre class="r"><code>vcf</code></pre>
 <pre><code>## ***** Object of Class vcfR *****
 ## 61 samples
+## 7171 CHROMs
 ## 69,296 variants
 ## Object size: 46.5 Mb
 ## 37.62 percent missing data
@@ -362,6 +363,7 @@ vcf@gt[,-1][ is.na(dp) == TRUE ] &lt;- NA</code></pre>
 <pre class="r"><code>vcf</code></pre>
 <pre><code>## ***** Object of Class vcfR *****
 ## 61 samples
+## 7171 CHROMs
 ## 69,296 variants
 ## Object size: 45.2 Mb
 ## 66.63 percent missing data
@@ -369,6 +371,7 @@ vcf@gt[,-1][ is.na(dp) == TRUE ] &lt;- NA</code></pre>
 <p>We see that this censoring has increased the degree of missingness in our matrix to over 60 percent. Ideally we should visualize the results of this action. For brevity, we will not here. But you can return to the section on depth and reuse the code presented there to visualize how this change has affected the distribution of the data.</p>
 <pre class="r"><code>heatmap.bp(dp[1:1000,], rlabels = FALSE)</code></pre>
 <p><img src="omitting_data_files/figure-html/unnamed-chunk-5-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>In this heatmap we see that we have samples in columns and variants in rows. The color ramp on the right represents the depth of coverage for each variant where yellow is high coverage and purple is low coverage. White is not part of our color ramp but it is a part of the heatmap. This is because white represents cells in our matrix that having missing data (NA). The marginal barplots sum the information accross columns and rows to tell us which samples (columns) or variants (rows) include a high or low amount of sequence coverage. In general we would like to see our sequence coverage uniformly distributed among our samples and variants.</p>
 <div id="omitting-samples" class="section level2">
 <h2>Omitting samples</h2>
 <p>We can see that some samples have a high degree of missingness. By omiting these samples we may reduce the overall missingness in the data set.</p>
@@ -378,6 +381,7 @@ vcf@gt &lt;- vcf@gt[, c(TRUE, myMiss &lt; 0.7)]
 vcf</code></pre>
 <pre><code>## ***** Object of Class vcfR *****
 ## 41 samples
+## 7171 CHROMs
 ## 69,296 variants
 ## Object size: 34.6 Mb
 ## 53.33 percent missing data
@@ -395,6 +399,7 @@ vcf &lt;- vcf[myMiss &lt; 0.2, ]
 vcf</code></pre>
 <pre><code>## ***** Object of Class vcfR *****
 ## 41 samples
+## 4563 CHROMs
 ## 18,782 variants
 ## Object size: 9.8 Mb
 ## 9.421 percent missing data

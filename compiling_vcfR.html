@@ -342,7 +342,7 @@ int main()
   // Introduction.
   std::cout &lt;&lt; &quot;Querying for g++: &quot;;
   std::cout &lt;&lt; __cplusplus;
-  std::cout &lt;&lt; &quot;\n&quot;;
+  std::cout &lt;&lt; std::endl;
   
   // Determine support.
   if(__cplusplus==201402L){
@@ -352,10 +352,10 @@ int main()
   } else if(__cplusplus == 199711L){
     std::cout &lt;&lt; &quot;C++&quot; &lt;&lt; std::endl;
   } else {
-    std::cout &lt;&lt; &quot;Unexpected result.\n&quot;;
+    std::cout &lt;&lt; &quot;Unexpected result.&quot; &lt;&lt; std::endl;
   }
 
-return 0;
+  return 0;
 }</code></pre>
 <p>First, let’s compile our program without C++11 support.</p>
 <pre class="r"><code>g++ myTest.cpp</code></pre>
