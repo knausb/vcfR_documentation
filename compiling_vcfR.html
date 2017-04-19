@@ -4,7 +4,7 @@
 
 <head>
 
-<meta charset="utf-8">
+<meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 
@@ -339,6 +339,14 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 
 int main()
 {
+  // Query OS info
+  if (system( NULL )){
+    system(&quot;cat /etc/*release&quot;);
+  } else {
+    std::cout &lt;&lt; &quot;Couldn&#39;t queru OS&quot; &lt;&lt; std::endl;
+  }
+  std::cout &lt;&lt; std::endl;
+  
   // Introduction.
   std::cout &lt;&lt; &quot;Querying for g++: &quot;;
   std::cout &lt;&lt; __cplusplus;
