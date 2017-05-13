@@ -69,6 +69,8 @@ navbar:
           href: "dip_to_hap.html"
         - text: "Compiling vcfR"
           href: "compiling_vcfR.html"
+        - text: "Reporting an issue"
+          href: "reporting_issue.html"
 output:
   html_document:
     theme: sandstone

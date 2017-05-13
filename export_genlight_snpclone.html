@@ -303,6 +303,9 @@ $(document).ready(function () {
     <li>
       <a href="compiling_vcfR.html">Compiling vcfR</a>
     </li>
+    <li>
+      <a href="reporting_issue.html">Reporting an issue</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -346,6 +349,7 @@ x &lt;- vcfR2genlight(vcf)</code></pre>
 <pre><code>## Warning in vcfR2genlight(vcf): Found 312 loci with more than two alleles.
 ## Objects of class genlight only support loci with two alleles.
 ## 312 loci will be omitted from the genlight object.</code></pre>
+<pre><code>## Loading required package: parallel</code></pre>
 <pre class="r"><code>x</code></pre>
 <pre><code>##  /// GENLIGHT OBJECT /////////
 ## 
@@ -371,16 +375,15 @@ x &lt;- vcfR2genlight(vcf)</code></pre>
 <pre><code>## Loading required package: methods</code></pre>
 <pre><code>## Loading required package: ade4</code></pre>
 <pre><code>## 
-##    /// adegenet 2.0.2 is loaded ////////////
+##    /// adegenet 2.0.1 is loaded ////////////
 ## 
 ##    &gt; overview: &#39;?adegenet&#39;
 ##    &gt; tutorials/doc/questions: &#39;adegenetWeb()&#39; 
 ##    &gt; bug reports/feature requests: adegenetIssues()</code></pre>
-<pre><code>## This is poppr version 2.4.1. To get started, type package?poppr
+<pre><code>## This is poppr version 2.3.0. To get started, type package?poppr
 ## OMP parallel support: available</code></pre>
-<pre class="r"><code>x &lt;- as.snpclone(x)</code></pre>
-<pre><code>## Loading required package: parallel</code></pre>
-<pre class="r"><code>x</code></pre>
+<pre class="r"><code>x &lt;- as.snpclone(x)
+x</code></pre>
 <pre><code>##  ||| SNPCLONE OBJECT |||||||||
 ## 
 ##  || 18 genotypes,  21,719 binary SNPs, size: 2.1 Mb
@@ -388,7 +391,7 @@ x &lt;- vcfR2genlight(vcf)</code></pre>
 ## 
 ##  || Basic content
 ##    @gen: list of 18 SNPbin
-##    @mlg: 16 original multilocus genotypes
+##    @mlg: 18 original multilocus genotypes
 ##    @ploidy: ploidy of each individual  (range: 2-2)
 ## 
 ##  || Optional content
