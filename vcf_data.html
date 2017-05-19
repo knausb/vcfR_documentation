@@ -4,7 +4,7 @@
 
 <head>
 
-<meta charset="utf-8">
+<meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 
@@ -305,6 +305,9 @@ div.tocify {
     <li>
       <a href="chromR_object.html">chromR objects</a>
     </li>
+    <li>
+      <a href="genetic_differentiation.html">Genetic differentiation</a>
+    </li>
   </ul>
 </li>
 <li class="dropdown">
@@ -469,32 +472,32 @@ vcf</code></pre>
 <p>The first line contains the version of the VCF format used in the file. This line is required. The second line specifies the software which created the VCF file. This is not required, so not all VCF files include it. When they do, the file becomes self documenting. Note that the alignment software is not included here because it was used upstream of the VCF file’s creation (aligners typically create *.SAM or *.BAM format files). Because the file can only include information about the software that created it, the entire pipeline does not get documented. Some VCF files may contain a line for every chromosome (or supercontig or contig depending on your genome), so they may become rather long. Here, the remaining lines contain INFO and FORMAT specifications which define abbreviations used in the fix and gt portions of the file.</p>
 <p>The meta region may include long lines that may not be easy to view. In vcfR we’ve created a function to help prcess this data.</p>
 <pre class="r"><code>queryMETA(vcf)</code></pre>
-<pre><code>##  [1] &quot;FILTER=ID=LowQual&quot;                 
-##  [2] &quot;FORMAT=ID=AD&quot;                      
-##  [3] &quot;FORMAT=ID=DP&quot;                      
-##  [4] &quot;FORMAT=ID=GQ&quot;                      
-##  [5] &quot;FORMAT=ID=GT&quot;                      
-##  [6] &quot;FORMAT=ID=PL&quot;                      
-##  [7] &quot;GATKCommandLine=ID=HaplotypeCaller&quot;
-##  [8] &quot;INFO=ID=AC&quot;                        
-##  [9] &quot;INFO=ID=AF&quot;                        
-## [10] &quot;INFO=ID=AN&quot;                        
-## [11] &quot;INFO=ID=BaseQRankSum&quot;              
-## [12] &quot;INFO=ID=ClippingRankSum&quot;           
-## [13] &quot;INFO=ID=DP&quot;                        
-## [14] &quot;INFO=ID=DS&quot;                        
-## [15] &quot;INFO=ID=FS&quot;                        
-## [16] &quot;INFO=ID=HaplotypeScore&quot;            
-## [17] &quot;INFO=ID=InbreedingCoeff&quot;           
-## [18] &quot;INFO=ID=MLEAC&quot;                     
-## [19] &quot;INFO=ID=MLEAF&quot;                     
-## [20] &quot;INFO=ID=MQ&quot;                        
-## [21] &quot;INFO=ID=MQ0&quot;                       
-## [22] &quot;INFO=ID=MQRankSum&quot;                 
-## [23] &quot;INFO=ID=QD&quot;                        
-## [24] &quot;INFO=ID=ReadPosRankSum&quot;            
-## [25] &quot;INFO=ID=SOR&quot;                       
-## [26] &quot;contig=&lt;ID omitted from queryMETA&quot;</code></pre>
+<pre><code>##  [1] &quot;FILTER=ID=LowQual&quot;                   
+##  [2] &quot;FORMAT=ID=AD&quot;                        
+##  [3] &quot;FORMAT=ID=DP&quot;                        
+##  [4] &quot;FORMAT=ID=GQ&quot;                        
+##  [5] &quot;FORMAT=ID=GT&quot;                        
+##  [6] &quot;FORMAT=ID=PL&quot;                        
+##  [7] &quot;GATKCommandLine=ID=HaplotypeCaller&quot;  
+##  [8] &quot;INFO=ID=AC&quot;                          
+##  [9] &quot;INFO=ID=AF&quot;                          
+## [10] &quot;INFO=ID=AN&quot;                          
+## [11] &quot;INFO=ID=BaseQRankSum&quot;                
+## [12] &quot;INFO=ID=ClippingRankSum&quot;             
+## [13] &quot;INFO=ID=DP&quot;                          
+## [14] &quot;INFO=ID=DS&quot;                          
+## [15] &quot;INFO=ID=FS&quot;                          
+## [16] &quot;INFO=ID=HaplotypeScore&quot;              
+## [17] &quot;INFO=ID=InbreedingCoeff&quot;             
+## [18] &quot;INFO=ID=MLEAC&quot;                       
+## [19] &quot;INFO=ID=MLEAF&quot;                       
+## [20] &quot;INFO=ID=MQ&quot;                          
+## [21] &quot;INFO=ID=MQ0&quot;                         
+## [22] &quot;INFO=ID=MQRankSum&quot;                   
+## [23] &quot;INFO=ID=QD&quot;                          
+## [24] &quot;INFO=ID=ReadPosRankSum&quot;              
+## [25] &quot;INFO=ID=SOR&quot;                         
+## [26] &quot;1 contig=&lt;IDs omitted from queryMETA&quot;</code></pre>
 <p>When the function <code>queryMETA()</code> is called with only a vcfR object as a parameter, it attempts to summarize the meta information. Not all of the information is returned. For example, ‘contig’ elements are not returned. This is an attempt to summarize information that may be most useful for comprehension of the file’s contents.</p>
 <pre class="r"><code>queryMETA(vcf, element = &#39;DP&#39;)</code></pre>
 <pre><code>## [[1]]
@@ -635,7 +638,7 @@ $(document).ready(function () {
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>

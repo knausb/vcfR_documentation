@@ -4,7 +4,7 @@
 
 <head>
 
-<meta charset="utf-8">
+<meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 
@@ -207,6 +207,9 @@ $(document).ready(function () {
     <li>
       <a href="chromR_object.html">chromR objects</a>
     </li>
+    <li>
+      <a href="genetic_differentiation.html">Genetic differentiation</a>
+    </li>
   </ul>
 </li>
 <li class="dropdown">
@@ -377,8 +380,8 @@ x &lt;- vcfR2genlight(vcf)</code></pre>
 ##    &gt; overview: &#39;?adegenet&#39;
 ##    &gt; tutorials/doc/questions: &#39;adegenetWeb()&#39; 
 ##    &gt; bug reports/feature requests: adegenetIssues()</code></pre>
-<pre><code>## This is poppr version 2.3.0. To get started, type package?poppr
-## OMP parallel support: unavailable</code></pre>
+<pre><code>## This is poppr version 2.4.1. To get started, type package?poppr
+## OMP parallel support: available</code></pre>
 <pre class="r"><code>x &lt;- as.snpclone(x)
 x</code></pre>
 <pre><code>##  ||| SNPCLONE OBJECT |||||||||
@@ -388,7 +391,7 @@ x</code></pre>
 ## 
 ##  || Basic content
 ##    @gen: list of 18 SNPbin
-##    @mlg: 18 original multilocus genotypes
+##    @mlg: 16 original multilocus genotypes
 ##    @ploidy: ploidy of each individual  (range: 2-2)
 ## 
 ##  || Optional content
@@ -428,7 +431,7 @@ $(document).ready(function () {
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>

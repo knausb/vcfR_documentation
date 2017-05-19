@@ -4,7 +4,7 @@
 
 <head>
 
-<meta charset="utf-8">
+<meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 
@@ -305,6 +305,9 @@ div.tocify {
     <li>
       <a href="chromR_object.html">chromR objects</a>
     </li>
+    <li>
+      <a href="genetic_differentiation.html">Genetic differentiation</a>
+    </li>
   </ul>
 </li>
 <li class="dropdown">
@@ -489,15 +492,15 @@ plot(chrom)</code></pre>
 <p>The function <code>var.win()</code> performs windowing analyses on the data. Currently it summarizes variant count per window as well as G/C content per window.</p>
 <pre class="r"><code>chrom &lt;- proc.chromR(chrom, verbose=TRUE)</code></pre>
 <pre><code>## Nucleotide regions complete.</code></pre>
-<pre><code>##   elapsed time:  0.249</code></pre>
+<pre><code>##   elapsed time:  0.257</code></pre>
 <pre><code>## N regions complete.</code></pre>
-<pre><code>##   elapsed time:  0.227</code></pre>
+<pre><code>##   elapsed time:  0.223</code></pre>
 <pre><code>## Population summary complete.</code></pre>
-<pre><code>##   elapsed time:  0.253</code></pre>
+<pre><code>##   elapsed time:  0.25</code></pre>
 <pre><code>## window_init complete.</code></pre>
 <pre><code>##   elapsed time:  0</code></pre>
 <pre><code>## windowize_fasta complete.</code></pre>
-<pre><code>##   elapsed time:  0.109</code></pre>
+<pre><code>##   elapsed time:  0.113</code></pre>
 <pre><code>## windowize_annotations complete.</code></pre>
 <pre><code>##   elapsed time:  0.011</code></pre>
 <pre><code>## windowize_variants complete.</code></pre>
@@ -559,7 +562,7 @@ $(document).ready(function () {
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>
