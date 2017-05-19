@@ -1,0 +1,99 @@
+---
+title: "Reporting an issue"
+output:
+  html_document:
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+If you experience some sort of unexpected behaviour it is possible that you have discovered a bug.
+Ways to report a bug include contacting me directly.
+If you are a GitHub user it would be better if you [created an issue](https://github.com/knausb/vcfR/issues).
+The success, and efficiency, of any attempt to help you will typically depend on your ability to create a [minimal reproducible example](http://stackoverflow.com/questions/5963269/how-to-make-a-great-r-reproducible-example).
+A minimal reproducible example is a small amount of code that allows me, or others, to reproduce the behaviour you are observing.
+Through providing a minimal reproducible example you accomplish two things.
+First, it provides me with a quick way to validate that the behaviour is repeatable on my system, confirming that this is not something specific to your system.
+Second, it provides me with an example of the reported behaviour that I can 'poke and prod' so that I can (hopefully) find a solution.
+To create a minimal reproducible example you will need some VCF data.
+Data for an example can be provided by using example data included in vcfR or by using your own data.
+
+
+## vcfR data
+
+
+The R package vcfR comes with some example data.
+This is used in the examples and vignettes.
+With a little work you can modify this example data to provide a minimal reproducible example.
+
+
+```{r, message=FALSE}
+library(vcfR)
+```
+
+```{r}
+data(vcfR_test)
+vcfR_test
+```
+
+
+Any problem is likely to occur in the 'gt' or 'fix' slots.
+These are matrices that can be manipulated with the square brackets ([]).
+
+
+```{r}
+vcfR_test@gt
+vcfR_test@gt[1,]
+vcfR_test@gt[1,2]
+# Change the genotype
+vcfR_test@gt[1,2] <- "3|4:48:1:51,51"
+vcfR_test@gt
+```
+
+
+If you can find the part of your data that reproduces the problem you should be able to engineer an example by using this example data.
+
+
+## Your data
+
+
+Of course, it might just be simpler if you send me your data.
+Some of you may not be comfortable with this, particularly if your data is unpublished.
+But many people have been comfortable sending me their data to troubleshoot issues.
+Keep in mind that VCF data 'self documents' in that it includes information about what software created it and information about the reference file used to call variants.
+I think this is interesting because I get to learn a bit about all the projects people are using vcfR with.
+But if you're uncomfortable with this you may either want to use the above option, or come up with a way of obfuscating any information you are uncomfortable sharing.
+
+
+## Reporting the issue
+
+
+Once you have some data, you should provide a few lines of code that reproduces the issue.
+If you can forward this data, code, and any error or warning messages to me (or post it as an issue) it should help me troubleshoot this matter.
+Better yet, if you use [RMarkdown](http://rmarkdown.rstudio.com/), sharing your \*.Rmd and its compiled output from your system illustrating the matter (usually \*.html), that would be great.
+
+
+Lastly, it never hurts to report your session information to validate this is not a version issue.
+Mine is as follows.
+
+
+```{r}
+sessionInfo()
+```
+
+
+## The benefits of reporting
+
+
+If you have identified an issue with the vcfR code, then reporting this issue will have at least two positive outcomes.
+First, I'll (hopefully) resolve this matter and you can continue with your research.
+Second, I will probably use your example to engineer a [unit test](https://en.wikipedia.org/wiki/Unit_testing).
+A unit test is a bit of code that is executed every time vcfR is built and tests that vcfR is operating correctly.
+My unit tests can be seen as a collection of code that has created issues in the past.
+By testing these during builds it ensures that these problems are fixed and haven't inadvertantly been unfixed while trying to address a different issue.
+So by reporting issues, you can actually help make vcfR a better software.
+Thank you!
+
+

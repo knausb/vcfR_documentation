@@ -69,6 +69,14 @@ heatmap.bp(dp[1:1000,], rlabels = FALSE)
 ```
 
 
+In this heatmap we see that we have samples in columns and variants in rows.
+The color ramp on the right represents the depth of coverage for each variant where yellow is high coverage and purple is low coverage.
+White is not part of our color ramp but it is a part of the heatmap.
+This is because white represents cells in our matrix that having missing data (NA).
+The marginal barplots sum the information accross columns and rows to tell us which samples (columns) or variants (rows) include a high or low amount of sequence coverage.
+In general we would like to see our sequence coverage uniformly distributed among our samples and variants.
+
+
 ## Omitting samples
 
 We can see that some samples have a high degree of missingness.

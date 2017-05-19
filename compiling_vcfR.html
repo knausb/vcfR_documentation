@@ -306,6 +306,9 @@ $(document).ready(function () {
     <li>
       <a href="compiling_vcfR.html">Compiling vcfR</a>
     </li>
+    <li>
+      <a href="reporting_issue.html">Reporting an issue</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -336,10 +339,26 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 <p>The package vcfR includes compiled code to increase it’s performance. For Windows and OSX precompiled binaries are available at CRAN and should always be your first choice. If you do want to compile vcfR yourself you need to make sure you have cupport for C++11. C++11 is an extension of C++, similar to how R packages extend the functionality of R. If you’re having problems compiling it may be good to validate your system has this functionality. We can test for this functionality by creating a small C++ function (this is entirely independent of R).</p>
 <p>Copy the below code into a text file named <code>myTest.cpp</code>.</p>
 <pre class="r"><code>#include &lt;iostream&gt;
+
+// Originally based on:
 // http://stackoverflow.com/a/34681870
 
 int main()
 {
+  // Query OS info
+  if (system( NULL )){
+    system(&quot;cat /etc/*release&quot;);
+  } else {
+    std::cout &lt;&lt; &quot;Couldn&#39;t queru OS&quot; &lt;&lt; std::endl;
+  }
+  std::cout &lt;&lt; std::endl;
+  
+  // Introduction.
+  std::cout &lt;&lt; &quot;Querying for g++: &quot;;
+  std::cout &lt;&lt; __cplusplus;
+  std::cout &lt;&lt; std::endl;
+  
+  // Determine support.
   if(__cplusplus==201402L){
     std::cout &lt;&lt; &quot;C++14&quot; &lt;&lt; std::endl;
   } else if(__cplusplus==201103L){
@@ -347,10 +366,10 @@ int main()
   } else if(__cplusplus == 199711L){
     std::cout &lt;&lt; &quot;C++&quot; &lt;&lt; std::endl;
   } else {
-    std::cout &lt;&lt; &quot;Unexpected result.\n&quot;;
+    std::cout &lt;&lt; &quot;Unexpected result.&quot; &lt;&lt; std::endl;
   }
 
-return 0;
+  return 0;
 }</code></pre>
 <p>First, let’s compile our program without C++11 support.</p>
 <pre class="r"><code>g++ myTest.cpp</code></pre>

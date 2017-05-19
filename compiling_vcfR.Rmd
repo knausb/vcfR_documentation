@@ -26,10 +26,26 @@ Copy the below code into a text file named `myTest.cpp`.
 
 ```{r, eval=FALSE}
 #include <iostream>
+
+// Originally based on:
 // http://stackoverflow.com/a/34681870
 
 int main()
 {
+  // Query OS info
+  if (system( NULL )){
+    system("cat /etc/*release");
+  } else {
+    std::cout << "Couldn't queru OS" << std::endl;
+  }
+  std::cout << std::endl;
+  
+  // Introduction.
+  std::cout << "Querying for g++: ";
+  std::cout << __cplusplus;
+  std::cout << std::endl;
+  
+  // Determine support.
   if(__cplusplus==201402L){
     std::cout << "C++14" << std::endl;
   } else if(__cplusplus==201103L){
@@ -37,10 +53,10 @@ int main()
   } else if(__cplusplus == 199711L){
     std::cout << "C++" << std::endl;
   } else {
-    std::cout << "Unexpected result.\n";
+    std::cout << "Unexpected result." << std::endl;
   }
 
-return 0;
+  return 0;
 }
 ```
 

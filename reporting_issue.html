@@ -11,7 +11,7 @@
 
 
 
-<title>Extracting matrices from vcfR objects</title>
+<title>Reporting an issue</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -331,98 +331,113 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 
 
 
-<h1 class="title toc-ignore">Extracting matrices from vcfR objects</h1>
+<h1 class="title toc-ignore">Reporting an issue</h1>
 
 </div>
 
+<div id="TOC">
+<ul>
+<li><a href="#vcfr-data">vcfR data</a></li>
+<li><a href="#your-data">Your data</a></li>
+<li><a href="#reporting-the-issue">Reporting the issue</a></li>
+<li><a href="#the-benefits-of-reporting">The benefits of reporting</a></li>
+</ul>
+</div>
 
-<p>The data contained in VCF files presents a challenge to analysis in that the data are not strictly tabular and are large. Because the data are not strictly tabular we need to find ways to coerce the data into tables or matrices. Once the data is stored as a matrix it can be operated on by numerous R functions and packages. Because the data are large, this process needs to happen in a computationally efficent manner. Here we explore how vcfR facilitates these tasks.</p>
-<div id="extracting-data-matrices" class="section level2">
-<h2>Extracting data matrices</h2>
-<p>Typical VCF datasets are so large that it is not practical to view them in their entirety. Here we use the example dataset <code>vcfR_test</code> which comes with vcfR. This is a nice dataset because it is small enough to visualize.</p>
-<pre class="r"><code>library(vcfR)
-data(&quot;vcfR_test&quot;)
-head(vcfR_test)</code></pre>
-<pre><code>## [1] &quot;***** Object of class &#39;vcfR&#39; *****&quot;
-## [1] &quot;***** Meta section *****&quot;
-## [1] &quot;##fileformat=VCFv4.3&quot;
-## [1] &quot;##fileDate=20090805&quot;
-## [1] &quot;##source=myImputationProgramV3.1&quot;
-## [1] &quot;##reference=file:///seq/references/1000GenomesPilot-NCBI36.fasta&quot;
-## [1] &quot;##contig=&lt;ID=20,length=62435964,assembly=B36,md5=f126cdf8a6e0c7f379d [Truncated]&quot;
-## [1] &quot;##phasing=partial&quot;
-## [1] &quot;First 6 rows.&quot;
-## [1] 
-## [1] &quot;***** Fixed section *****&quot;
-##      CHROM POS       ID          REF   ALT      QUAL FILTER
-## [1,] &quot;20&quot;  &quot;14370&quot;   &quot;rs6054257&quot; &quot;G&quot;   &quot;A&quot;      &quot;29&quot; &quot;PASS&quot;
-## [2,] &quot;20&quot;  &quot;17330&quot;   NA          &quot;T&quot;   &quot;A&quot;      &quot;3&quot;  &quot;q10&quot; 
-## [3,] &quot;20&quot;  &quot;1110696&quot; &quot;rs6040355&quot; &quot;A&quot;   &quot;G,T&quot;    &quot;67&quot; &quot;PASS&quot;
-## [4,] &quot;20&quot;  &quot;1230237&quot; NA          &quot;T&quot;   NA       &quot;47&quot; &quot;PASS&quot;
-## [5,] &quot;20&quot;  &quot;1234567&quot; &quot;microsat1&quot; &quot;GTC&quot; &quot;G,GTCT&quot; &quot;50&quot; &quot;PASS&quot;
-## [1] 
-## [1] &quot;***** Genotype section *****&quot;
-##      FORMAT        NA00001          NA00002          NA00003       
+<p>If you experience some sort of unexpected behaviour it is possible that you have discovered a bug. Ways to report a bug include contacting me directly. If you are a GitHub user it would be better if you <a href="https://github.com/knausb/vcfR/issues">created an issue</a>. The success, and efficiency, of any attempt to help you will typically depend on your ability to create a <a href="http://stackoverflow.com/questions/5963269/how-to-make-a-great-r-reproducible-example">minimal reproducible example</a>. A minimal reproducible example is a small amount of code that allows me, or others, to reproduce the behaviour you are observing. Through providing a minimal reproducible example you accomplish two things. First, it provides me with a quick way to validate that the behaviour is repeatable on my system, confirming that this is not something specific to your system. Second, it provides me with an example of the reported behaviour that I can ‘poke and prod’ so that I can (hopefully) find a solution. To create a minimal reproducible example you will need some VCF data. Data for an example can be provided by using example data included in vcfR or by using your own data.</p>
+<div id="vcfr-data" class="section level2">
+<h2>vcfR data</h2>
+<p>The R package vcfR comes with some example data. This is used in the examples and vignettes. With a little work you can modify this example data to provide a minimal reproducible example.</p>
+<pre class="r"><code>library(vcfR)</code></pre>
+<pre class="r"><code>data(vcfR_test)
+vcfR_test</code></pre>
+<pre><code>## ***** Object of Class vcfR *****
+## 3 samples
+## 1 CHROMs
+## 5 variants
+## Object size: 0 Mb
+## 0 percent missing data
+## *****        *****         *****</code></pre>
+<p>Any problem is likely to occur in the ‘gt’ or ‘fix’ slots. These are matrices that can be manipulated with the square brackets ([]).</p>
+<pre class="r"><code>vcfR_test@gt</code></pre>
+<pre><code>##      FORMAT        NA00001          NA00002          NA00003       
 ## [1,] &quot;GT:GQ:DP:HQ&quot; &quot;0|0:48:1:51,51&quot; &quot;1|0:48:8:51,51&quot; &quot;1/1:43:5:.,.&quot;
 ## [2,] &quot;GT:GQ:DP:HQ&quot; &quot;0|0:49:3:58,50&quot; &quot;0|1:3:5:65,3&quot;   &quot;0/0:41:3&quot;    
 ## [3,] &quot;GT:GQ:DP:HQ&quot; &quot;1|2:21:6:23,27&quot; &quot;2|1:2:0:18,2&quot;   &quot;2/2:35:4&quot;    
 ## [4,] &quot;GT:GQ:DP:HQ&quot; &quot;0|0:54:7:56,60&quot; &quot;0|0:48:4:51,51&quot; &quot;0/0:61:2&quot;    
-## [5,] &quot;GT:GQ:DP&quot;    &quot;0/1:35:4&quot;       &quot;0/2:17:2&quot;       &quot;1/1:40:3&quot;    
-## [1] 
-## [1] &quot;Unique GT formats:&quot;
-## [1] &quot;GT:GQ:DP:HQ&quot; &quot;GT:GQ:DP&quot;   
-## [1]</code></pre>
-<p>In the genotype section we see four columns: a FORMAT column that indicates the contents of subsequent columns and three sample columns. Variants one through four contain four pieces of information with each genotype (GT:GQ:DP:HQ). The meaning of these acronyms should be defined in the meta section. Each element of the genotype matrix therefore contains a colon delimeted list that we need to parse before we can work with it. For example, if we wanted to analyze teh genotypes we would need to isolate them from the other information. Thsi can be accomplished using the function <code>extract.gt()</code>.</p>
-<pre class="r"><code>gt &lt;- extract.gt(vcfR_test)
-gt</code></pre>
-<pre><code>##            NA00001 NA00002 NA00003
-## rs6054257  &quot;0|0&quot;   &quot;1|0&quot;   &quot;1/1&quot;  
-## 20_17330   &quot;0|0&quot;   &quot;0|1&quot;   &quot;0/0&quot;  
-## rs6040355  &quot;1|2&quot;   &quot;2|1&quot;   &quot;2/2&quot;  
-## 20_1230237 &quot;0|0&quot;   &quot;0|0&quot;   &quot;0/0&quot;  
-## microsat1  &quot;0/1&quot;   &quot;0/2&quot;   &quot;1/1&quot;</code></pre>
-<p>When a genotype section is included in VCF data the one mandatory field is the genotype (GT) and it must be the first. The genotype is the default field for <code>extract.gt()</code> to work on. Note that the samplers names have been used to name the columns. The variant names (row names) are a little more complicated. The ‘ID’ column of the fixed section contains optional unique identifiers. These typically come from some sort of database of variants. If this column were entirely populated with unique identifiers we could use it to name our variants. However, all variants do not always have an ID. For example, variants 2 and 4 have missing IDs (NA). The function <code>extract.gt()</code> tries to name these variants by combining the chromosome (CHROM) and the position (POS) with the delimiter ’_’ to create a name. We see in our matrix of genotypes that they all have a name.</p>
-<p>We can also extract numeric data from our VCF data. We can do this by selecting a numeric element and setting the parameter <code>as.numeric = TRUE</code>.</p>
-<pre class="r"><code>gt &lt;- extract.gt(vcfR_test, element = &#39;DP&#39;, as.numeric = TRUE)
-gt</code></pre>
-<pre><code>##            NA00001 NA00002 NA00003
-## rs6054257        1       8       5
-## 20_17330         3       5       3
-## rs6040355        6       0       4
-## 20_1230237       7       4       2
-## microsat1        4       2       3</code></pre>
-<p>Here we’ve extracted the sequence depth (DP) of each variant and converted it to a numeric. Because they are numeric they may be used for quantitative comparisons. Much of R is designed to work with matrices of numbers. Be careful setting the parameter <code>as.numeric = TRUE</code>. It will do its best to convert the data to a numeric, even if this may not make sense. For example, we could convert the genotype to numeric.</p>
-<pre class="r"><code>gt &lt;- extract.gt(vcfR_test, element = &#39;GT&#39;, as.numeric = TRUE)
-gt</code></pre>
-<pre><code>##            NA00001 NA00002 NA00003
-## rs6054257        0       1       1
-## 20_17330         0       0       0
-## rs6040355        1       2       2
-## 20_1230237       0       0       0
-## microsat1        0       0       1</code></pre>
-<p>This operation did not throw an error, but the resulting matrix doesn’t appear to make much sense. Only ask to convert numeric data to numeric data or you will probably get unexpected results.</p>
+## [5,] &quot;GT:GQ:DP&quot;    &quot;0/1:35:4&quot;       &quot;0/2:17:2&quot;       &quot;1/1:40:3&quot;</code></pre>
+<pre class="r"><code>vcfR_test@gt[1,]</code></pre>
+<pre><code>##           FORMAT          NA00001          NA00002          NA00003 
+##    &quot;GT:GQ:DP:HQ&quot; &quot;0|0:48:1:51,51&quot; &quot;1|0:48:8:51,51&quot;   &quot;1/1:43:5:.,.&quot;</code></pre>
+<pre class="r"><code>vcfR_test@gt[1,2]</code></pre>
+<pre><code>##          NA00001 
+## &quot;0|0:48:1:51,51&quot;</code></pre>
+<pre class="r"><code># Change the genotype
+vcfR_test@gt[1,2] &lt;- &quot;3|4:48:1:51,51&quot;
+vcfR_test@gt</code></pre>
+<pre><code>##      FORMAT        NA00001          NA00002          NA00003       
+## [1,] &quot;GT:GQ:DP:HQ&quot; &quot;3|4:48:1:51,51&quot; &quot;1|0:48:8:51,51&quot; &quot;1/1:43:5:.,.&quot;
+## [2,] &quot;GT:GQ:DP:HQ&quot; &quot;0|0:49:3:58,50&quot; &quot;0|1:3:5:65,3&quot;   &quot;0/0:41:3&quot;    
+## [3,] &quot;GT:GQ:DP:HQ&quot; &quot;1|2:21:6:23,27&quot; &quot;2|1:2:0:18,2&quot;   &quot;2/2:35:4&quot;    
+## [4,] &quot;GT:GQ:DP:HQ&quot; &quot;0|0:54:7:56,60&quot; &quot;0|0:48:4:51,51&quot; &quot;0/0:61:2&quot;    
+## [5,] &quot;GT:GQ:DP&quot;    &quot;0/1:35:4&quot;       &quot;0/2:17:2&quot;       &quot;1/1:40:3&quot;</code></pre>
+<p>If you can find the part of your data that reproduces the problem you should be able to engineer an example by using this example data.</p>
 </div>
-<div id="matrix-parsing" class="section level2">
-<h2>Matrix parsing</h2>
-<p>Some elements fromthe genotype section may require further parsing. In our example the haplotype quality (HQ) includes a quality for each haplotype and these values are comma delimited.</p>
-<pre class="r"><code>gt &lt;- extract.gt(vcfR_test, element = &#39;HQ&#39;)
-gt</code></pre>
-<pre><code>##            NA00001 NA00002 NA00003
-## rs6054257  &quot;51,51&quot; &quot;51,51&quot; &quot;.,.&quot;  
-## 20_17330   &quot;58,50&quot; &quot;65,3&quot;  NA     
-## rs6040355  &quot;23,27&quot; &quot;18,2&quot;  NA     
-## 20_1230237 &quot;56,60&quot; &quot;51,51&quot; NA     
-## microsat1  NA      NA      NA</code></pre>
-<p>Note that some elements contain data while in others it is missing.</p>
-<pre class="r"><code>myHQ1 &lt;- masplit(gt[,1:2], sort = 0)
-myHQ1</code></pre>
-<pre><code>##            NA00001 NA00002
-## rs6054257       51      51
-## 20_17330        58      65
-## rs6040355       23      18
-## 20_1230237      56      51
-## microsat1       NA      NA</code></pre>
-<p>The function <code>masplit()</code> is fairly flexible in that you can choose which element to return and you can also sort the data prior to selection. These functions should help make VCF data accessible to the wealth of existing R functions and packages.</p>
+<div id="your-data" class="section level2">
+<h2>Your data</h2>
+<p>Of course, it might just be simpler if you send me your data. Some of you may not be comfortable with this, particularly if your data is unpublished. But many people have been comfortable sending me their data to troubleshoot issues. Keep in mind that VCF data ‘self documents’ in that it includes information about what software created it and information about the reference file used to call variants. I think this is interesting because I get to learn a bit about all the projects people are using vcfR with. But if you’re uncomfortable with this you may either want to use the above option, or come up with a way of obfuscating any information you are uncomfortable sharing.</p>
+</div>
+<div id="reporting-the-issue" class="section level2">
+<h2>Reporting the issue</h2>
+<p>Once you have some data, you should provide a few lines of code that reproduces the issue. If you can forward this data, code, and any error or warning messages to me (or post it as an issue) it should help me troubleshoot this matter. Better yet, if you use <a href="http://rmarkdown.rstudio.com/">RMarkdown</a>, sharing your *.Rmd and its compiled output from your system illustrating the matter (usually *.html), that would be great.</p>
+<p>Lastly, it never hurts to report your session information to validate this is not a version issue. Mine is as follows.</p>
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>## R version 3.4.0 (2017-04-21)
+## Platform: x86_64-apple-darwin15.6.0 (64-bit)
+## Running under: macOS Sierra 10.12.4
+## 
+## Matrix products: default
+## BLAS: /Library/Frameworks/R.framework/Versions/3.4/Resources/lib/libRblas.0.dylib
+## LAPACK: /Library/Frameworks/R.framework/Versions/3.4/Resources/lib/libRlapack.dylib
+## 
+## locale:
+## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+## 
+## attached base packages:
+## [1] methods   parallel  stats     graphics  grDevices utils     datasets 
+## [8] base     
+## 
+## other attached packages:
+##  [1] RColorBrewer_1.1-2 poppr_2.4.1        adegenet_2.0.1    
+##  [4] ade4_1.7-6         pinfsc50_1.1.0     cowplot_0.7.0     
+##  [7] ggplot2_2.2.1      reshape2_1.4.2     vcfR_1.5.0        
+## [10] rmarkdown_1.5     
+## 
+## loaded via a namespace (and not attached):
+##  [1] phangorn_2.2.0    gtools_3.5.0      memuse_3.0-1     
+##  [4] splines_3.4.0     lattice_0.20-35   expm_0.999-2     
+##  [7] colorspace_1.3-2  htmltools_0.3.6   viridisLite_0.2.0
+## [10] pegas_0.10        yaml_2.1.14       mgcv_1.8-17      
+## [13] DBI_0.6-1         sp_1.2-4          plyr_1.8.4       
+## [16] stringr_1.2.0     munsell_0.4.3     gtable_0.2.0     
+## [19] coda_0.19-1       evaluate_0.10     labeling_0.3     
+## [22] knitr_1.15.20     permute_0.9-4     httpuv_1.3.3     
+## [25] spdep_0.6-13      highr_0.6         Rcpp_0.12.10     
+## [28] xtable_1.8-2      scales_0.4.1      backports_1.0.5  
+## [31] formatR_1.5       gdata_2.17.0      vegan_2.4-3      
+## [34] mime_0.5          deldir_0.1-14     fastmatch_1.1-0  
+## [37] digest_0.6.12     stringi_1.1.5     gmodels_2.16.2   
+## [40] dplyr_0.5.0       shiny_1.0.3       grid_3.4.0       
+## [43] rprojroot_1.2     quadprog_1.5-5    tools_3.4.0      
+## [46] LearnBayes_2.15   magrittr_1.5      lazyeval_0.2.0   
+## [49] tibble_1.3.0      cluster_2.0.6     ape_4.1          
+## [52] seqinr_3.3-6      MASS_7.3-47       Matrix_1.2-10    
+## [55] assertthat_0.2.0  R6_2.2.0          boot_1.3-19      
+## [58] igraph_1.0.1      nlme_3.1-131      compiler_3.4.0</code></pre>
+</div>
+<div id="the-benefits-of-reporting" class="section level2">
+<h2>The benefits of reporting</h2>
+<p>If you have identified an issue with the vcfR code, then reporting this issue will have at least two positive outcomes. First, I’ll (hopefully) resolve this matter and you can continue with your research. Second, I will probably use your example to engineer a <a href="https://en.wikipedia.org/wiki/Unit_testing">unit test</a>. A unit test is a bit of code that is executed every time vcfR is built and tests that vcfR is operating correctly. My unit tests can be seen as a collection of code that has created issues in the past. By testing these during builds it ensures that these problems are fixed and haven’t inadvertantly been unfixed while trying to address a different issue. So by reporting issues, you can actually help make vcfR a better software. Thank you!</p>
 </div>
 
 <center>
