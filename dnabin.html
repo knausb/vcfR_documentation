@@ -356,11 +356,8 @@ dna &lt;- ape::read.dna(dna_file, format=&quot;fasta&quot;)
 gff &lt;- read.table(gff_file, sep=&quot;\t&quot;, quote = &quot;&quot;)</code></pre>
 <p>We can use information from the annotation file (gff) to extract a gene. Here we have specifically chosen one which has variants. We can use IUPAC ambiguity codes to convert heterozygous sites into a one character encoding. This results in a single sequence per individual. Alternatively, we can create two haplotypes for each diploid sample, resulting in two sequences per individual.</p>
 <pre class="r"><code>record &lt;- 130
-# my_dnabin1 &lt;- vcfR2DNAbin(vcf, consensus = TRUE, extract.haps = FALSE,
-# gt.split=&#39;|&#39;, ref.seq=dna[,gff[record,4]:gff[record,5]],
-# start.pos=gff[record,4], verbose=FALSE)
-my_dnabin1 &lt;- vcfR2DNAbin(vcf, consensus = TRUE, extract.haps = FALSE, ref.seq = dna[, 
-    gff[record, 4]:gff[record, 5]], start.pos = gff[record, 4], verbose = FALSE)
+#my_dnabin1 &lt;- vcfR2DNAbin(vcf, consensus = TRUE, extract.haps = FALSE, gt.split=&quot;|&quot;, ref.seq=dna[,gff[record,4]:gff[record,5]], start.pos=gff[record,4], verbose=FALSE)
+my_dnabin1 &lt;- vcfR2DNAbin(vcf, consensus = TRUE, extract.haps = FALSE, ref.seq=dna[,gff[record,4]:gff[record,5]], start.pos=gff[record,4], verbose=FALSE)
 my_dnabin1</code></pre>
 <pre><code>## 18 DNA sequences in binary format stored in a matrix.
 ## 
@@ -385,11 +382,8 @@ ape::image.DNAbin(my_dnabin1[,ape::seg.sites(my_dnabin1)])</code></pre>
 <pre class="r"><code>par(mar=c(5,4,4,2))</code></pre>
 <p>Here, the ambiguous sites are visualized as ‘other.’ While the DNAbin object can include the ambiguity codes, not all downstream software handle these codes well. So the user should excercise prudence when using this option.</p>
 <p>If we instead create two haplotypes for each diploid sample, it results in a DNAbin object which includes only unambiguous nucleotides(A, C, G and T). This typically requires the data to be phased (I use <a href="https://faculty.washington.edu/browning/beagle/beagle.html">beagle4</a>). In VCF files this is indicated by delimiting the alleles of the genotype with a pipe (‘|’) for phased data, while unphased data are delimited with a forward slash (‘/’).</p>
-<pre class="r"><code># my_dnabin1 &lt;- vcfR2DNAbin(vcf, consensus=FALSE, extract.haps=TRUE,
-# gt.split=&#39;|&#39;, ref.seq=dna[,gff[record,4]:gff[record,5]],
-# start.pos=gff[record,4], verbose=FALSE)
-my_dnabin1 &lt;- vcfR2DNAbin(vcf, consensus = FALSE, extract.haps = TRUE, ref.seq = dna[, 
-    gff[record, 4]:gff[record, 5]], start.pos = gff[record, 4], verbose = FALSE)</code></pre>
+<pre class="r"><code>#my_dnabin1 &lt;- vcfR2DNAbin(vcf, consensus=FALSE, extract.haps=TRUE, gt.split=&quot;|&quot;, ref.seq=dna[,gff[record,4]:gff[record,5]], start.pos=gff[record,4], verbose=FALSE)
+my_dnabin1 &lt;- vcfR2DNAbin(vcf, consensus=FALSE, extract.haps=TRUE, ref.seq=dna[,gff[record,4]:gff[record,5]], start.pos=gff[record,4], verbose=FALSE)</code></pre>
 <pre class="r"><code>par(mar=c(5,8,4,2))
 ape::image.DNAbin(my_dnabin1[,ape::seg.sites(my_dnabin1)])</code></pre>
 <p><img src="dnabin_files/figure-html/image_DNAbin_2-1.png" width="672" style="display: block; margin: auto;" /></p>

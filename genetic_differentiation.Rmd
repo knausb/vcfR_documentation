@@ -23,7 +23,7 @@ As researchers applied these metrics to microsatellites, genetic markers with a 
 More recently, Lou Jost proposed another alternative [@jost2008gst].
 You can tell a topic is popular when so many variants of it are generated.
 And there are more variants than I've mentioned here.
-A nice discussion as to which measure may be appropriate for your data was posteed to teh Molecular Ecologist blog titled [should I use $F_{ST}$, $G_{ST}$ or $D$?](http://www.molecularecologist.com/2011/03/should-i-use-fst-gst-or-d-2/).
+A nice discussion as to which measure may be appropriate for your data was posted to the Molecular Ecologist blog titled [should I use $F_{ST}$, $G_{ST}$ or $D$?](http://www.molecularecologist.com/2011/03/should-i-use-fst-gst-or-d-2/).
 
 
 In `vcfR` I've implemented the function `genetic_diff()` to measure population diversity and differentiation.
