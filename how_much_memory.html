@@ -9,9 +9,10 @@
 <meta name="generator" content="pandoc" />
 
 
+<meta name="author" content="Brian J. Knaus" />
 
 
-<title>Compiling vcfR</title>
+<title>How much memory do I need?</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -334,56 +335,63 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 
 
 
-<h1 class="title toc-ignore">Compiling vcfR</h1>
+<h1 class="title toc-ignore">How much memory do I need?</h1>
+<h4 class="author"><em>Brian J. Knaus</em></h4>
+<h4 class="date"><em>June 7, 2017</em></h4>
 
 </div>
 
 
-<p>The package vcfR includes compiled code to increase it’s performance. For Windows and OSX precompiled binaries are available at CRAN and should always be your first choice. If you do want to compile vcfR yourself you need to make sure you have cupport for C++11. C++11 is an extension of C++, similar to how R packages extend the functionality of R. If you’re having problems compiling it may be good to validate your system has this functionality. We can test for this functionality by creating a small C++ function (this is entirely independent of R).</p>
-<p>Copy the below code into a text file named <code>myTest.cpp</code>.</p>
-<pre class="r"><code>#include &lt;iostream&gt;
+<p>The R package vcfR attempts to read all data into memory (RAM) in order to perform manipulations or analyses. This is similar to other R packages. The catch with vcfR is that VCF files frequently contain large quantities of data. This may create a situation where you have more data than you can read into memory. Here I explore the memory footprint of a vcfR object to help you decide whether you have enough memory to read in your entire file, or whether you need to develop strategies for working on subsets of this data.</p>
+<div id="the-vcfr-object" class="section level2">
+<h2>The vcfR object</h2>
+<p>The vcfR object is an S4 class object consisting of three slots. The <code>meta</code> slot is a character vector. It is recommended, but not required, that the meta data include information for each chromosome in the reference. In mature projects, with a small number of chromosomes, the size of this data may be fairly small. In less mature projects, where the reference may consist of thousands of contigs, this region may become noticable in size. However, it is likely to be small relative to the rest of the VCF data. The <code>fix</code> slot is a character matrix that always consists of eight columns but has as many rows as there are variants in the VCF file, plus one more row for the header. The <code>gt</code> slot is a character matrix that contains a column for each sample, plus one column to designate the format for each variant, and it has as one row for each variant. As the number of variants in your data grow the sizes of the <code>fix</code> and <code>gt</code> slots grow to accomodate these variants. As the number of samples in your dataset grow the number of columns in your <code>gt</code> slot grows. Here we’ll explore how many variants may require how much memory.</p>
+</div>
+<div id="simulation-of-data" class="section level2">
+<h2>Simulation of data</h2>
+<p>In order to estimate the memory footprint of vcfR objects containing different numbers of variants we’ll use the R package <code>memuse</code>. For simplicity, we’ll ignore the <code>meta</code> slot and instead of using both a <code>fix</code> and a <code>gt</code> slot we’ll use a single matrix of 10 columns. This approximates VCF data containing one sample. As your sample size increases, so will your memory footprint. Depending on your comfort level with R, you may be able to modify the below code to match your data set.</p>
+<pre class="r"><code>library(&#39;memuse&#39;)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;memuse&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:ggplot2&#39;:
+## 
+##     unit</code></pre>
+<pre class="r"><code>nvar &lt;- 10^{2:8}
+nMb &lt;- howbig(nrow=10, ncol=10, unit=&quot;MB&quot;)
 
-// Originally based on:
-// http://stackoverflow.com/a/34681870
+for(i in nvar){
+  nMb &lt;- c(nMb, howbig(nrow=i, ncol=8, unit=&quot;KB&quot;))
+}
+nvar &lt;- c(10, nvar)
 
-int main()
-{
-  // Query OS info
-  if (system( NULL )){
-    system(&quot;cat /etc/*release&quot;);
-  } else {
-    std::cout &lt;&lt; &quot;Couldn&#39;t queru OS&quot; &lt;&lt; std::endl;
-  }
-  std::cout &lt;&lt; std::endl;
-  
-  // Introduction.
-  std::cout &lt;&lt; &quot;Querying for g++: &quot;;
-  std::cout &lt;&lt; __cplusplus;
-  std::cout &lt;&lt; std::endl;
-  
-  // Determine support.
-  if(__cplusplus==201402L){
-    std::cout &lt;&lt; &quot;C++14&quot; &lt;&lt; std::endl;
-  } else if(__cplusplus==201103L){
-    std::cout &lt;&lt; &quot;C++11&quot; &lt;&lt; std::endl;
-  } else if(__cplusplus == 199711L){
-    std::cout &lt;&lt; &quot;C++&quot; &lt;&lt; std::endl;
-  } else {
-    std::cout &lt;&lt; &quot;Unexpected result.&quot; &lt;&lt; std::endl;
-  }
-
-  return 0;
-}</code></pre>
-<p>First, let’s compile our program without C++11 support.</p>
-<pre class="r"><code>g++ myTest.cpp</code></pre>
-<p>And execute.</p>
-<pre class="r"><code>./a.out
-C++</code></pre>
-<p>Now we can compile with C++11 support.</p>
-<pre class="r"><code>g++ -std=c++11 myTest.cpp </code></pre>
-<pre class="r"><code>./a.out
-C++11</code></pre>
-<p>Your results should be the same as above. If not, you may not have C++ support on your system.</p>
+nMb &lt;- as.numeric(lapply(nMb, as.numeric))/1000</code></pre>
+</div>
+<div id="visualization" class="section level2">
+<h2>Visualization</h2>
+<p>Once we’ve simulated our data, we can visualize it. Here we’ll use a simple line graph.</p>
+<pre class="r"><code>par(mar=c(5,5,4,2))
+plot(log10(nvar), log10(nMb), xaxt=&quot;n&quot;, yaxt=&quot;n&quot;, type=&#39;b&#39;, xlab=&quot;Number of variants&quot;, ylab = &quot;&quot;)
+axis(side = 1, at = 1:8, labels=c(&#39;10&#39;, &#39;100&#39;, &#39;1k&#39;, &#39;10k&#39;, &#39;100k&#39;, &#39;1m&#39;, &#39;10m&#39;, &#39;100m&#39;))
+axis(side = 2, at = 1:8, labels=c(&#39;800k&#39;, &#39;6.4Mb&#39;, &#39;64Mb&#39;, &#39;640Mb&#39;, &#39;6.4Gb&#39;, &#39;64Gb&#39;, &#39;640Gb&#39;, &#39;6.4Tb&#39;), las=2)
+title(ylab=&quot;Memory use&quot;, line=4)
+abline(h=1:8, lwd=2, col=&quot;#C0C0C066&quot;)
+abline(v=1:8, lwd=2, col=&quot;#C0C0C066&quot;)</code></pre>
+<p><img src="how_much_memory_files/figure-html/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>par(mar=c(5,4,4,2))</code></pre>
+<p>This should give us an idea of how much data we can read into a vcfR object. When we have 100,000 variants we’ll need about 640 Mb of memory. If we have 1 million variants we’ll need about 6.4 Gb of memory. This is asking a lot of your typical work station. In the past I’ve found that creating objects in R that are over about 1 GB starts to affect the performance of the system. This may change in the future as R is constantly improving.</p>
+</div>
+<div id="dont-know-how-many-variants-are-in-your-file" class="section level2">
+<h2>Don’t know how many variants are in your file?</h2>
+<p>If you don’t know how many variants are in your VCF file you may be a t aloss for guessing how much memory you need. If you’re working on a flavor of Unix (OSX, Linux, etc.) you can use the shell to get an idea.</p>
+<pre class="bash"><code>grep -v &quot;^#&quot; myVcfFile.vcf | head -n 1000000 | wc -l</code></pre>
+<p>Or for gzipped files.</p>
+<pre class="bash"><code>zgrep -v &quot;^#&quot; myVcfFile.vcf.gz | head -n 1000000 | wc -l</code></pre>
+<p>The <code>zgrep -v &quot;^#&quot; myVcfFile.vcf.gz</code> command sends the contents of your VCF file to standard output, while omitting the meta and header information which have lines begining with a pound or hash sign. By piping this to head you limit the number of lines you count. If you have a really large number of variants you may not want to count them all. By piping this to <code>wc -l</code> it should count the lines for you where each variant is one line. This should help you get an idea of how many variants are in your file.</p>
+</div>
+<div id="summary" class="section level2">
+<h2>Summary</h2>
+<p>Our lab works on plant pathogens that have genomes in the range of tens to hundreds of millions of base pairs in size. We typically work on complete GBS datasets consisting of over 100 samples. These datasets appear to read into memory and work quite well. For genomic projects we typically have more variants than we can comfortably read into memory. For these projects we typically work on a per supercontig manner as a way of decomposing a genomic project into more manageable subsets. The function <code>read.vcfR()</code> includes parameters <code>nrows</code> and <code>skip</code> to allow you to read portions of VCF files into memory. Note that this will require serial access so that selecting regions of a file that are near the end of the file may require some time to access. I find that breaking a VCF file into several files, one for each supercontig, helps me sort through a genome more efficiently. Hopefully this information will help you as well.</p>
+</div>
 
 <center>
 <hr class="style1">
