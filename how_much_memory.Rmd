@@ -50,7 +50,7 @@ nvar <- 10^{2:8}
 nMb <- howbig(nrow=10, ncol=10, unit="MB")
 
 for(i in nvar){
-  nMb <- c(nMb, howbig(nrow=i, ncol=8, unit="KB"))
+  nMb <- c(nMb, howbig(nrow=i, ncol=10, unit="KB"))
 }
 nvar <- c(10, nvar)
 

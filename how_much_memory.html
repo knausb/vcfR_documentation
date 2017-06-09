@@ -355,7 +355,7 @@ nvar &lt;- 10^{2:8}
 nMb &lt;- howbig(nrow=10, ncol=10, unit=&quot;MB&quot;)
 
 for(i in nvar){
-  nMb &lt;- c(nMb, howbig(nrow=i, ncol=8, unit=&quot;KB&quot;))
+  nMb &lt;- c(nMb, howbig(nrow=i, ncol=10, unit=&quot;KB&quot;))
 }
 nvar &lt;- c(10, nvar)
 
