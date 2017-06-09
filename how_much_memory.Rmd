@@ -70,7 +70,7 @@ Here we'll use a simple line graph.
 par(mar=c(5,5,4,2))
 plot(log10(nvar), log10(nMb), xaxt="n", yaxt="n", type='b', xlab="Number of variants", ylab = "")
 axis(side = 1, at = 1:8, labels=c('10', '100', '1k', '10k', '100k', '1m', '10m', '100m'))
-axis(side = 2, at = 1:8, labels=c('800k', '6.4Mb', '64Mb', '640Mb', '6.4Gb', '64Gb', '640Gb', '6.4Tb'), las=2)
+axis(side = 2, at = 0:7, labels=c('800k', '6.4Mb', '64Mb', '640Mb', '6.4Gb', '64Gb', '640Gb', '6.4Tb'), las=2)
 title(ylab="Memory use", line=4)
 abline(h=1:8, lwd=2, col="#C0C0C066")
 abline(v=1:8, lwd=2, col="#C0C0C066")
