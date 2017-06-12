@@ -352,25 +352,23 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 <p>In order to estimate the memory footprint of vcfR objects containing different numbers of variants we’ll use the R package <code>memuse</code>. For simplicity, we’ll ignore the <code>meta</code> slot and instead of using both a <code>fix</code> and a <code>gt</code> slot we’ll use a single matrix of 10 columns. This approximates VCF data containing one sample. As your sample size increases, so will your memory footprint. Depending on your comfort level with R, you may be able to modify the below code to match your data set.</p>
 <pre class="r"><code>library(&#39;memuse&#39;)
 nvar &lt;- 10^{2:8}
-nMb &lt;- howbig(nrow=10, ncol=10, unit=&quot;MB&quot;)
+nMb &lt;- howbig(nrow=10, ncol=10, unit=&quot;MB&quot;)@size
 
 for(i in nvar){
-  nMb &lt;- c(nMb, howbig(nrow=i, ncol=10, unit=&quot;KB&quot;))
+  nMb &lt;- c(nMb, howbig(nrow=i, ncol=10, unit=&quot;MB&quot;)@size)
 }
-nvar &lt;- c(10, nvar)
-
-nMb &lt;- as.numeric(lapply(nMb, as.numeric))/1000</code></pre>
+nvar &lt;- c(10, nvar)</code></pre>
 </div>
 <div id="visualization" class="section level2">
 <h2>Visualization</h2>
 <p>Once we’ve simulated our data, we can visualize it. Here we’ll use a simple line graph.</p>
 <pre class="r"><code>par(mar=c(5,5,4,2))
 plot(log10(nvar), log10(nMb), xaxt=&quot;n&quot;, yaxt=&quot;n&quot;, type=&#39;b&#39;, xlab=&quot;Number of variants&quot;, ylab = &quot;&quot;)
-axis(side = 1, at = 1:8, labels=c(&#39;10&#39;, &#39;100&#39;, &#39;1k&#39;, &#39;10k&#39;, &#39;100k&#39;, &#39;1m&#39;, &#39;10m&#39;, &#39;100m&#39;))
-axis(side = 2, at = 0:7, labels=c(&#39;800k&#39;, &#39;6.4Mb&#39;, &#39;64Mb&#39;, &#39;640Mb&#39;, &#39;6.4Gb&#39;, &#39;64Gb&#39;, &#39;640Gb&#39;, &#39;6.4Tb&#39;), las=2)
-title(ylab=&quot;Memory use&quot;, line=4)
-abline(h=1:8, lwd=2, col=&quot;#C0C0C066&quot;)
-abline(v=1:8, lwd=2, col=&quot;#C0C0C066&quot;)</code></pre>
+axis(side = 1, at = log10(nvar), labels=nvar)
+axis(side = 2, at = log10(nMb), labels=nMb, las=2)
+title(ylab=&quot;Memory use (Mb)&quot;, line=4)
+abline(h=log10(nMb), lwd=2, col=&quot;#C0C0C066&quot;)
+abline(v=log10(nvar), lwd=2, col=&quot;#C0C0C066&quot;)</code></pre>
 <p><img src="how_much_memory_files/figure-html/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>par(mar=c(5,4,4,2))</code></pre>
 <p>This should give us an idea of how much data we can read into a vcfR object. When we have 100,000 variants we’ll need about 640 Mb of memory. If we have 1 million variants we’ll need about 6.4 Gb of memory. This is asking a lot of your typical work station. In the past I’ve found that creating objects in R that are over about 1 GB starts to affect the performance of the system. This may change in the future as R is constantly improving.</p>
