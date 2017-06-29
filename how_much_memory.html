@@ -212,6 +212,9 @@ $(document).ready(function () {
       <a href="chromR_object.html">chromR objects</a>
     </li>
     <li>
+      <a href="windowing.html">Windowing</a>
+    </li>
+    <li>
       <a href="genetic_differentiation.html">Genetic differentiation</a>
     </li>
   </ul>
@@ -350,8 +353,13 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 <div id="simulation-of-data" class="section level2">
 <h2>Simulation of data</h2>
 <p>In order to estimate the memory footprint of vcfR objects containing different numbers of variants we’ll use the R package <code>memuse</code>. For simplicity, we’ll ignore the <code>meta</code> slot and instead of using both a <code>fix</code> and a <code>gt</code> slot we’ll use a single matrix of 10 columns. This approximates VCF data containing one sample. As your sample size increases, so will your memory footprint. Depending on your comfort level with R, you may be able to modify the below code to match your data set.</p>
-<pre class="r"><code>library(&#39;memuse&#39;)
-nvar &lt;- 10^{2:8}
+<pre class="r"><code>library(&#39;memuse&#39;)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;memuse&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:ggplot2&#39;:
+## 
+##     unit</code></pre>
+<pre class="r"><code>nvar &lt;- 10^{2:8}
 nMb &lt;- howbig(nrow=10, ncol=10, unit=&quot;MB&quot;)@size
 
 for(i in nvar){

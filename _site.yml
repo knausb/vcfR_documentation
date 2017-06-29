@@ -23,6 +23,8 @@ navbar:
           href: "tidy_vcfR.html"
         - text: "chromR objects"
           href: "chromR_object.html"
+        - text: "Windowing"
+          href: "windowing.html"          
         - text: "Genetic differentiation"
           href: "genetic_differentiation.html"
     - text: "GBS class"
