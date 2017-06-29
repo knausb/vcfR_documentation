@@ -1,0 +1,157 @@
+---
+title: "Windowing"
+author: "Brian J. Knaus"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(fig.align = 'center')
+knitr::opts_chunk$set(fig.width = 8)
+knitr::opts_chunk$set(fig.height = 6)
+```
+
+
+The package vcfR was designed to work on individual chromosomes.
+This is because a chromosome is a convenient way to subset a genome into smaller tasks.
+We are frequently interested in examining an entire genome in order to identify features of interest.
+This can be accomplished by processing chromosomes one at a time and writing summaries to a file.
+This allows us to survey entire genomes even when we lack the computational resources necessary to load entire genomes into memory.
+
+
+
+## Example data
+
+
+vcfR comes with several example datasets.
+Here we'll use them to create a small example genomic dataset.
+
+
+```{r}
+library(vcfR)
+data(vcfR_example)
+data("vcfR_test")
+```
+
+
+The vcfR_test dataset consists only of VCF data.
+We'll fabricate a sequence and annotation for the sake of an example.
+
+
+```{r}
+library(ape)
+
+dna.l <- vector('list', length=3)
+
+dna.l[[1]] <- as.character(dna[1,1:length(dna)])
+set.seed(123)
+dna.l[[2]] <- sample( c('a','c','g','t'), size = getPOS(vcfR_test)[length(getPOS(vcfR_test))], replace = TRUE )
+dna.l[[3]] <- sample( c('a','c','g','t'), size = getPOS(vcfR_test)[length(getPOS(vcfR_test))], replace = TRUE )
+dna.l <- as.DNAbin(dna.l)
+
+names(dna.l)[1] <- "Supercontig_1.50"
+names(dna.l)[2] <- "Supercontig_1.5"
+names(dna.l)[3] <- "Supercontig_1.10"
+dna.l
+
+gff2 <- gff[1:10,]
+gff2[,1] <- "Supercontig_1.5"
+gff3 <- gff[11:20,]
+gff3[,1] <- "Supercontig_1.10"
+```
+
+
+I'm used to receiving reference and annotation data as a single file each.
+We'll combine those data here for the example.
+
+
+```{r}
+gff <- rbind(gff, gff2, gff3)
+rm(gff2)
+rm(gff3)
+```
+
+
+I'm also used to having my VCF data seperated as one file per chromosome.
+So we'll write our VCF data to file.
+
+
+```{r}
+write.vcf(vcf, file = "Supercontig_1.50.vcf.gz")
+vcfR_test@fix[,'CHROM'] <- "Supercontig_1.5"
+write.vcf(vcfR_test, file = "Supercontig_1.5.vcf.gz")
+vcfR_test@fix[,'CHROM'] <- "Supercontig_1.10"
+write.vcf(vcfR_test, file = "Supercontig_1.10.vcf.gz")
+```
+
+
+## Windowing through chromosomes
+
+
+We now have a reference sequence and annotation information in memory and VCF data in files.
+We are going to use vcfR to windowize each chromosome and write summaries for each window and each variant to file.
+This is accomplished by first writing the files to disk and subsequently appending to each file.
+
+
+```{r}
+myFiles <- list.files(".", pattern = "Supercontig.*vcf.gz$")
+myChroms <- unlist( lapply( strsplit(myFiles, "\\.vcf"), function(x){ x[1] } ) )
+
+myWin.size <- 1e4
+i <- 1
+myChrom <- myChroms[i]
+
+dna1 <- dna.l[myChrom]
+gff1 <- gff[ gff[,1] == myChrom,]
+
+vcf <- read.vcfR(myFiles[i], verbose = FALSE)
+    
+chrom <- create.chromR(name=myChrom, vcf=vcf, seq=dna1, ann=gff1, verbose = FALSE)
+chrom <- proc.chromR(chrom, win.size = myWin.size, verbose=FALSE)
+
+write.var.info(chrom, file = "pinf_ref_vars.csv", APPEND = FALSE)
+write.win.info(chrom, file = "pinf_ref_wins.csv", APPEND = FALSE)
+
+for(i in 2:length(myFiles)){
+  myChrom <- myChroms[i]
+  cat(myChrom)
+  cat("\n")
+  
+  dna1 <- dna.l[myChrom]
+  gff1 <- gff[ gff[,1] == myChrom,]
+
+  vcf <- read.vcfR(myFiles[i], verbose = FALSE)
+
+  chrom <- create.chromR(name=myChrom, vcf=vcf, seq=dna1, ann=gff1, verbose = FALSE)
+  chrom <- proc.chromR(chrom, win.size = myWin.size, verbose=FALSE)
+
+  write.var.info(chrom, file = "pinf_ref_vars.csv", APPEND = TRUE)
+  write.win.info(chrom, file = "pinf_ref_wins.csv", APPEND = TRUE)
+
+}
+
+```
+
+
+## Clean up
+
+We wrote two files to disk for this example.
+Typically these files would be data and would therefore be valuable.
+In the context of this example, we no longer need them, so we'll delete them.
+Make sure you do not delete your real data!
+
+
+```{r, eval=FALSE}
+unlink("Supercontig_1.5.vcf.gz")
+unlink("Supercontig_1.10.vcf.gz")
+unlink("Supercontig_1.50.vcf.gz")
+
+unlink("pinf_ref_vars.csv")
+unlink("pinf_ref_wins.csv")
+```
+
+
+
