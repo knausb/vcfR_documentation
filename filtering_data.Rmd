@@ -1,12 +1,7 @@
 ---
 title: "Filtering data"
-author: "Brian J. Knaus"
-date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{Filtering data}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+output:
+  html_document
 ---
 
 
