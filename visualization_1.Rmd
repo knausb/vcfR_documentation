@@ -1,12 +1,9 @@
 ---
 title: "Visualizing VCF data 1"
-author: "Brian Knaus"
+author: "Brian J. Knaus"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{Visualization 1}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+output:
+  html_document
 ---
 
 
