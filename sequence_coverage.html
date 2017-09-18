@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Brian J. Knaus" />
+
+<meta name="date" content="2017-09-18" />
+
+<title>Sequence coverage</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+
+
+<link rel="stylesheet" href="/home/local/USDA-ARS/knausb/R/x86_64-pc-linux-gnu-library/3.4/rmarkdown/rmarkdown/templates/html_vignette/resources/vignette.css" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Sequence coverage</h1>
+<h4 class="author"><em>Brian J. Knaus</em></h4>
+<h4 class="date"><em>2017-09-18</em></h4>
+
+
+
+<p>Once data is received from a sequencing center, an initial question is whether the sequencing was successful? A common attempt to address this question is by asking how much sequence coverage was attained. For a diploid organism, one would require at least two reads per variant to infer a genotype. Ideally, we would like a little more so that we have redundancy. How much redundancy is necessary may be a question the researchers need to address themselves. In this vignette we’ll learn how to read in VCF data, extract sequence depth information from it and how to visualize this data.</p>
+<div id="reading-vcf-data" class="section level2">
+<h2>Reading VCF data</h2>
+<p>The topic of reading in VCF format data is covered in other vignettes. We include it here for redundancy, and because every example involving VCF data needs to start with some data.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(vcfR)
+vcf_file &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;pinf_sc50.vcf.gz&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;pinfsc50&quot;</span>)
+vcf &lt;-<span class="st"> </span><span class="kw">read.vcfR</span>(vcf_file, <span class="dt">verbose =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<p>Calling the object by name, with no options (the show method), provides a summary of the data.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">vcf</code></pre></div>
+<pre><code>## ***** Object of Class vcfR *****
+## 18 samples
+## 1 CHROMs
+## 22,031 variants
+## Object size: 20.9 Mb
+## 7.929 percent missing data
+## *****        *****         *****</code></pre>
+</div>
+<div id="querying-vcf-information" class="section level2">
+<h2>Querying VCF information</h2>
+<p>Some, but not all, variant callers will provide per variant and per sample sequence depth information. Some variant callers may provide this information only as an option (see relevant documentation). We can use the ‘head’ method to explore what sort of information exists in our data.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(vcf)</code></pre></div>
+<pre><code>## [1] &quot;***** Object of class &#39;vcfR&#39; *****&quot;
+## [1] &quot;***** Meta section *****&quot;
+## [1] &quot;##fileformat=VCFv4.1&quot;
+## [1] &quot;##source=\&quot;GATK haplotype Caller, phased with beagle4\&quot;&quot;
+## [1] &quot;##FILTER=&lt;ID=LowQual,Description=\&quot;Low quality\&quot;&gt;&quot;
+## [1] &quot;##FORMAT=&lt;ID=AD,Number=.,Type=Integer,Description=\&quot;Allelic depths fo [Truncated]&quot;
+## [1] &quot;##FORMAT=&lt;ID=DP,Number=1,Type=Integer,Description=\&quot;Approximate read  [Truncated]&quot;
+## [1] &quot;##FORMAT=&lt;ID=GQ,Number=1,Type=Integer,Description=\&quot;Genotype Quality\&quot;&gt;&quot;
+## [1] &quot;First 6 rows.&quot;
+## [1] 
+## [1] &quot;***** Fixed section *****&quot;
+##      CHROM              POS   ID REF  ALT QUAL      FILTER
+## [1,] &quot;Supercontig_1.50&quot; &quot;41&quot;  NA &quot;AT&quot; &quot;A&quot; &quot;4784.43&quot; NA    
+## [2,] &quot;Supercontig_1.50&quot; &quot;136&quot; NA &quot;A&quot;  &quot;C&quot; &quot;550.27&quot;  NA    
+## [3,] &quot;Supercontig_1.50&quot; &quot;254&quot; NA &quot;T&quot;  &quot;G&quot; &quot;774.44&quot;  NA    
+## [4,] &quot;Supercontig_1.50&quot; &quot;275&quot; NA &quot;A&quot;  &quot;G&quot; &quot;714.53&quot;  NA    
+## [5,] &quot;Supercontig_1.50&quot; &quot;386&quot; NA &quot;T&quot;  &quot;G&quot; &quot;876.55&quot;  NA    
+## [6,] &quot;Supercontig_1.50&quot; &quot;462&quot; NA &quot;T&quot;  &quot;G&quot; &quot;1301.07&quot; NA    
+## [1] 
+## [1] &quot;***** Genotype section *****&quot;
+##      FORMAT           BL2009P4_us23             
+## [1,] &quot;GT:AD:DP:GQ:PL&quot; &quot;1|1:0,7:7:21:283,21,0&quot;   
+## [2,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:12,0:12:36:0,36,427&quot; 
+## [3,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:27,0:27:81:0,81,1117&quot;
+## [4,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:29,0:29:87:0,87,1243&quot;
+## [5,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:26,0:26:78:0,78,1034&quot;
+## [6,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:23,0:23:69:0,69,958&quot; 
+##      DDR7602                     IN2009T1_us22              
+## [1,] &quot;1|1:0,6:6:18:243,18,0&quot;     &quot;1|1:0,8:8:24:324,24,0&quot;    
+## [2,] &quot;0|0:20,0:20:60:0,60,819&quot;   &quot;0|0:16,0:16:48:0,48,650&quot;  
+## [3,] &quot;0|0:26,0:26:78:0,78,1077&quot;  &quot;0|0:23,0:23:69:0,69,946&quot;  
+## [4,] &quot;0|0:27,0:27:81:0,81,1158&quot;  &quot;0|0:32,0:32:96:0,96,1299&quot; 
+## [5,] &quot;0|0:30,0:30:90:0,90,1242&quot;  &quot;0|0:41,0:41:99:0,122,1613&quot;
+## [6,] &quot;0|0:36,0:36:99:0,108,1556&quot; &quot;0|0:35,0:35:99:0,105,1467&quot;
+##      LBUS5                       NL07434                    
+## [1,] &quot;1|1:0,6:6:18:243,18,0&quot;     &quot;1|1:0,12:12:36:486,36,0&quot;  
+## [2,] &quot;0|0:20,0:20:60:0,60,819&quot;   &quot;0|0:28,0:28:84:0,84,948&quot;  
+## [3,] &quot;0|0:26,0:26:78:0,78,1077&quot;  &quot;0|1:19,20:39:99:565,0,559&quot;
+## [4,] &quot;0|0:27,0:27:81:0,81,1158&quot;  &quot;0|1:19,19:38:99:523,0,535&quot;
+## [5,] &quot;0|0:30,0:30:90:0,90,1242&quot;  &quot;0|1:22,22:44:99:593,0,651&quot;
+## [6,] &quot;0|0:36,0:36:99:0,108,1556&quot; &quot;0|1:29,25:54:99:723,0,876&quot;
+## [1] &quot;First 6 columns only.&quot;
+## [1] 
+## [1] &quot;Unique GT formats:&quot;
+## [1] &quot;GT:AD:DP:GQ:PL&quot;
+## [1]</code></pre>
+<p>This provides a summary of the information contained in the VCF data. In the genotype section, the first column is titled ‘FORMAT’ and includes fields that describe the genotype data included with each genotype. According to the VCF definition the first element must be the genotype. All subsequent data is optional according to the VCF definition. Each field is defined in the meta region. We can use ‘grep’ to search the meta slot for the definition of these fields.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#strwrap(grep(&#39;DP&#39;, vcf@meta, value = TRUE))</span>
+<span class="kw">queryMETA</span>(vcf, <span class="dt">element =</span> <span class="st">&#39;DP&#39;</span>)</code></pre></div>
+<pre><code>## [[1]]
+## [1] &quot;FORMAT=ID=DP&quot;                                                                         
+## [2] &quot;Number=1&quot;                                                                             
+## [3] &quot;Type=Integer&quot;                                                                         
+## [4] &quot;Description=Approximate read depth (reads with MQ=255 or with bad mates are filtered)&quot;
+## 
+## [[2]]
+## [1] &quot;INFO=ID=DP&quot;                                                           
+## [2] &quot;Number=1&quot;                                                             
+## [3] &quot;Type=Integer&quot;                                                         
+## [4] &quot;Description=Approximate read depth; some reads may have been filtered&quot;</code></pre>
+<p>Here ‘DP’ is defined as a ‘FORMAT’ (the genotype region) as well as in the ‘INFO’ column. We’re interested in the former. This tells us that data for depth (DP) exists, so we can extract the DP information from the genotype slot.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dp &lt;-<span class="st"> </span><span class="kw">extract.gt</span>(vcf, <span class="dt">element=</span><span class="st">&#39;DP&#39;</span>, <span class="dt">as.numeric=</span><span class="ot">TRUE</span>)</code></pre></div>
+<p>We can use this function to extract other fields by changing the value of the ‘element’ parameter. Here, we’ve specified to convert the data to a numeric. This makes sense because depth should be a number describing how many times a variant was sequenced. Some fields, such as the genotype (GT), may not be easily converted to a numeric because they contain non-numeric characters. For example, the genotype field will contain a pipe (‘|’) for phased data or a forward slash (‘/’) for unphased data. If you select a field which is non-numeric, such as the genotype, and specify as.numeric to be TRUE, you will get a numeric matrix. However, these numbers may not make much sense. Make sure to only use as.numeric=TRUE on data that actually are numeric.</p>
+</div>
+<div id="creating-boxplots-of-sequence-depth" class="section level2">
+<h2>Creating boxplots of sequence depth</h2>
+<p>Now that we have our data, we will want to visualize it. A good choice for this type of data is a box and whisker plot.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">8</span>,<span class="dv">4</span>,<span class="dv">1</span>,<span class="dv">1</span>))
+<span class="co">#boxplot(dp, las=3, col=c(&quot;#C0C0C0&quot;, &quot;#808080&quot;), ylab=&quot;Depth&quot;, log=&#39;y&#39;, las=2)</span>
+<span class="kw">boxplot</span>(dp, <span class="dt">las=</span><span class="dv">3</span>, <span class="dt">col=</span><span class="kw">c</span>(<span class="st">&quot;#C0C0C0&quot;</span>, <span class="st">&quot;#808080&quot;</span>), <span class="dt">ylab=</span><span class="st">&quot;Depth&quot;</span>, <span class="dt">las=</span><span class="dv">2</span>)
+<span class="kw">abline</span>(<span class="dt">h=</span><span class="kw">seq</span>(<span class="dv">0</span>,<span class="fl">1e4</span>, <span class="dt">by=</span><span class="dv">100</span>), <span class="dt">col=</span><span class="st">&quot;#C0C0C088&quot;</span>)</code></pre></div>
+<p><img src="sequence_coverage_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">2</span>))</code></pre></div>
+<p>This is a reasonable representation of the data. The boxplots contain 50% of the data within each box (the first and third quartiles). The majority of data beyond the first and third quartiles are contained in the whiskers. Outlying data is represented by characters, here open circles. A shortcoming of this plot is that there is a great amount of large values. This compresses the plot so that the boxes are small and the plot is dominated by outliers.</p>
+</div>
+<div id="creating-violin-plots-of-sequence-depth" class="section level2">
+<h2>Creating violin plots of sequence depth</h2>
+<p>For quality control purposes, I’m frequently happy with using boxplots. They are quick and easy to produce. If I want something a little more fancy, say for publication, I may use violin plots. This will require us to recast the data from a matrix to a data.frame, and then we can plot it with ggplot2.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">if( <span class="kw">require</span>(reshape2) &amp;<span class="st"> </span><span class="kw">require</span>(ggplot2) ){
+  dpf &lt;-<span class="st"> </span><span class="kw">melt</span>(dp, <span class="dt">varnames=</span><span class="kw">c</span>(<span class="st">&#39;Index&#39;</span>, <span class="st">&#39;Sample&#39;</span>), <span class="dt">value.name =</span> <span class="st">&#39;Depth&#39;</span>, <span class="dt">na.rm=</span><span class="ot">TRUE</span>)
+  dpf &lt;-<span class="st"> </span>dpf[ dpf$Depth &gt;<span class="st"> </span><span class="dv">0</span>,]
+  p &lt;-<span class="st"> </span><span class="kw">ggplot</span>(dpf, <span class="kw">aes</span>(<span class="dt">x=</span>Sample, <span class="dt">y=</span>Depth)) +<span class="st"> </span><span class="kw">geom_violin</span>(<span class="dt">fill=</span><span class="st">&quot;#C0C0C0&quot;</span>, <span class="dt">adjust=</span><span class="fl">1.0</span>,
+                                                         <span class="dt">scale =</span> <span class="st">&quot;count&quot;</span>, <span class="dt">trim=</span><span class="ot">TRUE</span>)
+  p &lt;-<span class="st"> </span>p +<span class="st"> </span><span class="kw">theme_bw</span>()
+  p &lt;-<span class="st"> </span>p +<span class="st"> </span><span class="kw">theme</span>(<span class="dt">axis.title.x =</span> <span class="kw">element_blank</span>(), 
+                 <span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">60</span>, <span class="dt">hjust =</span> <span class="dv">1</span>))
+<span class="co">#  p &lt;- p + stat_summary(fun.data=mean_sdl, mult=1, geom=&quot;pointrange&quot;, color=&quot;black&quot;)</span>
+  p &lt;-<span class="st"> </span>p +<span class="st"> </span><span class="kw">scale_y_continuous</span>(<span class="dt">trans=</span>scales::<span class="kw">log2_trans</span>(), 
+                              <span class="dt">breaks=</span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">10</span>, <span class="dv">100</span>, <span class="dv">800</span>),
+                              <span class="dt">minor_breaks=</span><span class="kw">c</span>(<span class="dv">1</span>:<span class="dv">10</span>, <span class="dv">2</span>:<span class="dv">10</span>*<span class="dv">10</span>, <span class="dv">2</span>:<span class="dv">8</span>*<span class="dv">100</span>))
+  p &lt;-<span class="st"> </span>p +<span class="st"> </span><span class="kw">theme</span>( <span class="dt">panel.grid.major.y=</span><span class="kw">element_line</span>(<span class="dt">color =</span> <span class="st">&quot;#A9A9A9&quot;</span>, <span class="dt">size=</span><span class="fl">0.6</span>) )
+  p &lt;-<span class="st"> </span>p +<span class="st"> </span><span class="kw">theme</span>( <span class="dt">panel.grid.minor.y=</span><span class="kw">element_line</span>(<span class="dt">color =</span> <span class="st">&quot;#C0C0C0&quot;</span>, <span class="dt">size=</span><span class="fl">0.2</span>) )
+  p
+} else {
+  <span class="kw">message</span>(<span class="st">&quot;The packages reshape2 and ggplot2 are required for this example but do not appear</span>
+<span class="st">          to be installed.  Please use install.packages(c(&#39;reshape2&#39;, &#39;ggplot2&#39;, &#39;scales&#39;)) if you would</span>
+<span class="st">          like to install them.&quot;</span>)
+}</code></pre></div>
+<p><img src="sequence_coverage_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /></p>
+<p>The violin plot presents the distribution of the data throughout its range. They also provide an easy way to apply a logarithmic transformation (here base 2) that effectively compresses large values and stretches out small values. Here we observe a large density of per variant sequence depths that are greater than ten (for the most part). This may be interpreted as having attained sufficient sequence depth for a diploid organism.</p>
+</div>
+<div id="filtering-on-sequence-depth." class="section level2">
+<h2>Filtering on sequence depth.</h2>
+<p>In order to sequence a diploid genotype, we need at least two sequence reads. Ideally, we would like some redundancy to build more confidence in our genotypes. This means we may want a lower bound on coverage for whether we call a genotype. You can also see from the plots that we have some samples that have exceptionally high sequence coverage (greater than 100). These may be variants from repetitive portions of the genome, and therefore may be desireable to exclude. Here we pull out summary statistics for each sample and use this information to filter our data. The quantile function is used to build a 90% confidence interval for each sample. We then use this information to set variants which are outside this region to missing data (NA). Lastly, we apply a minimum threshold by setting variants with coverage less than four as missing.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sums &lt;-<span class="st"> </span><span class="kw">apply</span>(dp, <span class="dt">MARGIN=</span><span class="dv">2</span>, quantile, <span class="dt">probs=</span><span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>), <span class="dt">na.rm=</span><span class="ot">TRUE</span>)
+dp2 &lt;-<span class="st"> </span><span class="kw">sweep</span>(dp, <span class="dt">MARGIN=</span><span class="dv">2</span>, <span class="dt">FUN =</span> <span class="st">&quot;-&quot;</span>, sums[<span class="dv">1</span>,])
+dp[dp2 &lt;<span class="st"> </span><span class="dv">0</span>] &lt;-<span class="st"> </span><span class="ot">NA</span>
+dp2 &lt;-<span class="st"> </span><span class="kw">sweep</span>(dp, <span class="dt">MARGIN=</span><span class="dv">2</span>, <span class="dt">FUN =</span> <span class="st">&quot;-&quot;</span>, sums[<span class="dv">2</span>,])
+dp[dp2 &gt;<span class="st"> </span><span class="dv">0</span>] &lt;-<span class="st"> </span><span class="ot">NA</span>
+dp[dp &lt;<span class="st"> </span><span class="dv">4</span>] &lt;-<span class="st"> </span><span class="ot">NA</span></code></pre></div>
+<p>Now that we’ve accomplished these manipulations, we can visualize the data using boxplots.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">8</span>,<span class="dv">4</span>,<span class="dv">1</span>,<span class="dv">1</span>))
+<span class="kw">boxplot</span>(dp, <span class="dt">las=</span><span class="dv">3</span>, <span class="dt">col=</span><span class="kw">c</span>(<span class="st">&quot;#C0C0C0&quot;</span>, <span class="st">&quot;#808080&quot;</span>), <span class="dt">ylab=</span><span class="st">&quot;Depth&quot;</span>)
+<span class="kw">abline</span>(<span class="dt">h=</span><span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">200</span>, <span class="dt">by=</span><span class="dv">20</span>), <span class="dt">col=</span><span class="st">&quot;#C0C0C088&quot;</span>)</code></pre></div>
+<p><img src="sequence_coverage_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">2</span>))</code></pre></div>
+<p>We can see that we’ve removed many of our outlier variants (circles beyond the whiskers). And our data appear much better behaved. We can now use this information to update our vcfR object.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">vcf</code></pre></div>
+<pre><code>## ***** Object of Class vcfR *****
+## 18 samples
+## 1 CHROMs
+## 22,031 variants
+## Object size: 20.9 Mb
+## 7.929 percent missing data
+## *****        *****         *****</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">is.na</span>( vcf@gt[,-<span class="dv">1</span>][ <span class="kw">is.na</span>(dp) ] ) &lt;-<span class="st"> </span><span class="ot">TRUE</span>
+vcf</code></pre></div>
+<pre><code>## ***** Object of Class vcfR *****
+## 18 samples
+## 1 CHROMs
+## 22,031 variants
+## Object size: 19.9 Mb
+## 21.06 percent missing data
+## *****        *****         *****</code></pre>
+<p>We can see that we’ve increased the amount of missing data in our vcfR object. This validated the success of our manipulation. However, we may want to use this information to further mitigate the data set.</p>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

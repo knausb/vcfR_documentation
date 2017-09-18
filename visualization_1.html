@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Brian Knaus" />
+
+<meta name="date" content="2017-09-18" />
+
+<title>Visualizing VCF data 1</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+
+
+<link rel="stylesheet" href="/home/local/USDA-ARS/knausb/R/x86_64-pc-linux-gnu-library/3.4/rmarkdown/rmarkdown/templates/html_vignette/resources/vignette.css" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Visualizing VCF data 1</h1>
+<h4 class="author"><em>Brian Knaus</em></h4>
+<h4 class="date"><em>2017-09-18</em></h4>
+
+
+
+<p>Most variant calling pipelines result in files containing large quantities of variant information. The <a href="http://samtools.github.io/hts-specs/" title="VCF format at hts-specs">variant call format (vcf)</a> is an increasingly popular format for this data. The format of these files and their content is discussed in the vignette ‘vcf data.’ These files are typically intended to be post-processed (i.e., filtered) as an attempt to remove false positives or otherwise problematic sites. The R package vcfR provides tools to facilitate this filtering as well as to visualize the effects of choices made during this process.</p>
+<div id="data-input" class="section level2">
+<h2>Data input</h2>
+<p>The input of data was covered in the vignette ‘Introduction to vcfR.’ If you haven’t read this vignette, you can with:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">vignette</span>(<span class="st">&quot;intro_to_vcfR&quot;</span>, <span class="dt">package=</span><span class="st">&quot;vcfR&quot;</span>)</code></pre></div>
+<p>For this vignette, we’ll use the example data provided in the package pinfsc50.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(vcfR)
+
+<span class="co"># Find the files.</span>
+vcf_file &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;pinf_sc50.vcf.gz&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;pinfsc50&quot;</span>)
+dna_file &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;pinf_sc50.fasta&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;pinfsc50&quot;</span>)
+gff_file &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;pinf_sc50.gff&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;pinfsc50&quot;</span>)
+
+<span class="co"># Input the files.</span>
+vcf &lt;-<span class="st"> </span><span class="kw">read.vcfR</span>(vcf_file, <span class="dt">verbose =</span> <span class="ot">FALSE</span>)
+dna &lt;-<span class="st"> </span>ape::<span class="kw">read.dna</span>(dna_file, <span class="dt">format =</span> <span class="st">&quot;fasta&quot;</span>)
+gff &lt;-<span class="st"> </span><span class="kw">read.table</span>(gff_file, <span class="dt">sep=</span><span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span>, <span class="dt">quote=</span><span class="st">&quot;&quot;</span>)
+
+<span class="co"># Create a chromR object.</span>
+chrom &lt;-<span class="st"> </span><span class="kw">create.chromR</span>(<span class="dt">name=</span><span class="st">&quot;Supercontig&quot;</span>, <span class="dt">vcf=</span>vcf, <span class="dt">seq=</span>dna, <span class="dt">ann=</span>gff, <span class="dt">verbose=</span><span class="ot">TRUE</span>)</code></pre></div>
+<pre><code>## Names in vcf:</code></pre>
+<pre><code>##   Supercontig_1.50</code></pre>
+<pre><code>## Names of sequences:</code></pre>
+<pre><code>##   Supercontig_1.50 of Phytophthora infestans T30-4</code></pre>
+<pre><code>## Warning in create.chromR(name = &quot;Supercontig&quot;, vcf = vcf, seq = dna, ann = gff, : 
+##         Names in variant data and sequence data do not match perfectly.
+##         If you choose to proceed, we&#39;ll do our best to match the data.
+##         But prepare yourself for unexpected results.</code></pre>
+<pre><code>## Names in annotation:</code></pre>
+<pre><code>##   Supercontig_1.50</code></pre>
+<pre><code>## Initializing var.info slot.</code></pre>
+<pre><code>## var.info slot initialized.</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">chrom &lt;-<span class="st"> </span><span class="kw">masker</span>(chrom, <span class="dt">min_QUAL=</span><span class="dv">0</span>, <span class="dt">min_DP=</span><span class="dv">350</span>, <span class="dt">max_DP=</span><span class="dv">650</span>, <span class="dt">min_MQ=</span><span class="fl">59.5</span>, <span class="dt">max_MQ=</span><span class="fl">60.5</span>)
+chrom &lt;-<span class="st"> </span><span class="kw">proc.chromR</span>(chrom, <span class="dt">verbose =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<pre><code>## Nucleotide regions complete.</code></pre>
+<pre><code>##   elapsed time:  0.243</code></pre>
+<pre><code>## N regions complete.</code></pre>
+<pre><code>##   elapsed time:  0.233</code></pre>
+<pre><code>## Population summary complete.</code></pre>
+<pre><code>##   elapsed time:  0.193</code></pre>
+<pre><code>## window_init complete.</code></pre>
+<pre><code>##   elapsed time:  0.001</code></pre>
+<pre><code>## windowize_fasta complete.</code></pre>
+<pre><code>##   elapsed time:  0.154</code></pre>
+<pre><code>## windowize_annotations complete.</code></pre>
+<pre><code>##   elapsed time:  0.012</code></pre>
+<pre><code>## windowize_variants complete.</code></pre>
+<pre><code>##   elapsed time:  0.001</code></pre>
+<p>The function create.chromR() reports the name of the chromosome (supercontig, contig, etc.) so that we can verify that all three data sources contain the same chromosome. We receive a warning because the names are not identical. Upon visual examination we determine that the names are synonyms and we can proceed.</p>
+<p>We can now visualize this data.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">chromoqc</span>(chrom, <span class="dt">dp.alpha =</span> <span class="dv">22</span>)</code></pre></div>
+<p><img src="visualization_1_files/figure-html/unnamed-chunk-3-1.png" /><!-- --></p>
+<p>In vcfR we refer to this form of plot as a <strong>chromo plot</strong>. This plot summarizes data from our three data sources. Annotation data is represented on the lowest plot. Features in the annotation file (e.g., gene models, exons, etc.) are represented as dark red rectangles. Above the annotation track is a sequence track. Here called nucleotides are represented in green while uncalled nucleotides (Ns) appear in red. Depending on the quality of your genome, it may include streches of uncalled nucleotides. Above the annotation track is a windowing analysis of G/C content. This track includes marginal barplots to summarize its contents, as do the tracks above it. The next track summarizes the number of variants per window. Above that we see dot plots for quality, mapping quality and read depth.</p>
+<p>One of the strengths of R is that it is interactively implemented. This means we can change things fairly rapidly. For example, we can repeat the above the above example using 10 kbp windows instead of the default 1 kbp window. If we become concerned with how our choice of window size affects our analysis, we can change it and visualize it.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">chrom &lt;-<span class="st"> </span><span class="kw">proc.chromR</span>(chrom, <span class="dt">verbose=</span><span class="ot">FALSE</span>, <span class="dt">win.size=</span><span class="fl">1e4</span>)
+<span class="kw">chromoqc</span>(chrom, <span class="dt">dp.alpha =</span> <span class="dv">22</span>)</code></pre></div>
+<p><img src="visualization_1_files/figure-html/unnamed-chunk-4-1.png" /><!-- --></p>
+<p>We’ll set the window size back to 1 kbp for the subsequent analyses.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">chrom &lt;-<span class="st"> </span><span class="kw">proc.chromR</span>(chrom, <span class="dt">verbose=</span><span class="ot">FALSE</span>, <span class="dt">win.size=</span><span class="fl">1e3</span>)</code></pre></div>
+<p>We can also use the function head() to summarize the contents of the chromR object.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(chrom)</code></pre></div>
+<pre><code>## *****   Class chromR, method head   *****
+## Name:  Supercontig
+## Length:  1,042,442
+## 
+## *****     Sample names (chromR)     *****
+## [1] &quot;BL2009P4_us23&quot; &quot;DDR7602&quot;       &quot;IN2009T1_us22&quot; &quot;LBUS5&quot;        
+## [5] &quot;NL07434&quot;       &quot;P10127&quot;       
+## [1] &quot;...&quot;
+## [1] &quot;P17777us22&quot;   &quot;P6096&quot;        &quot;P7722&quot;        &quot;RS2009P1_us8&quot;
+## [5] &quot;blue13&quot;       &quot;t30-4&quot;       
+## 
+## *****    VCF fixed data (chromR)    *****
+##      CHROM              POS   ID REF  ALT QUAL      FILTER
+## [1,] &quot;Supercontig_1.50&quot; &quot;41&quot;  NA &quot;AT&quot; &quot;A&quot; &quot;4784.43&quot; NA    
+## [2,] &quot;Supercontig_1.50&quot; &quot;136&quot; NA &quot;A&quot;  &quot;C&quot; &quot;550.27&quot;  NA    
+## [3,] &quot;Supercontig_1.50&quot; &quot;254&quot; NA &quot;T&quot;  &quot;G&quot; &quot;774.44&quot;  NA    
+## [4,] &quot;Supercontig_1.50&quot; &quot;275&quot; NA &quot;A&quot;  &quot;G&quot; &quot;714.53&quot;  NA    
+## [5,] &quot;Supercontig_1.50&quot; &quot;386&quot; NA &quot;T&quot;  &quot;G&quot; &quot;876.55&quot;  NA    
+## [6,] &quot;Supercontig_1.50&quot; &quot;462&quot; NA &quot;T&quot;  &quot;G&quot; &quot;1301.07&quot; NA    
+## [1] &quot;...&quot;
+##          CHROM              POS       ID REF  ALT QUAL      FILTER
+## [22026,] &quot;Supercontig_1.50&quot; &quot;1042176&quot; NA &quot;T&quot;  &quot;A&quot; &quot;162.59&quot;  NA    
+## [22027,] &quot;Supercontig_1.50&quot; &quot;1042196&quot; NA &quot;G&quot;  &quot;A&quot; &quot;180.86&quot;  NA    
+## [22028,] &quot;Supercontig_1.50&quot; &quot;1042198&quot; NA &quot;T&quot;  &quot;G&quot; &quot;60.27&quot;   NA    
+## [22029,] &quot;Supercontig_1.50&quot; &quot;1042303&quot; NA &quot;C&quot;  &quot;G&quot; &quot;804.15&quot;  NA    
+## [22030,] &quot;Supercontig_1.50&quot; &quot;1042396&quot; NA &quot;GA&quot; &quot;G&quot; &quot;1578.82&quot; NA    
+## [22031,] &quot;Supercontig_1.50&quot; &quot;1042398&quot; NA &quot;A&quot;  &quot;C&quot; &quot;1587.87&quot; NA    
+## 
+## INFO column has been suppressed, first INFO record:
+##  [1] &quot;AC=32&quot;                   &quot;AF=1.00&quot;                
+##  [3] &quot;AN=32&quot;                   &quot;DP=174&quot;                 
+##  [5] &quot;FS=0.000&quot;                &quot;InbreedingCoeff=-0.0224&quot;
+##  [7] &quot;MLEAC=32&quot;                &quot;MLEAF=1.00&quot;             
+##  [9] &quot;MQ=51.30&quot;                &quot;MQ0=0&quot;                  
+## [11] &quot;QD=27.50&quot;                &quot;SOR=4.103&quot;              
+## 
+## *****  VCF genotype data (chromR)  *****
+## *****     First 6 columns      *********
+##      FORMAT           BL2009P4_us23             
+## [1,] &quot;GT:AD:DP:GQ:PL&quot; &quot;1|1:0,7:7:21:283,21,0&quot;   
+## [2,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:12,0:12:36:0,36,427&quot; 
+## [3,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:27,0:27:81:0,81,1117&quot;
+## [4,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:29,0:29:87:0,87,1243&quot;
+## [5,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:26,0:26:78:0,78,1034&quot;
+## [6,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:23,0:23:69:0,69,958&quot; 
+##      DDR7602                     IN2009T1_us22              
+## [1,] &quot;1|1:0,6:6:18:243,18,0&quot;     &quot;1|1:0,8:8:24:324,24,0&quot;    
+## [2,] &quot;0|0:20,0:20:60:0,60,819&quot;   &quot;0|0:16,0:16:48:0,48,650&quot;  
+## [3,] &quot;0|0:26,0:26:78:0,78,1077&quot;  &quot;0|0:23,0:23:69:0,69,946&quot;  
+## [4,] &quot;0|0:27,0:27:81:0,81,1158&quot;  &quot;0|0:32,0:32:96:0,96,1299&quot; 
+## [5,] &quot;0|0:30,0:30:90:0,90,1242&quot;  &quot;0|0:41,0:41:99:0,122,1613&quot;
+## [6,] &quot;0|0:36,0:36:99:0,108,1556&quot; &quot;0|0:35,0:35:99:0,105,1467&quot;
+##      LBUS5                       NL07434                    
+## [1,] &quot;1|1:0,6:6:18:243,18,0&quot;     &quot;1|1:0,12:12:36:486,36,0&quot;  
+## [2,] &quot;0|0:20,0:20:60:0,60,819&quot;   &quot;0|0:28,0:28:84:0,84,948&quot;  
+## [3,] &quot;0|0:26,0:26:78:0,78,1077&quot;  &quot;0|1:19,20:39:99:565,0,559&quot;
+## [4,] &quot;0|0:27,0:27:81:0,81,1158&quot;  &quot;0|1:19,19:38:99:523,0,535&quot;
+## [5,] &quot;0|0:30,0:30:90:0,90,1242&quot;  &quot;0|1:22,22:44:99:593,0,651&quot;
+## [6,] &quot;0|0:36,0:36:99:0,108,1556&quot; &quot;0|1:29,25:54:99:723,0,876&quot;
+## 
+## *****      Var info (chromR)       *****
+## *****       First 6 columns        *****
+##              CHROM POS    MQ  DP  mask  n
+## 1 Supercontig_1.50  41 51.30 174 FALSE NA
+## 2 Supercontig_1.50 136 52.83 390 FALSE NA
+## 3 Supercontig_1.50 254 56.79 514 FALSE NA
+## 4 Supercontig_1.50 275 57.07 514 FALSE NA
+## 5 Supercontig_1.50 386 57.40 509 FALSE NA
+## 6 Supercontig_1.50 462 58.89 508 FALSE NA
+## 
+## *****      VCF mask (chromR)        *****
+## Percent unmasked: 47.09
+## 
+## *****      End head (chromR)        *****</code></pre>
+<p>The slots of the class chromR are defined in the package documentation.</p>
+</div>
+<div id="getting-to-know-your-vcf-data" class="section level2">
+<h2>Getting to know your VCF data</h2>
+<p>The VCF format is discussed in the vignette ‘vcf data’. The chromR object includes the vcfR object and all of its data. Some of this information can be quickly explored using the plot function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(chrom)</code></pre></div>
+<p><img src="visualization_1_files/figure-html/unnamed-chunk-7-1.png" /><!-- --></p>
+<p>Here we see the distribution of some quality metrics. The raw read depth and mapping quality have been extracted from the INFO column of the VCF data. The quality is from the QUAL column of the VCF data. And the variant count per window was summarized during the windowing analysis performed by proc.chromR(). The raw read depth appears fairly continuous, an observation which appears consistent with the above chromo plots. Mapping quality appears to be predominantly one value (about 60), this may not have been apparent in the chromo plots. The varaint count per window summarizes the degree of variability we’ve observed along our chromosome. The peak near zero indicates that many windows lack variants.</p>
+</div>
+<div id="conclusion" class="section level2">
+<h2>Conclusion</h2>
+<p>In this exercise we’ve explored some of the plotting functions provided in vcfR. We’ve also learned how to access some of the information contained in the vcfR data structures so we can visualize and analyze it using other R functions. It is hoped that this provides a foundation for exploring and understanding the contents of VCF files.</p>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

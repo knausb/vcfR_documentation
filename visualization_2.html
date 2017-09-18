@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Brian Knaus" />
+
+<meta name="date" content="2017-09-18" />
+
+<title>Visualizing VCF data 2</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+
+
+<link rel="stylesheet" href="/home/local/USDA-ARS/knausb/R/x86_64-pc-linux-gnu-library/3.4/rmarkdown/rmarkdown/templates/html_vignette/resources/vignette.css" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Visualizing VCF data 2</h1>
+<h4 class="author"><em>Brian Knaus</em></h4>
+<h4 class="date"><em>2017-09-18</em></h4>
+
+
+
+<p>In the vignette ‘Visualizing VCF data I’ we began to explore how to plot information contained in <a href="http://samtools.github.io/hts-specs/" title="VCF format at hts-specs">variant call format (vcf)</a> files. This perspective was mostly one of summaries over all samples for each variant. Here we build on this by exploring data based on each sample’s genotype information.</p>
+<div id="data" class="section level2">
+<h2>Data</h2>
+<p>As in other vignettes, we begin by loading the example data.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(vcfR)
+
+vcf_file &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;pinf_sc50.vcf.gz&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;pinfsc50&quot;</span>)
+dna_file &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;pinf_sc50.fasta&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;pinfsc50&quot;</span>)
+gff_file &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;pinf_sc50.gff&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;pinfsc50&quot;</span>)
+
+vcf &lt;-<span class="st"> </span><span class="kw">read.vcfR</span>(vcf_file, <span class="dt">verbose =</span> <span class="ot">FALSE</span>)
+dna &lt;-<span class="st"> </span>ape::<span class="kw">read.dna</span>(dna_file, <span class="dt">format =</span> <span class="st">&quot;fasta&quot;</span>)
+gff &lt;-<span class="st"> </span><span class="kw">read.table</span>(gff_file, <span class="dt">sep=</span><span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span>, <span class="dt">quote=</span><span class="st">&quot;&quot;</span>)
+
+chrom &lt;-<span class="st"> </span><span class="kw">create.chromR</span>(<span class="dt">name=</span><span class="st">&quot;Supercontig&quot;</span>, <span class="dt">vcf=</span>vcf, <span class="dt">seq=</span>dna, <span class="dt">ann=</span>gff, <span class="dt">verbose=</span><span class="ot">FALSE</span>)
+chrom &lt;-<span class="st"> </span><span class="kw">masker</span>(chrom, <span class="dt">min_DP =</span> <span class="dv">300</span>, <span class="dt">max_DP =</span> <span class="dv">700</span>)
+chrom &lt;-<span class="st"> </span><span class="kw">proc.chromR</span>(chrom, <span class="dt">verbose =</span> <span class="ot">FALSE</span>)</code></pre></div>
+</div>
+<div id="genotype-data" class="section level2">
+<h2>Genotype data</h2>
+<p>In the vignette ‘Visualizing VCF data I’ we explored summaries of variants made across all samples. If all samples are fairly homogenous in the qualities of these metrics, than a summary across all samples may be appropriate. However, if a few samples have very low quality, or some samples are exceptional, this may be masked by looking at summaries across all samples. By looking at the individual samples, these differences may be discovered.</p>
+<p>In order to look at the per sample information, we first need to determine what sort of data we have there. We can use the function head() to summarize the information in our Chrom object.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(chrom)</code></pre></div>
+<pre><code>## *****   Class chromR, method head   *****
+## Name:  Supercontig
+## Length:  1,042,442
+## 
+## *****     Sample names (chromR)     *****
+## [1] &quot;BL2009P4_us23&quot; &quot;DDR7602&quot;       &quot;IN2009T1_us22&quot; &quot;LBUS5&quot;        
+## [5] &quot;NL07434&quot;       &quot;P10127&quot;       
+## [1] &quot;...&quot;
+## [1] &quot;P17777us22&quot;   &quot;P6096&quot;        &quot;P7722&quot;        &quot;RS2009P1_us8&quot;
+## [5] &quot;blue13&quot;       &quot;t30-4&quot;       
+## 
+## *****    VCF fixed data (chromR)    *****
+##      CHROM              POS   ID REF  ALT QUAL      FILTER
+## [1,] &quot;Supercontig_1.50&quot; &quot;41&quot;  NA &quot;AT&quot; &quot;A&quot; &quot;4784.43&quot; NA    
+## [2,] &quot;Supercontig_1.50&quot; &quot;136&quot; NA &quot;A&quot;  &quot;C&quot; &quot;550.27&quot;  NA    
+## [3,] &quot;Supercontig_1.50&quot; &quot;254&quot; NA &quot;T&quot;  &quot;G&quot; &quot;774.44&quot;  NA    
+## [4,] &quot;Supercontig_1.50&quot; &quot;275&quot; NA &quot;A&quot;  &quot;G&quot; &quot;714.53&quot;  NA    
+## [5,] &quot;Supercontig_1.50&quot; &quot;386&quot; NA &quot;T&quot;  &quot;G&quot; &quot;876.55&quot;  NA    
+## [6,] &quot;Supercontig_1.50&quot; &quot;462&quot; NA &quot;T&quot;  &quot;G&quot; &quot;1301.07&quot; NA    
+## [1] &quot;...&quot;
+##          CHROM              POS       ID REF  ALT QUAL      FILTER
+## [22026,] &quot;Supercontig_1.50&quot; &quot;1042176&quot; NA &quot;T&quot;  &quot;A&quot; &quot;162.59&quot;  NA    
+## [22027,] &quot;Supercontig_1.50&quot; &quot;1042196&quot; NA &quot;G&quot;  &quot;A&quot; &quot;180.86&quot;  NA    
+## [22028,] &quot;Supercontig_1.50&quot; &quot;1042198&quot; NA &quot;T&quot;  &quot;G&quot; &quot;60.27&quot;   NA    
+## [22029,] &quot;Supercontig_1.50&quot; &quot;1042303&quot; NA &quot;C&quot;  &quot;G&quot; &quot;804.15&quot;  NA    
+## [22030,] &quot;Supercontig_1.50&quot; &quot;1042396&quot; NA &quot;GA&quot; &quot;G&quot; &quot;1578.82&quot; NA    
+## [22031,] &quot;Supercontig_1.50&quot; &quot;1042398&quot; NA &quot;A&quot;  &quot;C&quot; &quot;1587.87&quot; NA    
+## 
+## INFO column has been suppressed, first INFO record:
+##  [1] &quot;AC=32&quot;                   &quot;AF=1.00&quot;                
+##  [3] &quot;AN=32&quot;                   &quot;DP=174&quot;                 
+##  [5] &quot;FS=0.000&quot;                &quot;InbreedingCoeff=-0.0224&quot;
+##  [7] &quot;MLEAC=32&quot;                &quot;MLEAF=1.00&quot;             
+##  [9] &quot;MQ=51.30&quot;                &quot;MQ0=0&quot;                  
+## [11] &quot;QD=27.50&quot;                &quot;SOR=4.103&quot;              
+## 
+## *****  VCF genotype data (chromR)  *****
+## *****     First 6 columns      *********
+##      FORMAT           BL2009P4_us23             
+## [1,] &quot;GT:AD:DP:GQ:PL&quot; &quot;1|1:0,7:7:21:283,21,0&quot;   
+## [2,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:12,0:12:36:0,36,427&quot; 
+## [3,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:27,0:27:81:0,81,1117&quot;
+## [4,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:29,0:29:87:0,87,1243&quot;
+## [5,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:26,0:26:78:0,78,1034&quot;
+## [6,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:23,0:23:69:0,69,958&quot; 
+##      DDR7602                     IN2009T1_us22              
+## [1,] &quot;1|1:0,6:6:18:243,18,0&quot;     &quot;1|1:0,8:8:24:324,24,0&quot;    
+## [2,] &quot;0|0:20,0:20:60:0,60,819&quot;   &quot;0|0:16,0:16:48:0,48,650&quot;  
+## [3,] &quot;0|0:26,0:26:78:0,78,1077&quot;  &quot;0|0:23,0:23:69:0,69,946&quot;  
+## [4,] &quot;0|0:27,0:27:81:0,81,1158&quot;  &quot;0|0:32,0:32:96:0,96,1299&quot; 
+## [5,] &quot;0|0:30,0:30:90:0,90,1242&quot;  &quot;0|0:41,0:41:99:0,122,1613&quot;
+## [6,] &quot;0|0:36,0:36:99:0,108,1556&quot; &quot;0|0:35,0:35:99:0,105,1467&quot;
+##      LBUS5                       NL07434                    
+## [1,] &quot;1|1:0,6:6:18:243,18,0&quot;     &quot;1|1:0,12:12:36:486,36,0&quot;  
+## [2,] &quot;0|0:20,0:20:60:0,60,819&quot;   &quot;0|0:28,0:28:84:0,84,948&quot;  
+## [3,] &quot;0|0:26,0:26:78:0,78,1077&quot;  &quot;0|1:19,20:39:99:565,0,559&quot;
+## [4,] &quot;0|0:27,0:27:81:0,81,1158&quot;  &quot;0|1:19,19:38:99:523,0,535&quot;
+## [5,] &quot;0|0:30,0:30:90:0,90,1242&quot;  &quot;0|1:22,22:44:99:593,0,651&quot;
+## [6,] &quot;0|0:36,0:36:99:0,108,1556&quot; &quot;0|1:29,25:54:99:723,0,876&quot;
+## 
+## *****      Var info (chromR)       *****
+## *****       First 6 columns        *****
+##              CHROM POS    MQ  DP  mask  n
+## 1 Supercontig_1.50  41 51.30 174 FALSE NA
+## 2 Supercontig_1.50 136 52.83 390  TRUE 17
+## 3 Supercontig_1.50 254 56.79 514  TRUE 17
+## 4 Supercontig_1.50 275 57.07 514  TRUE 17
+## 5 Supercontig_1.50 386 57.40 509  TRUE 16
+## 6 Supercontig_1.50 462 58.89 508  TRUE 17
+## 
+## *****      VCF mask (chromR)        *****
+## Percent unmasked: 70.7
+## 
+## *****      End head (chromR)        *****</code></pre>
+<p>Recall from the vignette ‘vcf data’ that the genotype information begins at column nine from the file. This column specifies the format of all subsequent columns. All columns subsequent to this column contain information for each sample where each column corresponds to a sample. We see form the output of head() that our genotype data contains GT:AD:DP:GQ:PL data. These abbreviations are defined in the meta portion of the file. Observation of the first few rows of genotype information shows the format as 1|1:0,7:7:21:283,21,0. These are colon delimited values, as in the format column. Because the genotypes are not strictly numeric (they contain a slash to delimit unphased data and a pipe to delimit phased data) we won’t be able to treat this as numeric information. Read depth (DP) is numeric, and we’ll use that in subsequent examples.</p>
+</div>
+<div id="using-extract.gt" class="section level2">
+<h2>Using extract.gt</h2>
+<p>The genotype region of VCF data contains several values for each sample and each variant. We can extract one of these colon delimited values using the function <strong>extract.gt()</strong>. This function determines the position of the desired element in the FORMAT column and uses this information to extract the same position from all of the other samples in that row. This is performed on a row by row basis so that files containing heterogeneous FORMAT specifications can be processed. Here we’ve asked the function to convert the resulting matrix to a numeric matrix. This is because we’ve determined, above, that this is indeed numeric data. But be careful with this option! If the data are not numeric it will do its best to convert the data and will probably not throw an error. It’s up to the user (<em>this means you</em>) to make sure this is a reasonable decision.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dp &lt;-<span class="st"> </span><span class="kw">extract.gt</span>(chrom, <span class="dt">element=</span><span class="st">&quot;DP&quot;</span>, <span class="dt">as.numeric=</span><span class="ot">TRUE</span>)
+<span class="kw">rownames</span>(dp) &lt;-<span class="st"> </span><span class="dv">1</span>:<span class="kw">nrow</span>(dp)
+<span class="kw">head</span>(dp)</code></pre></div>
+<pre><code>##   BL2009P4_us23 DDR7602 IN2009T1_us22 LBUS5 NL07434 P10127 P10650 P11633
+## 1             7       6             8     6      12      6      4      6
+## 2            12      20            16    20      28      9      8     11
+## 3            27      26            23    26      39     22      8     11
+## 4            29      27            32    27      38     22      7     10
+## 5            26      30            41    30      44     18     11     11
+## 6            23      36            35    36      54     18     20     18
+##   P12204 P13527 P1362 P13626 P17777us22 P6096 P7722 RS2009P1_us8 blue13
+## 1      1      7    NA     13         14     6    NA            6     16
+## 2      6     29     1     41         33    11    NA           21     31
+## 3      6     47     3     58         58    11    NA           28     71
+## 4      4     44     5     70         62    10    NA           35     63
+## 5     NA     29     3     62         49    11    NA           38     60
+## 6      1     37     4     48         52    18    NA           27     68
+##   t30-4
+## 1     2
+## 2     3
+## 3     2
+## 4     2
+## 5     4
+## 6     7</code></pre>
+<p>Once we’ve extracted the desired element, we’ll want to visualize the resulting matrix of data. The head() statement above gives us a peak at what it looks like. But it doesn’t allow us to view the entire matrix. The function <strong>heatmap.bp()</strong> helps us to visualize a matrix of data.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">heatmap.bp</span>(dp[<span class="dv">1001</span>:<span class="dv">1500</span>,])</code></pre></div>
+<p><img src="visualization_2_files/figure-html/unnamed-chunk-4-1.png" /><!-- --></p>
+<p>The plot that results from heatmap.bp() shows samples in columns and variants in rows. Marginal barplots summarize sums of the rows and columns. The color ramp, at the right, is parameterized for continuous data. In the above plot, yellow is a high number of high quality bases violet is a low number of high quality bases. If you ask the function to visualize more values than the screen has pixels, some form of interpolation is performed. Because of this I suggest using this function for no more than about 1,000 variants.</p>
+</div>
+<div id="interpretation-of-zeros" class="section level2">
+<h2>Interpretation of zeros</h2>
+<p>The presence of zeros in a dataset presents a conundrum. Sometimes, the presence of zero valued data represents the positive determination that there is zero valued data. For example, if we went to the grocery store and at the checkout counter we could count that we have three bananas, two oranges but zero apples when we know the store had apples. This means that we know that we did not want any apples as opposed to the store not having apples, or perhaps we just forgot to look, or a number of other scenarios. Alternatively, the presences of zero valued data indicates that there is missing data. This would be similar to counting how many bananas and oranges are in our basket, but not reporting on the number of apples. We do not know if there are zero apples, or we just didn’t count the apples. For our sequence depth, a zero value may indicate that the nucleotide exists in the reference sequence but not in the resequenced sample. Alternatively, it may mean that the resequenced sample was not sequenced at sufficient depth to detect its presence. In the present example, we may interpret zero data as missing data. Therefore, we should re-encode zero data as NA data.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">is.na</span>(dp[<span class="kw">na.omit</span>(dp ==<span class="st"> </span><span class="dv">0</span>)]) &lt;-<span class="st"> </span><span class="ot">TRUE</span></code></pre></div>
+<p>And re-visualize.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">heatmap.bp</span>(dp[<span class="dv">1001</span>:<span class="dv">1500</span>,])</code></pre></div>
+<p><img src="visualization_2_files/figure-html/unnamed-chunk-6-1.png" /><!-- --></p>
+<p>There are some important differences among the two above plots. In the first plot there are missing data, but there are also sites where there is a read depth of zero. The difference is that in the first plot, zero data are coded as dark violet while missing data are coded as white (a color that is not present in the color ramp). In the second plot, the zero data were recoded as missing so they now stand out better. One of the downsides of the heatmap is that it tells up what is high valued or low, but it does not tell us the actual values. We can use a barplot to inform us of this information.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">8</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">2</span>))
+<span class="kw">barplot</span>(<span class="kw">apply</span>(dp, <span class="dt">MARGIN=</span><span class="dv">2</span>, mean, <span class="dt">na.rm=</span><span class="ot">TRUE</span>), <span class="dt">las=</span><span class="dv">3</span>)</code></pre></div>
+<p><img src="visualization_2_files/figure-html/unnamed-chunk-7-1.png" /><!-- --></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">2</span>))</code></pre></div>
+<p>Here we see that the mean number of high quality bases per variant is quite high for most samples. The sample p1362 appears to have an abundance of missing data in the heatmap. In the barplot we’ve validated that this sample lacks information. At the other end of the spectrum, the sample NL07434 has a high average coverage as seen in the heatmap, and in the barplot we can see that this value is just over 40.</p>
+</div>
+<div id="conclusion" class="section level2">
+<h2>Conclusion</h2>
+<p>Now that we know our way around our chromosome it may be time to make some decisions. Regions which do not meet our expectations may need extra work to make sure they are of high quality. Alternatively, we may simply wish to censor these regions and focus on the high quality fraction of the data. Once we’ve gained a familiarity with the data contained in our VCF file we can make informed decisions on how best to process it.</p>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

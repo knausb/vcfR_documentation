@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Brian J. Knaus" />
+
+<meta name="date" content="2017-09-18" />
+
+<title>Ranking data</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+
+
+<link rel="stylesheet" href="/home/local/USDA-ARS/knausb/R/x86_64-pc-linux-gnu-library/3.4/rmarkdown/rmarkdown/templates/html_vignette/resources/vignette.css" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Ranking data</h1>
+<h4 class="author"><em>Brian J. Knaus</em></h4>
+<h4 class="date"><em>2017-09-18</em></h4>
+
+
+
+<p>In the vignette ‘Filtering data’ we used thresholds as an attempt to isolate the high quality fraction of variants from a VCF file. Here we assign ranks to variants within windows. This information used alone, or in conjunction with thresholds, may be an effective strategy to identify high quality variants.</p>
+<div id="data" class="section level2">
+<h2>Data</h2>
+<p>As in other vignettes, we begin by loading the example data.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(vcfR)
+
+vcf_file &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;pinf_sc50.vcf.gz&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;pinfsc50&quot;</span>)
+dna_file &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;pinf_sc50.fasta&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;pinfsc50&quot;</span>)
+gff_file &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;pinf_sc50.gff&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;pinfsc50&quot;</span>)
+
+vcf &lt;-<span class="st"> </span><span class="kw">read.vcfR</span>(vcf_file, <span class="dt">verbose =</span> <span class="ot">FALSE</span>)
+dna &lt;-<span class="st"> </span>ape::<span class="kw">read.dna</span>(dna_file, <span class="dt">format =</span> <span class="st">&quot;fasta&quot;</span>)
+gff &lt;-<span class="st"> </span><span class="kw">read.table</span>(gff_file, <span class="dt">sep=</span><span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span>, <span class="dt">quote =</span> <span class="st">&quot;&quot;</span>)
+
+chrom &lt;-<span class="st"> </span><span class="kw">create.chromR</span>(<span class="dt">name=</span><span class="st">&quot;Supercontig&quot;</span>, <span class="dt">vcf=</span>vcf, <span class="dt">seq=</span>dna, <span class="dt">ann=</span>gff, <span class="dt">verbose=</span><span class="ot">FALSE</span>)
+<span class="co">#chrom &lt;- masker(chrom, min_DP = 900, max_DP = 1500)</span>
+chrom &lt;-<span class="st"> </span><span class="kw">proc.chromR</span>(chrom, <span class="dt">verbose =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<pre><code>## Nucleotide regions complete.</code></pre>
+<pre><code>##   elapsed time:  0.243</code></pre>
+<pre><code>## N regions complete.</code></pre>
+<pre><code>##   elapsed time:  0.227</code></pre>
+<pre><code>## Population summary complete.</code></pre>
+<pre><code>##   elapsed time:  0.233</code></pre>
+<pre><code>## window_init complete.</code></pre>
+<pre><code>##   elapsed time:  0.001</code></pre>
+<pre><code>## windowize_fasta complete.</code></pre>
+<pre><code>##   elapsed time:  0.156</code></pre>
+<pre><code>## windowize_annotations complete.</code></pre>
+<pre><code>##   elapsed time:  0.013</code></pre>
+<pre><code>## windowize_variants complete.</code></pre>
+<pre><code>##   elapsed time:  0</code></pre>
+</div>
+<div id="creating-scores-to-rank" class="section level2">
+<h2>Creating scores to rank</h2>
+<p>Before we can rank our variants, we need to come up with some sort of criteria to help us determine if a variant is high or low quality. Once we have this score we can select the variant with the highest score from each window. In order to create our vector of scores, let’s remind ourselves of what data we have.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(chrom)</code></pre></div>
+<pre><code>## *****   Class chromR, method head   *****
+## Name:  Supercontig
+## Length:  1,042,442
+## 
+## *****     Sample names (chromR)     *****
+## [1] &quot;BL2009P4_us23&quot; &quot;DDR7602&quot;       &quot;IN2009T1_us22&quot; &quot;LBUS5&quot;        
+## [5] &quot;NL07434&quot;       &quot;P10127&quot;       
+## [1] &quot;...&quot;
+## [1] &quot;P17777us22&quot;   &quot;P6096&quot;        &quot;P7722&quot;        &quot;RS2009P1_us8&quot;
+## [5] &quot;blue13&quot;       &quot;t30-4&quot;       
+## 
+## *****    VCF fixed data (chromR)    *****
+##      CHROM              POS   ID REF  ALT QUAL      FILTER
+## [1,] &quot;Supercontig_1.50&quot; &quot;41&quot;  NA &quot;AT&quot; &quot;A&quot; &quot;4784.43&quot; NA    
+## [2,] &quot;Supercontig_1.50&quot; &quot;136&quot; NA &quot;A&quot;  &quot;C&quot; &quot;550.27&quot;  NA    
+## [3,] &quot;Supercontig_1.50&quot; &quot;254&quot; NA &quot;T&quot;  &quot;G&quot; &quot;774.44&quot;  NA    
+## [4,] &quot;Supercontig_1.50&quot; &quot;275&quot; NA &quot;A&quot;  &quot;G&quot; &quot;714.53&quot;  NA    
+## [5,] &quot;Supercontig_1.50&quot; &quot;386&quot; NA &quot;T&quot;  &quot;G&quot; &quot;876.55&quot;  NA    
+## [6,] &quot;Supercontig_1.50&quot; &quot;462&quot; NA &quot;T&quot;  &quot;G&quot; &quot;1301.07&quot; NA    
+## [1] &quot;...&quot;
+##          CHROM              POS       ID REF  ALT QUAL      FILTER
+## [22026,] &quot;Supercontig_1.50&quot; &quot;1042176&quot; NA &quot;T&quot;  &quot;A&quot; &quot;162.59&quot;  NA    
+## [22027,] &quot;Supercontig_1.50&quot; &quot;1042196&quot; NA &quot;G&quot;  &quot;A&quot; &quot;180.86&quot;  NA    
+## [22028,] &quot;Supercontig_1.50&quot; &quot;1042198&quot; NA &quot;T&quot;  &quot;G&quot; &quot;60.27&quot;   NA    
+## [22029,] &quot;Supercontig_1.50&quot; &quot;1042303&quot; NA &quot;C&quot;  &quot;G&quot; &quot;804.15&quot;  NA    
+## [22030,] &quot;Supercontig_1.50&quot; &quot;1042396&quot; NA &quot;GA&quot; &quot;G&quot; &quot;1578.82&quot; NA    
+## [22031,] &quot;Supercontig_1.50&quot; &quot;1042398&quot; NA &quot;A&quot;  &quot;C&quot; &quot;1587.87&quot; NA    
+## 
+## INFO column has been suppressed, first INFO record:
+##  [1] &quot;AC=32&quot;                   &quot;AF=1.00&quot;                
+##  [3] &quot;AN=32&quot;                   &quot;DP=174&quot;                 
+##  [5] &quot;FS=0.000&quot;                &quot;InbreedingCoeff=-0.0224&quot;
+##  [7] &quot;MLEAC=32&quot;                &quot;MLEAF=1.00&quot;             
+##  [9] &quot;MQ=51.30&quot;                &quot;MQ0=0&quot;                  
+## [11] &quot;QD=27.50&quot;                &quot;SOR=4.103&quot;              
+## 
+## *****  VCF genotype data (chromR)  *****
+## *****     First 6 columns      *********
+##      FORMAT           BL2009P4_us23             
+## [1,] &quot;GT:AD:DP:GQ:PL&quot; &quot;1|1:0,7:7:21:283,21,0&quot;   
+## [2,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:12,0:12:36:0,36,427&quot; 
+## [3,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:27,0:27:81:0,81,1117&quot;
+## [4,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:29,0:29:87:0,87,1243&quot;
+## [5,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:26,0:26:78:0,78,1034&quot;
+## [6,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:23,0:23:69:0,69,958&quot; 
+##      DDR7602                     IN2009T1_us22              
+## [1,] &quot;1|1:0,6:6:18:243,18,0&quot;     &quot;1|1:0,8:8:24:324,24,0&quot;    
+## [2,] &quot;0|0:20,0:20:60:0,60,819&quot;   &quot;0|0:16,0:16:48:0,48,650&quot;  
+## [3,] &quot;0|0:26,0:26:78:0,78,1077&quot;  &quot;0|0:23,0:23:69:0,69,946&quot;  
+## [4,] &quot;0|0:27,0:27:81:0,81,1158&quot;  &quot;0|0:32,0:32:96:0,96,1299&quot; 
+## [5,] &quot;0|0:30,0:30:90:0,90,1242&quot;  &quot;0|0:41,0:41:99:0,122,1613&quot;
+## [6,] &quot;0|0:36,0:36:99:0,108,1556&quot; &quot;0|0:35,0:35:99:0,105,1467&quot;
+##      LBUS5                       NL07434                    
+## [1,] &quot;1|1:0,6:6:18:243,18,0&quot;     &quot;1|1:0,12:12:36:486,36,0&quot;  
+## [2,] &quot;0|0:20,0:20:60:0,60,819&quot;   &quot;0|0:28,0:28:84:0,84,948&quot;  
+## [3,] &quot;0|0:26,0:26:78:0,78,1077&quot;  &quot;0|1:19,20:39:99:565,0,559&quot;
+## [4,] &quot;0|0:27,0:27:81:0,81,1158&quot;  &quot;0|1:19,19:38:99:523,0,535&quot;
+## [5,] &quot;0|0:30,0:30:90:0,90,1242&quot;  &quot;0|1:22,22:44:99:593,0,651&quot;
+## [6,] &quot;0|0:36,0:36:99:0,108,1556&quot; &quot;0|1:29,25:54:99:723,0,876&quot;
+## 
+## *****      Var info (chromR)       *****
+## *****       First 6 columns        *****
+##              CHROM POS    MQ  DP mask  n
+## 1 Supercontig_1.50  41 51.30 174 TRUE 16
+## 2 Supercontig_1.50 136 52.83 390 TRUE 17
+## 3 Supercontig_1.50 254 56.79 514 TRUE 17
+## 4 Supercontig_1.50 275 57.07 514 TRUE 17
+## 5 Supercontig_1.50 386 57.40 509 TRUE 16
+## 6 Supercontig_1.50 462 58.89 508 TRUE 17
+## 
+## *****      VCF mask (chromR)        *****
+## Percent unmasked: 100
+## 
+## *****      End head (chromR)        *****</code></pre>
+<p>Let’s use the genotype quality (GQ) and sequence depth (DP) from the VCF genotype information. We can isolate matrices of genotype quality and sequence depth with the extract.gt function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gq &lt;-<span class="st"> </span><span class="kw">extract.gt</span>(chrom, <span class="dt">element=</span><span class="st">&quot;GQ&quot;</span>, <span class="dt">as.numeric=</span><span class="ot">TRUE</span>)
+dp &lt;-<span class="st"> </span><span class="kw">extract.gt</span>(chrom, <span class="dt">element=</span><span class="st">&quot;DP&quot;</span>, <span class="dt">as.numeric=</span><span class="ot">TRUE</span>)</code></pre></div>
+<p>We can visualize these data with box and whisker plots.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#hist(gq[,1])</span>
+<span class="kw">par</span>( <span class="dt">mar =</span> <span class="kw">c</span>(<span class="dv">8</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">2</span>) )
+<span class="kw">boxplot</span>(gq, <span class="dt">las=</span><span class="dv">2</span>, <span class="dt">col=</span><span class="dv">2</span>:<span class="dv">5</span>, <span class="dt">main=</span><span class="st">&quot;Genotype Quality (GQ)&quot;</span>)</code></pre></div>
+<p><img src="ranking_data_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dp2 &lt;-<span class="st"> </span>dp
+dp2[ dp2 ==<span class="st"> </span><span class="dv">0</span> ] &lt;-<span class="st"> </span><span class="ot">NA</span>
+<span class="kw">boxplot</span>(dp2, <span class="dt">las=</span><span class="dv">2</span>, <span class="dt">col=</span><span class="dv">2</span>:<span class="dv">5</span>, <span class="dt">main=</span><span class="st">&quot;Sequence Depth (DP)&quot;</span>, <span class="dt">log=</span><span class="st">&quot;y&quot;</span>)
+<span class="kw">abline</span>(<span class="dt">h=</span><span class="dv">10</span>^<span class="kw">c</span>(<span class="dv">0</span>:<span class="dv">4</span>), <span class="dt">lty=</span><span class="dv">3</span>, <span class="dt">col=</span><span class="st">&quot;#808080&quot;</span>)</code></pre></div>
+<p><img src="ranking_data_files/figure-html/unnamed-chunk-4-2.png" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>( <span class="dt">mar =</span> <span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">2</span>) )</code></pre></div>
+<p>The values for genotype quality appear to range from 0 to 100 with among sample variability. For example, sample P13626 consists of variants which are predominantly near 100 while sample P1362 consists of variants with qualities mostly just below 20. Comparison of the plots suggests that there is a correlation among sequence depth (DP) and genotype qualities (GQ) where samples with variants of high sequence depth have variants of high genotype quality.</p>
+<p>Unlike genotype quality, we don’t necessarily want to maximize on sequence depth. Low depth variants may make obvious poor choices, but excessive coverage may represent variants from repetitive regions of the genome. What we really want to optimize on is mean depth, or some other measure of central tendency. This will require a little mathematical gymnastics. If we substract from each library its mean (or other measure of central tendency) it will center the data around zero. We can then take an absolute value which will cause the data to range from zero to some infinite number with zero being our optimal value (the measure of central tendency). The algorithm we’re going to use looks for an optimum and not a minimum, so if we multiply by negative one our data will range from negative infinity to zero with zero being optimal. We now have a measure of depth where the greatest value is the optimal value.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mids &lt;-<span class="st"> </span><span class="kw">apply</span>(dp, <span class="dt">MARGIN=</span><span class="dv">2</span>, median, <span class="dt">na.rm=</span><span class="ot">TRUE</span>)
+dp2 &lt;-<span class="st"> </span><span class="kw">sweep</span>(dp, <span class="dt">MARGIN=</span><span class="dv">2</span>, mids, <span class="dt">FUN=</span><span class="st">&quot;-&quot;</span>)
+dp2 &lt;-<span class="st"> </span><span class="kw">abs</span>(dp2)
+dp2 &lt;-<span class="st"> </span>-<span class="dv">1</span> *<span class="st"> </span>dp2</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>( <span class="dt">mar =</span> <span class="kw">c</span>(<span class="dv">8</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">2</span>) )
+<span class="kw">boxplot</span>(dp2, <span class="dt">las=</span><span class="dv">2</span>, <span class="dt">col=</span><span class="dv">2</span>:<span class="dv">5</span>, <span class="dt">main=</span><span class="st">&quot;Sequence Depth (DP)&quot;</span>)</code></pre></div>
+<p><img src="ranking_data_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>( <span class="dt">mar =</span> <span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">2</span>) )</code></pre></div>
+<p>Before we combine these data we have one more issue we need to address. In their current state, sequence depth’s range is much greater than genotype quality. This means that the data are effectively weighted, if we simply add them together the sequence depth will have a greater impact on the final metric than will genotype quality. If we are happy with that then we can proceed. If we would like to equalize each metric’s contribution to our final measure of quality we’ll want to normalize the data. The genotype quality data is fairly straight forward. If we divide each library by 100 (their theoretical maximum) they will scale from 0 to 1 instead of 0 to 100. For the sequence depth we can add the absolute value of the minimum value to each library, this will make all of the data positive. Then we can divide by this value and our data should then scale from 0 to 1.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gq2 &lt;-<span class="st"> </span>gq/<span class="dv">100</span>
+<span class="kw">range</span>(gq2, <span class="dt">na.rm=</span><span class="ot">TRUE</span>)</code></pre></div>
+<pre><code>## [1] 0.00 0.99</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">amins &lt;-<span class="st"> </span><span class="kw">abs</span>(<span class="kw">apply</span>(dp2, <span class="dt">MARGIN=</span><span class="dv">2</span>, min, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))
+dp2 &lt;-<span class="st"> </span><span class="kw">sweep</span>(dp2, <span class="dt">MARGIN=</span><span class="dv">2</span>, <span class="dt">STATS =</span> amins, <span class="dt">FUN=</span><span class="st">&quot;+&quot;</span>)
+dp2 &lt;-<span class="st"> </span><span class="kw">sweep</span>(dp2, <span class="dt">MARGIN=</span><span class="dv">2</span>, <span class="dt">STATS =</span> amins, <span class="dt">FUN=</span><span class="st">&quot;/&quot;</span>)
+<span class="kw">range</span>(dp2, <span class="dt">na.rm=</span><span class="ot">TRUE</span>)</code></pre></div>
+<pre><code>## [1] 0 1</code></pre>
+<p>We now have metrics which are fairly equal. We can add them together and summarize over variants.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scores &lt;-<span class="st"> </span>dp2 +<span class="st"> </span>gq2
+scores &lt;-<span class="st"> </span><span class="kw">rowSums</span>(scores, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<p>Check their distribution with a histogram.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hist</span>(scores, <span class="dt">col=</span><span class="dv">4</span>)</code></pre></div>
+<p><img src="ranking_data_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" /></p>
+<p>Once we have scores in hand we can use them to rank our variants.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">chrom &lt;-<span class="st"> </span><span class="kw">rank.variants.chromR</span>(chrom, scores)
+<span class="kw">head</span>(chrom@var.info)</code></pre></div>
+<pre><code>##              CHROM POS    MQ  DP mask  n Allele_counts        He       Ne
+## 1 Supercontig_1.50  41 51.30 174 TRUE 16          0,32 0.0000000 1.000000
+## 2 Supercontig_1.50 136 52.83 390 TRUE 17          32,2 0.1107266 1.124514
+## 3 Supercontig_1.50 254 56.79 514 TRUE 17          31,3 0.1608997 1.191753
+## 4 Supercontig_1.50 275 57.07 514 TRUE 17          31,3 0.1608997 1.191753
+## 5 Supercontig_1.50 386 57.40 509 TRUE 16          29,3 0.1699219 1.204706
+## 6 Supercontig_1.50 462 58.89 508 TRUE 17          31,3 0.1608997 1.191753
+##   window_number rank
+## 1             0   16
+## 2             0   13
+## 3             0    9
+## 4             0   10
+## 5             0   14
+## 6             0    2</code></pre>
+<p>This creates a vector of window numbers and rank within each window and adds them to the var.info slot of the chromR object. We can take a look at them bay calling this directly.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(chrom@var.info[,<span class="kw">c</span>(<span class="st">&#39;POS&#39;</span>, <span class="st">&#39;MQ&#39;</span>, <span class="st">&#39;DP&#39;</span>, <span class="st">&#39;window_number&#39;</span>, <span class="st">&#39;rank&#39;</span>)])</code></pre></div>
+<pre><code>##   POS    MQ  DP window_number rank
+## 1  41 51.30 174             0   16
+## 2 136 52.83 390             0   13
+## 3 254 56.79 514             0    9
+## 4 275 57.07 514             0   10
+## 5 386 57.40 509             0   14
+## 6 462 58.89 508             0    2</code></pre>
+<p>We can use this information to create our mask.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">chrom@var.info$mask[chrom@var.info$rank &gt;<span class="st"> </span><span class="dv">1</span>] &lt;-<span class="st"> </span><span class="ot">FALSE</span></code></pre></div>
+<p>And plot.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">chromoqc</span>(chrom, <span class="dt">dp.alpha=</span><span class="st">&#39;66&#39;</span>)</code></pre></div>
+<p><img src="ranking_data_files/figure-html/unnamed-chunk-13-1.png" /><!-- --></p>
+<p>This looks pretty good. But we still have variants with rather high or low depth. We can combine the use of masker, which we explored in the vignette ‘Filtering data’ with our ranks. We’ll first call masker, which will reset our mask, and then censor this mask based on rank.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">chrom &lt;-<span class="st"> </span><span class="kw">masker</span>( chrom, <span class="dt">min_QUAL=</span><span class="dv">0</span>, <span class="dt">min_DP=</span><span class="dv">350</span>, <span class="dt">max_DP=</span><span class="dv">650</span>, <span class="dt">min_MQ=</span><span class="fl">59.5</span>, <span class="dt">max_MQ=</span><span class="fl">60.5</span> )
+chrom@var.info$mask[ chrom@var.info$rank &gt;<span class="st"> </span><span class="dv">1</span> ] &lt;-<span class="st"> </span><span class="ot">FALSE</span></code></pre></div>
+<p>Then replot.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">chromoqc</span>(chrom, <span class="dt">dp.alpha=</span><span class="st">&#39;66&#39;</span>)</code></pre></div>
+<p><img src="ranking_data_files/figure-html/unnamed-chunk-15-1.png" /><!-- --></p>
+</div>
+<div id="conclusion" class="section level2">
+<h2>Conclusion</h2>
+<p>This provides another tool to help filter variant files to the highest quality fraction. In a previous vignette we used the function masker() to filter the data. Here we’ve created a composite score which we’d like to maximize and ranked the variants based on theis score within windows. A strength of this method is that by using windows we’re able to evenly space our variants accross a chromosome. Choosing the best, or several best, variants per window does not necessarily guaranty high quality variants. If all of the variants in a window are of low quality then the best of these may still be poor quality. Some some additional processing may be necessary. With these tools it is hoped that an individual can rapidly explore their data and determine a method to extract the highest quality variants so that downstream analyses will be of the highest quality possible.</p>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

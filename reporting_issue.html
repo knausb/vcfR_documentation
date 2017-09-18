@@ -211,6 +211,21 @@ $(document).ready(function () {
       <a href="chromR_object.html">chromR objects</a>
     </li>
     <li>
+      <a href="visualization_1.html">Visualization 1</a>
+    </li>
+    <li>
+      <a href="visualization_2.html">Visualization 2</a>
+    </li>
+    <li>
+      <a href="sequence_coverage.html">Sequence coverage</a>
+    </li>
+    <li>
+      <a href="filtering_data.html">Filtering data</a>
+    </li>
+    <li>
+      <a href="ranking_data.html">Ranking data</a>
+    </li>
+    <li>
       <a href="windowing.html">Windowing</a>
     </li>
     <li>
@@ -398,7 +413,7 @@ vcfR_test@gt</code></pre>
 <p>Once you have some data, you should provide a few lines of code that reproduces the issue. If you can forward this data, code, and any error or warning messages to me (or post it as an issue) it should help me troubleshoot this matter. Better yet, if you use <a href="http://rmarkdown.rstudio.com/">RMarkdown</a>, sharing your *.Rmd and its compiled output from your system illustrating the matter (usually *.html), that would be great.</p>
 <p>Lastly, it never hurts to report your session information to validate this is not a version issue. Mine is as follows.</p>
 <pre class="r"><code>sessionInfo()</code></pre>
-<pre><code>## R version 3.4.0 (2017-04-21)
+<pre><code>## R version 3.4.1 (2017-06-30)
 ## Platform: x86_64-pc-linux-gnu (64-bit)
 ## Running under: Ubuntu 16.04.2 LTS
 ## 
@@ -419,33 +434,34 @@ vcfR_test@gt</code></pre>
 ## [8] base     
 ## 
 ## other attached packages:
-##  [1] RColorBrewer_1.1-2 memuse_3.0-1       poppr_2.4.1       
-##  [4] adegenet_2.0.1     ade4_1.7-6         pinfsc50_1.1.0    
-##  [7] cowplot_0.7.0      ggplot2_2.2.1      reshape2_1.4.2    
-## [10] vcfR_1.5.0.9000    rmarkdown_1.5     
+##  [1] RColorBrewer_1.1-2 memuse_3.0-1       poppr_2.5.0       
+##  [4] adegenet_2.0.1     ade4_1.7-8         pinfsc50_1.1.0    
+##  [7] cowplot_0.8.0      ggplot2_2.2.1      reshape2_1.4.2    
+## [10] vcfR_1.5.0.9000    rmarkdown_1.6     
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] phangorn_2.2.0    gtools_3.5.0      splines_3.4.0    
-##  [4] lattice_0.20-35   expm_0.999-2      colorspace_1.3-2 
-##  [7] htmltools_0.3.6   viridisLite_0.2.0 pegas_0.10       
-## [10] yaml_2.1.14       mgcv_1.8-17       rlang_0.1.1      
-## [13] DBI_0.6-1         glue_1.1.0        sp_1.2-4         
-## [16] plyr_1.8.4        stringr_1.2.0     munsell_0.4.3    
-## [19] gtable_0.2.0      coda_0.19-1       evaluate_0.10    
-## [22] labeling_0.3      knitr_1.16        permute_0.9-4    
-## [25] httpuv_1.3.3      spdep_0.6-13      highr_0.6        
-## [28] Rcpp_0.12.11      xtable_1.8-2      scales_0.4.1     
-## [31] backports_1.1.0   formatR_1.5       gdata_2.17.0     
-## [34] vegan_2.4-3       mime_0.5          deldir_0.1-14    
-## [37] fastmatch_1.1-0   digest_0.6.12     stringi_1.1.5    
-## [40] gmodels_2.16.2    dplyr_0.7.0       shiny_1.0.3      
-## [43] grid_3.4.0        rprojroot_1.2     quadprog_1.5-5   
-## [46] tools_3.4.0       LearnBayes_2.15   magrittr_1.5     
-## [49] lazyeval_0.2.0    tibble_1.3.3      cluster_2.0.6    
-## [52] ape_4.1           seqinr_3.3-6      MASS_7.3-47      
-## [55] Matrix_1.2-10     assertthat_0.2.0  R6_2.2.1         
-## [58] boot_1.3-19       igraph_1.0.1      nlme_3.1-131     
-## [61] compiler_3.4.0</code></pre>
+##  [1] Rcpp_0.12.12      ape_4.1           lattice_0.20-35  
+##  [4] deldir_0.1-14     gtools_3.5.0      assertthat_0.2.0 
+##  [7] rprojroot_1.2     digest_0.6.12     mime_0.5         
+## [10] R6_2.2.2          plyr_1.8.4        backports_1.1.0  
+## [13] evaluate_0.10.1   coda_0.19-1       highr_0.6        
+## [16] rlang_0.1.2       lazyeval_0.2.0    spdep_0.6-15     
+## [19] gdata_2.18.0      vegan_2.4-4       phangorn_2.2.0   
+## [22] gmodels_2.16.2    Matrix_1.2-11     labeling_0.3     
+## [25] splines_3.4.1     stringr_1.2.0     igraph_1.1.2     
+## [28] munsell_0.4.3     shiny_1.0.5       compiler_3.4.1   
+## [31] httpuv_1.3.5      pkgconfig_2.0.1   mgcv_1.8-20      
+## [34] htmltools_0.3.6   tibble_1.3.4      expm_0.999-2     
+## [37] quadprog_1.5-5    permute_0.9-4     viridisLite_0.2.0
+## [40] dplyr_0.7.3       MASS_7.3-47       grid_3.4.1       
+## [43] nlme_3.1-131      xtable_1.8-2      gtable_0.2.0     
+## [46] DBI_0.7           magrittr_1.5      formatR_1.5      
+## [49] scales_0.5.0      stringi_1.1.5     LearnBayes_2.15  
+## [52] pegas_0.10        bindrcpp_0.2      sp_1.2-5         
+## [55] seqinr_3.4-5      boot_1.3-20       fastmatch_1.1-0  
+## [58] tools_3.4.1       glue_1.1.1        yaml_2.1.14      
+## [61] colorspace_1.3-2  cluster_2.0.6     knitr_1.17       
+## [64] bindr_0.1</code></pre>
 </div>
 <div id="the-benefits-of-reporting" class="section level2">
 <h2>The benefits of reporting</h2>
