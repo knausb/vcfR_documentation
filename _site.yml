@@ -92,6 +92,7 @@ output:
     theme: sandstone
     highlight: textmate
     include:
+      in_header: googlecode.html
       before_body: header.html
       after_body: footer.html
     css: styles.css      
