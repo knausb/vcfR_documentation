@@ -348,6 +348,10 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 </center>
 </p>
 
+<!— Global Site Tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-107144798-1”></script>
+<script> window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments)}; gtag('js', new Date()); gtag('config', 'UA-107144798-1'); </script>
+
 <div class="fluid-row" id="header">
 
 
@@ -425,15 +429,15 @@ chrom &lt;- create.chromR(name=&quot;Supercontig&quot;, vcf=vcf, seq=dna, ann=gf
 <pre><code>## N regions complete.</code></pre>
 <pre><code>##   elapsed time:  0.232</code></pre>
 <pre><code>## Population summary complete.</code></pre>
-<pre><code>##   elapsed time:  0.227</code></pre>
+<pre><code>##   elapsed time:  0.228</code></pre>
 <pre><code>## window_init complete.</code></pre>
-<pre><code>##   elapsed time:  0.001</code></pre>
+<pre><code>##   elapsed time:  0</code></pre>
 <pre><code>## windowize_fasta complete.</code></pre>
 <pre><code>##   elapsed time:  0.156</code></pre>
 <pre><code>## windowize_annotations complete.</code></pre>
-<pre><code>##   elapsed time:  0.012</code></pre>
+<pre><code>##   elapsed time:  0.011</code></pre>
 <pre><code>## windowize_variants complete.</code></pre>
-<pre><code>##   elapsed time:  0.001</code></pre>
+<pre><code>##   elapsed time:  0</code></pre>
 <pre class="r"><code>plot(chrom)</code></pre>
 <p><img src="chromR_object_files/figure-html/unnamed-chunk-6-1.png" width="768" style="display: block; margin: auto;" /></p>
 <p>Subsequent to processing our plot function is identical to its previous presentation except that we now have variant densities. When we observe the chromoqc plot we see that we now have variant densities, nucleotide content as well as a representation of where in our reference we have nucleotides (A, C, G or T) or where we have ambiguous nucleotides.</p>
@@ -446,15 +450,15 @@ chrom &lt;- create.chromR(name=&quot;Supercontig&quot;, vcf=vcf, seq=dna, ann=gf
 <pre class="r"><code>chrom &lt;- masker(chrom, min_QUAL=0, min_DP=350, max_DP=650, min_MQ=59.5, max_MQ=60.5)
 chrom &lt;- proc.chromR(chrom, verbose = TRUE)</code></pre>
 <pre><code>## Nucleotide regions complete.</code></pre>
-<pre><code>##   elapsed time:  0.242</code></pre>
+<pre><code>##   elapsed time:  0.239</code></pre>
 <pre><code>## N regions complete.</code></pre>
-<pre><code>##   elapsed time:  0.233</code></pre>
+<pre><code>##   elapsed time:  0.234</code></pre>
 <pre><code>## Population summary complete.</code></pre>
-<pre><code>##   elapsed time:  0.185</code></pre>
+<pre><code>##   elapsed time:  0.186</code></pre>
 <pre><code>## window_init complete.</code></pre>
-<pre><code>##   elapsed time:  0</code></pre>
+<pre><code>##   elapsed time:  0.001</code></pre>
 <pre><code>## windowize_fasta complete.</code></pre>
-<pre><code>##   elapsed time:  0.155</code></pre>
+<pre><code>##   elapsed time:  0.157</code></pre>
 <pre><code>## windowize_annotations complete.</code></pre>
 <pre><code>##   elapsed time:  0.012</code></pre>
 <pre><code>## windowize_variants complete.</code></pre>
