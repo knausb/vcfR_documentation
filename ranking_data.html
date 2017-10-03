@@ -23,9 +23,25 @@
 <link href="site_libs/highlightjs-1.1/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-1.1/highlight.js"></script>
 
-<!— Global Site Tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-107144798-1”></script>
-<script> window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments)}; gtag('js', new Date()); gtag('config', 'UA-107144798-1'); </script>
+<!-- Global Site Tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-107144798-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments)};
+  gtag('js', new Date());
+
+  gtag('config', 'UA-107144798-2');
+</script>
+
+
+<!-- Global Site Tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-107144798-1"></script>
+<script> 
+window.dataLayer = window.dataLayer || []; 
+function gtag(){dataLayer.push(arguments)}; 
+gtag('js', new Date()); 
+gtag('config', 'UA-107144798-1'); 
+</script>
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -379,19 +395,19 @@ chrom &lt;- create.chromR(name=&quot;Supercontig&quot;, vcf=vcf, seq=dna, ann=gf
 #chrom &lt;- masker(chrom, min_DP = 900, max_DP = 1500)
 chrom &lt;- proc.chromR(chrom, verbose = TRUE)</code></pre>
 <pre><code>## Nucleotide regions complete.</code></pre>
-<pre><code>##   elapsed time:  0.241</code></pre>
+<pre><code>##   elapsed time:  0.249</code></pre>
 <pre><code>## N regions complete.</code></pre>
-<pre><code>##   elapsed time:  0.232</code></pre>
+<pre><code>##   elapsed time:  0.233</code></pre>
 <pre><code>## Population summary complete.</code></pre>
-<pre><code>##   elapsed time:  0.227</code></pre>
+<pre><code>##   elapsed time:  0.232</code></pre>
 <pre><code>## window_init complete.</code></pre>
-<pre><code>##   elapsed time:  0</code></pre>
-<pre><code>## windowize_fasta complete.</code></pre>
-<pre><code>##   elapsed time:  0.155</code></pre>
-<pre><code>## windowize_annotations complete.</code></pre>
-<pre><code>##   elapsed time:  0.012</code></pre>
-<pre><code>## windowize_variants complete.</code></pre>
 <pre><code>##   elapsed time:  0.001</code></pre>
+<pre><code>## windowize_fasta complete.</code></pre>
+<pre><code>##   elapsed time:  0.157</code></pre>
+<pre><code>## windowize_annotations complete.</code></pre>
+<pre><code>##   elapsed time:  0.015</code></pre>
+<pre><code>## windowize_variants complete.</code></pre>
+<pre><code>##   elapsed time:  0</code></pre>
 </div>
 <div id="creating-scores-to-rank" class="section level2">
 <h2>Creating scores to rank</h2>
