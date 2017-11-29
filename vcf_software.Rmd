@@ -49,3 +49,8 @@ If you know of a software that I have not included on this list, particularly if
 
 * [VariantAnnotation](https://bioconductor.org/packages/release/bioc/html/VariantAnnotation.html)
 * [pegas](https://cran.r-project.org/package=pegas)
+
+**Other VCF software**
+
+* [vcf-validator](https://github.com/EBIvariation/vcf-validator)
+
