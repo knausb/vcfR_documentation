@@ -392,12 +392,12 @@ vcfR_test</code></pre>
 <p>The function <code>vcfR2tidy()</code> will convert all of the data in the vcfR object to a ‘tibble.’ A ‘tibble’ is a trimmed down version of a data.frame. (See <code>?tibble::tibble</code> for more information.) This could result in the creation of a large data structure. We can also specify what parts of the VCF data we want to have converted into our tibble. The funciton <code>vcf_field_names()</code> can remind us of what data are contained in our vcfR object.</p>
 <pre class="r"><code>vcf_field_names(vcfR_test, tag = &quot;FORMAT&quot;)</code></pre>
 <pre><code>## # A tibble: 4 x 7
-##      Tag    ID Number    Type       Description Source Version
-##    &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;             &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;
-## 1 FORMAT    GT      1  String          Genotype   &lt;NA&gt;    &lt;NA&gt;
-## 2 FORMAT    GQ      1 Integer  Genotype Quality   &lt;NA&gt;    &lt;NA&gt;
-## 3 FORMAT    DP      1 Integer        Read Depth   &lt;NA&gt;    &lt;NA&gt;
-## 4 FORMAT    HQ      2 Integer Haplotype Quality   &lt;NA&gt;    &lt;NA&gt;</code></pre>
+##   Tag    ID    Number Type    Description       Source Version
+##   &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;             &lt;chr&gt;  &lt;chr&gt;  
+## 1 FORMAT GT    1      String  Genotype          &lt;NA&gt;   &lt;NA&gt;   
+## 2 FORMAT GQ    1      Integer Genotype Quality  &lt;NA&gt;   &lt;NA&gt;   
+## 3 FORMAT DP    1      Integer Read Depth        &lt;NA&gt;   &lt;NA&gt;   
+## 4 FORMAT HQ    2      Integer Haplotype Quality &lt;NA&gt;   &lt;NA&gt;</code></pre>
 <pre class="r"><code>Z &lt;- vcfR2tidy(vcfR_test, format_fields = c(&quot;GT&quot;, &quot;DP&quot;))</code></pre>
 <pre><code>## Extracting gt element GT</code></pre>
 <pre><code>## Extracting gt element DP</code></pre>
@@ -406,46 +406,45 @@ vcfR_test</code></pre>
 <p>The result is a list containing three elements named ‘fix, ’gt’ and ‘meta.’ This is analogous to the three slots in the vcfR object. Each element of the list is a tibble that we can examine as we would any other list element.</p>
 <pre class="r"><code>Z$meta</code></pre>
 <pre><code>## # A tibble: 8 x 7
-##      Tag    ID Number    Type                 Description         Source
-##    &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;                       &lt;chr&gt;          &lt;chr&gt;
-## 1   INFO    NS      1 Integer Number of Samples With Data           &lt;NA&gt;
-## 2   INFO    DP      1 Integer                 Total Depth           &lt;NA&gt;
-## 3   INFO    AF      A   Float            Allele Frequency           &lt;NA&gt;
-## 4   INFO    AA      1  String            Ancestral Allele           &lt;NA&gt;
-## 5   INFO    DB      0    Flag            dbSNP membership &quot; build 129\&quot;&quot;
-## 6   INFO    H2      0    Flag          HapMap2 membership           &lt;NA&gt;
-## 7 FORMAT gt_GT      1  String                    Genotype           &lt;NA&gt;
-## 8 FORMAT gt_DP      1 Integer                  Read Depth           &lt;NA&gt;
-## # ... with 1 more variables: Version &lt;chr&gt;</code></pre>
+##   Tag    ID    Number Type    Description                 Source   Version
+##   &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;                       &lt;chr&gt;    &lt;chr&gt;  
+## 1 INFO   NS    1      Integer Number of Samples With Data &lt;NA&gt;     &lt;NA&gt;   
+## 2 INFO   DP    1      Integer Total Depth                 &lt;NA&gt;     &lt;NA&gt;   
+## 3 INFO   AF    A      Float   Allele Frequency            &lt;NA&gt;     &lt;NA&gt;   
+## 4 INFO   AA    1      String  Ancestral Allele            &lt;NA&gt;     &lt;NA&gt;   
+## 5 INFO   DB    0      Flag    dbSNP membership            &quot; build… &lt;NA&gt;   
+## 6 INFO   H2    0      Flag    HapMap2 membership          &lt;NA&gt;     &lt;NA&gt;   
+## 7 FORMAT gt_GT 1      String  Genotype                    &lt;NA&gt;     &lt;NA&gt;   
+## 8 FORMAT gt_DP 1      Integer Read Depth                  &lt;NA&gt;     &lt;NA&gt;</code></pre>
 <pre class="r"><code>Z$fix</code></pre>
 <pre><code>## # A tibble: 5 x 14
-##   ChromKey CHROM     POS        ID   REF    ALT  QUAL FILTER    NS    DP
-##      &lt;int&gt; &lt;chr&gt;   &lt;int&gt;     &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt; &lt;dbl&gt;  &lt;chr&gt; &lt;int&gt; &lt;int&gt;
-## 1        1    20   14370 rs6054257     G      A    29   PASS     3    14
-## 2        1    20   17330      &lt;NA&gt;     T      A     3    q10     3    11
-## 3        1    20 1110696 rs6040355     A    G,T    67   PASS     2    10
-## 4        1    20 1230237      &lt;NA&gt;     T   &lt;NA&gt;    47   PASS     3    13
-## 5        1    20 1234567 microsat1   GTC G,GTCT    50   PASS     3     9
-## # ... with 4 more variables: AF &lt;chr&gt;, AA &lt;chr&gt;, DB &lt;lgl&gt;, H2 &lt;lgl&gt;</code></pre>
+##   ChromKey CHROM     POS ID    REF   ALT    QUAL FILTER    NS    DP AF    
+##      &lt;int&gt; &lt;chr&gt;   &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;int&gt; &lt;int&gt; &lt;chr&gt; 
+## 1        1 20      14370 rs60… G     A     29.0  PASS       3    14 0.5   
+## 2        1 20      17330 &lt;NA&gt;  T     A      3.00 q10        3    11 0.017 
+## 3        1 20    1110696 rs60… A     G,T   67.0  PASS       2    10 0.333…
+## 4        1 20    1230237 &lt;NA&gt;  T     &lt;NA&gt;  47.0  PASS       3    13 &lt;NA&gt;  
+## 5        1 20    1234567 micr… GTC   G,GT… 50.0  PASS       3     9 &lt;NA&gt;  
+## # ... with 3 more variables: AA &lt;chr&gt;, DB &lt;lgl&gt;, H2 &lt;lgl&gt;</code></pre>
 <pre class="r"><code>Z$gt</code></pre>
 <pre><code>## # A tibble: 15 x 6
-##    ChromKey     POS   Indiv gt_GT gt_DP gt_GT_alleles
-##       &lt;int&gt;   &lt;int&gt;   &lt;chr&gt; &lt;chr&gt; &lt;int&gt;         &lt;chr&gt;
-##  1        1   14370 NA00001   0|0     1           G|G
-##  2        1   17330 NA00001   0|0     3           T|T
-##  3        1 1110696 NA00001   1|2     6           G|T
-##  4        1 1230237 NA00001   0|0     7           T|T
-##  5        1 1234567 NA00001   0/1     4         GTC/G
-##  6        1   14370 NA00002   1|0     8           A|G
-##  7        1   17330 NA00002   0|1     5           T|A
-##  8        1 1110696 NA00002   2|1     0           T|G
-##  9        1 1230237 NA00002   0|0     4           T|T
-## 10        1 1234567 NA00002   0/2     2      GTC/GTCT
-## 11        1   14370 NA00003   1/1     5           A/A
-## 12        1   17330 NA00003   0/0     3           T/T
-## 13        1 1110696 NA00003   2/2     4           T/T
-## 14        1 1230237 NA00003   0/0     2           T/T
-## 15        1 1234567 NA00003   1/1     3           G/G</code></pre>
+##    ChromKey     POS Indiv   gt_GT gt_DP gt_GT_alleles
+##       &lt;int&gt;   &lt;int&gt; &lt;chr&gt;   &lt;chr&gt; &lt;int&gt; &lt;chr&gt;        
+##  1        1   14370 NA00001 0|0       1 G|G          
+##  2        1   17330 NA00001 0|0       3 T|T          
+##  3        1 1110696 NA00001 1|2       6 G|T          
+##  4        1 1230237 NA00001 0|0       7 T|T          
+##  5        1 1234567 NA00001 0/1       4 GTC/G        
+##  6        1   14370 NA00002 1|0       8 A|G          
+##  7        1   17330 NA00002 0|1       5 T|A          
+##  8        1 1110696 NA00002 2|1       0 T|G          
+##  9        1 1230237 NA00002 0|0       4 T|T          
+## 10        1 1234567 NA00002 0/2       2 GTC/GTCT     
+## 11        1   14370 NA00003 1/1       5 A/A          
+## 12        1   17330 NA00003 0/0       3 T/T          
+## 13        1 1110696 NA00003 2/2       4 T/T          
+## 14        1 1230237 NA00003 0/0       2 T/T          
+## 15        1 1234567 NA00003 1/1       3 G/G</code></pre>
 <p>Note that the fix and gt elements have a ‘ChromKey’ to help coordinate the variants in both structures. Also, the information from the meta region has been used to assign a type to each column (e.g., integer, character, etc.). These data structures should now be in a format that other packages in the ‘tidyverse’ can work with. More information about <code>vcfR2tidy()</code> can be found in its manual page (<code>?vcfR2tidy</code>).</p>
 
 <center>
