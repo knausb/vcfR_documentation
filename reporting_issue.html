@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Reporting an issue</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<!-- Global Site Tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-107144798-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments)};
+  gtag('js', new Date());
+
+  gtag('config', 'UA-107144798-2');
+</script>
+
+
+<!-- Global Site Tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-107144798-1"></script>
+<script> 
+window.dataLayer = window.dataLayer || []; 
+function gtag(){dataLayer.push(arguments)}; 
+gtag('js', new Date()); 
+gtag('config', 'UA-107144798-1'); 
+</script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 61px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+
+.section h2 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+.section h3 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+.section h4 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+.section h5 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+.section h6 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">vcfR</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="rlanguage.html">R language</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Tutorial
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="quick_intro.html">A quick introduction</a>
+    </li>
+    <li>
+      <a href="vcf_data.html">VCF data</a>
+    </li>
+    <li>
+      <a href="vcfR_object.html">vcfR objects</a>
+    </li>
+    <li>
+      <a href="how_much_memory.html">How much memory</a>
+    </li>
+    <li>
+      <a href="matrices.html">Extracting matrices</a>
+    </li>
+    <li>
+      <a href="tidy_vcfR.html">Tidy vcfR</a>
+    </li>
+    <li>
+      <a href="chromR_object.html">chromR objects</a>
+    </li>
+    <li>
+      <a href="visualization_1.html">Visualization 1</a>
+    </li>
+    <li>
+      <a href="visualization_2.html">Visualization 2</a>
+    </li>
+    <li>
+      <a href="sequence_coverage.html">Sequence coverage</a>
+    </li>
+    <li>
+      <a href="filtering_data.html">Filtering data</a>
+    </li>
+    <li>
+      <a href="ranking_data.html">Ranking data</a>
+    </li>
+    <li>
+      <a href="windowing.html">Windowing</a>
+    </li>
+    <li>
+      <a href="genetic_differentiation.html">Genetic differentiation</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    GBS class
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="gbs_class.html">GBS class</a>
+    </li>
+    <li>
+      <a href="vcf_data.html">VCF data</a>
+    </li>
+    <li>
+      <a href="extract_data.html">Extract data</a>
+    </li>
+    <li>
+      <a href="depth_plot.html">Depth plot</a>
+    </li>
+    <li>
+      <a href="missing_data.html">Missing data</a>
+    </li>
+    <li>
+      <a href="censoring_data.html">Censoring data</a>
+    </li>
+    <li>
+      <a href="omitting_data.html">Omitting data</a>
+    </li>
+    <li>
+      <a href="apply.html">Apply</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Ploidy
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="ploidy.html">Ploidy</a>
+    </li>
+    <li>
+      <a href="determining_ploidy_1.html">Determining ploidy 1</a>
+    </li>
+    <li>
+      <a href="determining_ploidy_2.html">Determining ploidy 2</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Export
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="export.html">Overview</a>
+    </li>
+    <li>
+      <a href="export_vcfgz.html">Export to *vcf.gz</a>
+    </li>
+    <li>
+      <a href="export_genind_genclone.html">Genind and Genclone</a>
+    </li>
+    <li>
+      <a href="export_genlight_snpclone.html">Genlight and SNPclone</a>
+    </li>
+    <li>
+      <a href="dnabin.html">DNAbin</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    FAQ
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="subset_data_to_1chrom.html">Subset to 1 chromosome</a>
+    </li>
+    <li>
+      <a href="vcf_software.html">VCF software</a>
+    </li>
+    <li>
+      <a href="dip_to_hap.html">Haploidizing diploid data</a>
+    </li>
+    <li>
+      <a href="compiling_vcfR.html">Compiling vcfR</a>
+    </li>
+    <li>
+      <a href="reporting_issue.html">Reporting an issue</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+<p>
+<center>
+<h3>vcfR documentation</h3>
+by
+<br>
+Brian J. Knaus and Niklaus J. Gr&uuml;nwald
+</center>
+</p>
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Reporting an issue</h1>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#vcfr-data">vcfR data</a></li>
+<li><a href="#your-data">Your data</a></li>
+<li><a href="#reporting-the-issue">Reporting the issue</a></li>
+<li><a href="#the-benefits-of-reporting">The benefits of reporting</a></li>
+</ul>
+</div>
+
+<p>If you experience some sort of unexpected behaviour it is possible that you have discovered a bug. Ways to report a bug include contacting me directly. If you are a GitHub user it would be better if you <a href="https://github.com/knausb/vcfR/issues">created an issue</a>. The success, and efficiency, of any attempt to help you will typically depend on your ability to create a <a href="http://stackoverflow.com/questions/5963269/how-to-make-a-great-r-reproducible-example">minimal reproducible example</a>. A minimal reproducible example is a small amount of code that allows me, or others, to reproduce the behaviour you are observing. Through providing a minimal reproducible example you accomplish two things. First, it provides me with a quick way to validate that the behaviour is repeatable on my system, confirming that this is not something specific to your system. Second, it provides me with an example of the reported behaviour that I can ‘poke and prod’ so that I can (hopefully) find a solution. To create a minimal reproducible example you will need some VCF data. Data for an example can be provided by using example data included in vcfR or by using your own data.</p>
+<div id="vcfr-data" class="section level2">
+<h2>vcfR data</h2>
+<p>The R package vcfR comes with some example data. This is used in the examples and vignettes. With a little work you can modify this example data to provide a minimal reproducible example.</p>
+<pre class="r"><code>library(vcfR)</code></pre>
+<pre class="r"><code>data(vcfR_test)
+vcfR_test</code></pre>
+<pre><code>## ***** Object of Class vcfR *****
+## 3 samples
+## 1 CHROMs
+## 5 variants
+## Object size: 0 Mb
+## 0 percent missing data
+## *****        *****         *****</code></pre>
+<p>Any problem is likely to occur in the ‘gt’ or ‘fix’ slots. These are matrices that can be manipulated with the square brackets ([]).</p>
+<pre class="r"><code>vcfR_test@gt</code></pre>
+<pre><code>##      FORMAT        NA00001          NA00002          NA00003       
+## [1,] &quot;GT:GQ:DP:HQ&quot; &quot;0|0:48:1:51,51&quot; &quot;1|0:48:8:51,51&quot; &quot;1/1:43:5:.,.&quot;
+## [2,] &quot;GT:GQ:DP:HQ&quot; &quot;0|0:49:3:58,50&quot; &quot;0|1:3:5:65,3&quot;   &quot;0/0:41:3&quot;    
+## [3,] &quot;GT:GQ:DP:HQ&quot; &quot;1|2:21:6:23,27&quot; &quot;2|1:2:0:18,2&quot;   &quot;2/2:35:4&quot;    
+## [4,] &quot;GT:GQ:DP:HQ&quot; &quot;0|0:54:7:56,60&quot; &quot;0|0:48:4:51,51&quot; &quot;0/0:61:2&quot;    
+## [5,] &quot;GT:GQ:DP&quot;    &quot;0/1:35:4&quot;       &quot;0/2:17:2&quot;       &quot;1/1:40:3&quot;</code></pre>
+<pre class="r"><code>vcfR_test@gt[1,]</code></pre>
+<pre><code>##           FORMAT          NA00001          NA00002          NA00003 
+##    &quot;GT:GQ:DP:HQ&quot; &quot;0|0:48:1:51,51&quot; &quot;1|0:48:8:51,51&quot;   &quot;1/1:43:5:.,.&quot;</code></pre>
+<pre class="r"><code>vcfR_test@gt[1,2]</code></pre>
+<pre><code>##          NA00001 
+## &quot;0|0:48:1:51,51&quot;</code></pre>
+<pre class="r"><code># Change the genotype
+vcfR_test@gt[1,2] &lt;- &quot;3|4:48:1:51,51&quot;
+vcfR_test@gt</code></pre>
+<pre><code>##      FORMAT        NA00001          NA00002          NA00003       
+## [1,] &quot;GT:GQ:DP:HQ&quot; &quot;3|4:48:1:51,51&quot; &quot;1|0:48:8:51,51&quot; &quot;1/1:43:5:.,.&quot;
+## [2,] &quot;GT:GQ:DP:HQ&quot; &quot;0|0:49:3:58,50&quot; &quot;0|1:3:5:65,3&quot;   &quot;0/0:41:3&quot;    
+## [3,] &quot;GT:GQ:DP:HQ&quot; &quot;1|2:21:6:23,27&quot; &quot;2|1:2:0:18,2&quot;   &quot;2/2:35:4&quot;    
+## [4,] &quot;GT:GQ:DP:HQ&quot; &quot;0|0:54:7:56,60&quot; &quot;0|0:48:4:51,51&quot; &quot;0/0:61:2&quot;    
+## [5,] &quot;GT:GQ:DP&quot;    &quot;0/1:35:4&quot;       &quot;0/2:17:2&quot;       &quot;1/1:40:3&quot;</code></pre>
+<p>If you can find the part of your data that reproduces the problem you should be able to engineer an example by using this example data.</p>
+</div>
+<div id="your-data" class="section level2">
+<h2>Your data</h2>
+<p>Of course, it might just be simpler if you send me your data. Some of you may not be comfortable with this, particularly if your data is unpublished. But many people have been comfortable sending me their data to troubleshoot issues. Keep in mind that VCF data ‘self documents’ in that it includes information about what software created it and information about the reference file used to call variants. I think this is interesting because I get to learn a bit about all the projects people are using vcfR with. But if you’re uncomfortable with this you may either want to use the above option, or come up with a way of obfuscating any information you are uncomfortable sharing.</p>
+</div>
+<div id="reporting-the-issue" class="section level2">
+<h2>Reporting the issue</h2>
+<p>Once you have some data, you should provide a few lines of code that reproduces the issue. If you can forward this data, code, and any error or warning messages to me (or post it as an issue) it should help me troubleshoot this matter. Better yet, if you use <a href="http://rmarkdown.rstudio.com/">RMarkdown</a>, sharing your *.Rmd and its compiled output from your system illustrating the matter (usually *.html), that would be great.</p>
+<p>Lastly, it never hurts to report your session information to validate this is not a version issue. Mine is as follows.</p>
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>## R version 3.4.4 (2018-03-15)
+## Platform: x86_64-pc-linux-gnu (64-bit)
+## Running under: Ubuntu 16.04.4 LTS
+## 
+## Matrix products: default
+## BLAS: /usr/lib/libblas/libblas.so.3.6.0
+## LAPACK: /usr/lib/lapack/liblapack.so.3.6.0
+## 
+## locale:
+##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+## 
+## attached base packages:
+## [1] methods   stats     graphics  grDevices utils     datasets  base     
+## 
+## other attached packages:
+##  [1] RColorBrewer_1.1-2 memuse_4.0-0       poppr_2.7.1       
+##  [4] adegenet_2.1.1     ade4_1.7-11        pinfsc50_1.1.0    
+##  [7] cowplot_0.9.2      ggplot2_2.2.1      reshape2_1.4.3    
+## [10] vcfR_1.8.0.9000    rmarkdown_1.9     
+## 
+## loaded via a namespace (and not attached):
+##  [1] viridisLite_0.3.0 splines_3.4.4     gtools_3.5.0     
+##  [4] shiny_1.0.5       assertthat_0.2.0  expm_0.999-2     
+##  [7] sp_1.2-7          highr_0.6         yaml_2.1.19      
+## [10] LearnBayes_2.15.1 pegas_0.10        pillar_1.2.2     
+## [13] backports_1.1.2   lattice_0.20-35   glue_1.2.0       
+## [16] quadprog_1.5-5    phangorn_2.4.0    digest_0.6.15    
+## [19] promises_1.0.1    colorspace_1.3-2  htmltools_0.3.6  
+## [22] httpuv_1.4.2      Matrix_1.2-14     plyr_1.8.4       
+## [25] pkgconfig_2.0.1   gmodels_2.16.2    xtable_1.8-2     
+## [28] scales_0.5.0      gdata_2.18.0      later_0.7.2      
+## [31] tibble_1.4.2      mgcv_1.8-23       lazyeval_0.2.1   
+## [34] magrittr_1.5      mime_0.5          deldir_0.1-15    
+## [37] evaluate_0.10.1   nlme_3.1-137      MASS_7.3-50      
+## [40] vegan_2.5-1       tools_3.4.4       formatR_1.5      
+## [43] stringr_1.3.0     munsell_0.4.3     cluster_2.0.7-1  
+## [46] bindrcpp_0.2.2    compiler_3.4.4    rlang_0.2.0      
+## [49] grid_3.4.4        igraph_1.2.1      labeling_0.3     
+## [52] boot_1.3-20       gtable_0.2.0      R6_2.2.2         
+## [55] knitr_1.20        dplyr_0.7.4       seqinr_3.4-5     
+## [58] bindr_0.1.1       fastmatch_1.1-0   rprojroot_1.3-2  
+## [61] spdep_0.7-7       permute_0.9-4     ape_5.1          
+## [64] stringi_1.2.2     parallel_3.4.4    polysat_1.7-2    
+## [67] Rcpp_0.12.16      spData_0.2.8.3    coda_0.19-1</code></pre>
+</div>
+<div id="the-benefits-of-reporting" class="section level2">
+<h2>The benefits of reporting</h2>
+<p>If you have identified an issue with the vcfR code, then reporting this issue will have at least two positive outcomes. First, I’ll (hopefully) resolve this matter and you can continue with your research. Second, I will probably use your example to engineer a <a href="https://en.wikipedia.org/wiki/Unit_testing">unit test</a>. A unit test is a bit of code that is executed every time vcfR is built and tests that vcfR is operating correctly. My unit tests can be seen as a collection of code that has created issues in the past. By testing these during builds it ensures that these problems are fixed and haven’t inadvertantly been unfixed while trying to address a different issue. So by reporting issues, you can actually help make vcfR a better software. Thank you!</p>
+</div>
+
+<center>
+<hr class="style1">
+<p>Copyright &copy; 2017 Brian J. Knaus. All rights reserved.</p>
+<p>USDA Agricultural Research Service, Horticultural Crops Research Lab.</p>
+</center>
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

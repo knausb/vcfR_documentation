@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>tidy vcfR</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<!-- Global Site Tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-107144798-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments)};
+  gtag('js', new Date());
+
+  gtag('config', 'UA-107144798-2');
+</script>
+
+
+<!-- Global Site Tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-107144798-1"></script>
+<script> 
+window.dataLayer = window.dataLayer || []; 
+function gtag(){dataLayer.push(arguments)}; 
+gtag('js', new Date()); 
+gtag('config', 'UA-107144798-1'); 
+</script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 61px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+
+.section h2 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+.section h3 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+.section h4 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+.section h5 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+.section h6 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">vcfR</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="rlanguage.html">R language</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Tutorial
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="quick_intro.html">A quick introduction</a>
+    </li>
+    <li>
+      <a href="vcf_data.html">VCF data</a>
+    </li>
+    <li>
+      <a href="vcfR_object.html">vcfR objects</a>
+    </li>
+    <li>
+      <a href="how_much_memory.html">How much memory</a>
+    </li>
+    <li>
+      <a href="matrices.html">Extracting matrices</a>
+    </li>
+    <li>
+      <a href="tidy_vcfR.html">Tidy vcfR</a>
+    </li>
+    <li>
+      <a href="chromR_object.html">chromR objects</a>
+    </li>
+    <li>
+      <a href="visualization_1.html">Visualization 1</a>
+    </li>
+    <li>
+      <a href="visualization_2.html">Visualization 2</a>
+    </li>
+    <li>
+      <a href="sequence_coverage.html">Sequence coverage</a>
+    </li>
+    <li>
+      <a href="filtering_data.html">Filtering data</a>
+    </li>
+    <li>
+      <a href="ranking_data.html">Ranking data</a>
+    </li>
+    <li>
+      <a href="windowing.html">Windowing</a>
+    </li>
+    <li>
+      <a href="genetic_differentiation.html">Genetic differentiation</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    GBS class
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="gbs_class.html">GBS class</a>
+    </li>
+    <li>
+      <a href="vcf_data.html">VCF data</a>
+    </li>
+    <li>
+      <a href="extract_data.html">Extract data</a>
+    </li>
+    <li>
+      <a href="depth_plot.html">Depth plot</a>
+    </li>
+    <li>
+      <a href="missing_data.html">Missing data</a>
+    </li>
+    <li>
+      <a href="censoring_data.html">Censoring data</a>
+    </li>
+    <li>
+      <a href="omitting_data.html">Omitting data</a>
+    </li>
+    <li>
+      <a href="apply.html">Apply</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Ploidy
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="ploidy.html">Ploidy</a>
+    </li>
+    <li>
+      <a href="determining_ploidy_1.html">Determining ploidy 1</a>
+    </li>
+    <li>
+      <a href="determining_ploidy_2.html">Determining ploidy 2</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Export
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="export.html">Overview</a>
+    </li>
+    <li>
+      <a href="export_vcfgz.html">Export to *vcf.gz</a>
+    </li>
+    <li>
+      <a href="export_genind_genclone.html">Genind and Genclone</a>
+    </li>
+    <li>
+      <a href="export_genlight_snpclone.html">Genlight and SNPclone</a>
+    </li>
+    <li>
+      <a href="dnabin.html">DNAbin</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    FAQ
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="subset_data_to_1chrom.html">Subset to 1 chromosome</a>
+    </li>
+    <li>
+      <a href="vcf_software.html">VCF software</a>
+    </li>
+    <li>
+      <a href="dip_to_hap.html">Haploidizing diploid data</a>
+    </li>
+    <li>
+      <a href="compiling_vcfR.html">Compiling vcfR</a>
+    </li>
+    <li>
+      <a href="reporting_issue.html">Reporting an issue</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+<p>
+<center>
+<h3>vcfR documentation</h3>
+by
+<br>
+Brian J. Knaus and Niklaus J. Gr&uuml;nwald
+</center>
+</p>
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">tidy vcfR</h1>
+
+</div>
+
+
+<p>Much of the functionality of vcfR was built around R and it’s base graphics system. More recently, the concept of ‘tidy data’ has been described in the <a href="http://vita.had.co.nz/papers/tidy-data.html">tidy data</a> article and implemented in the CRAN package <a href="https://CRAN.R-project.org/package=tidyr">tidyr</a> (and an increasing number of other packages). In order to accomodate the audience that is interested in working with vcfR in a ‘tidy’ framework, several functions have been added. (Thank you Eric!)</p>
+<p>For our example we will load an example data set provided in vcfR.</p>
+<pre class="r"><code>library(vcfR)
+data(&quot;vcfR_test&quot;)
+vcfR_test</code></pre>
+<pre><code>## ***** Object of Class vcfR *****
+## 3 samples
+## 1 CHROMs
+## 5 variants
+## Object size: 0 Mb
+## 0 percent missing data
+## *****        *****         *****</code></pre>
+<p>The function <code>vcfR2tidy()</code> will convert all of the data in the vcfR object to a ‘tibble.’ A ‘tibble’ is a trimmed down version of a data.frame. (See <code>?tibble::tibble</code> for more information.) This could result in the creation of a large data structure. We can also specify what parts of the VCF data we want to have converted into our tibble. The funciton <code>vcf_field_names()</code> can remind us of what data are contained in our vcfR object.</p>
+<pre class="r"><code>vcf_field_names(vcfR_test, tag = &quot;FORMAT&quot;)</code></pre>
+<pre><code>## # A tibble: 4 x 5
+##   Tag    ID    Number Type    Description      
+##   &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;            
+## 1 FORMAT GT    1      String  Genotype         
+## 2 FORMAT GQ    1      Integer Genotype Quality 
+## 3 FORMAT DP    1      Integer Read Depth       
+## 4 FORMAT HQ    2      Integer Haplotype Quality</code></pre>
+<pre class="r"><code>Z &lt;- vcfR2tidy(vcfR_test, format_fields = c(&quot;GT&quot;, &quot;DP&quot;))</code></pre>
+<pre><code>## Extracting gt element GT</code></pre>
+<pre><code>## Extracting gt element DP</code></pre>
+<pre class="r"><code>names(Z)</code></pre>
+<pre><code>## [1] &quot;fix&quot;  &quot;gt&quot;   &quot;meta&quot;</code></pre>
+<p>The result is a list containing three elements named ‘fix, ’gt’ and ‘meta.’ This is analogous to the three slots in the vcfR object. Each element of the list is a tibble that we can examine as we would any other list element.</p>
+<pre class="r"><code>Z$meta</code></pre>
+<pre><code>## # A tibble: 8 x 5
+##   Tag    ID    Number Type    Description                
+##   &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;                      
+## 1 INFO   NS    1      Integer Number of Samples With Data
+## 2 INFO   DP    1      Integer Total Depth                
+## 3 INFO   AF    A      Float   Allele Frequency           
+## 4 INFO   AA    1      String  Ancestral Allele           
+## 5 INFO   DB    0      Flag    dbSNP membership, build 129
+## 6 INFO   H2    0      Flag    HapMap2 membership         
+## 7 FORMAT gt_GT 1      String  Genotype                   
+## 8 FORMAT gt_DP 1      Integer Read Depth</code></pre>
+<pre class="r"><code>Z$fix</code></pre>
+<pre><code>## # A tibble: 5 x 14
+##   ChromKey CHROM     POS ID    REF   ALT    QUAL FILTER    NS    DP AF    
+##      &lt;int&gt; &lt;chr&gt;   &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;int&gt; &lt;int&gt; &lt;chr&gt; 
+## 1        1 20      14370 rs60… G     A        29 PASS       3    14 0.5   
+## 2        1 20      17330 &lt;NA&gt;  T     A         3 q10        3    11 0.017 
+## 3        1 20    1110696 rs60… A     G,T      67 PASS       2    10 0.333…
+## 4        1 20    1230237 &lt;NA&gt;  T     &lt;NA&gt;     47 PASS       3    13 &lt;NA&gt;  
+## 5        1 20    1234567 micr… GTC   G,GT…    50 PASS       3     9 &lt;NA&gt;  
+## # ... with 3 more variables: AA &lt;chr&gt;, DB &lt;lgl&gt;, H2 &lt;lgl&gt;</code></pre>
+<pre class="r"><code>Z$gt</code></pre>
+<pre><code>## # A tibble: 15 x 6
+##    ChromKey     POS Indiv   gt_GT gt_DP gt_GT_alleles
+##       &lt;int&gt;   &lt;int&gt; &lt;chr&gt;   &lt;chr&gt; &lt;int&gt; &lt;chr&gt;        
+##  1        1   14370 NA00001 0|0       1 G|G          
+##  2        1   17330 NA00001 0|0       3 T|T          
+##  3        1 1110696 NA00001 1|2       6 G|T          
+##  4        1 1230237 NA00001 0|0       7 T|T          
+##  5        1 1234567 NA00001 0/1       4 GTC/G        
+##  6        1   14370 NA00002 1|0       8 A|G          
+##  7        1   17330 NA00002 0|1       5 T|A          
+##  8        1 1110696 NA00002 2|1       0 T|G          
+##  9        1 1230237 NA00002 0|0       4 T|T          
+## 10        1 1234567 NA00002 0/2       2 GTC/GTCT     
+## 11        1   14370 NA00003 1/1       5 A/A          
+## 12        1   17330 NA00003 0/0       3 T/T          
+## 13        1 1110696 NA00003 2/2       4 T/T          
+## 14        1 1230237 NA00003 0/0       2 T/T          
+## 15        1 1234567 NA00003 1/1       3 G/G</code></pre>
+<p>Note that the fix and gt elements have a ‘ChromKey’ to help coordinate the variants in both structures. Also, the information from the meta region has been used to assign a type to each column (e.g., integer, character, etc.). These data structures should now be in a format that other packages in the ‘tidyverse’ can work with. More information about <code>vcfR2tidy()</code> can be found in its manual page (<code>?vcfR2tidy</code>).</p>
+
+<center>
+<hr class="style1">
+<p>Copyright &copy; 2017 Brian J. Knaus. All rights reserved.</p>
+<p>USDA Agricultural Research Service, Horticultural Crops Research Lab.</p>
+</center>
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
