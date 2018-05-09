@@ -20,8 +20,8 @@
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-1.1/textmate.css" rel="stylesheet" />
-<script src="site_libs/highlightjs-1.1/highlight.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 
 <!-- Global Site Tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-107144798-2"></script>
@@ -50,10 +50,12 @@ gtag('config', 'UA-107144798-1');
   }
 </style>
 <script type="text/javascript">
-if (window.hljs && document.readyState && document.readyState === "complete") {
-   window.setTimeout(function() {
-      hljs.initHighlighting();
-   }, 0);
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
 }
 </script>
 
@@ -563,41 +565,47 @@ knitr::kable(head(myDiff[,1:15]))</code></pre>
 <p>We now have information for each variant in the VCF data. Because this is typically a large quantity of information, we’ll want to summarize it. One way is to take averages of the data.</p>
 <pre class="r"><code>knitr::kable(round(colMeans(myDiff[,c(3:9,16,19)], na.rm = TRUE), digits = 3))</code></pre>
 <table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">x</th>
+</tr>
+</thead>
 <tbody>
 <tr class="odd">
-<td align="left">Hs_af</td>
+<td>Hs_af</td>
 <td align="right">0.176</td>
 </tr>
 <tr class="even">
-<td align="left">Hs_eu</td>
+<td>Hs_eu</td>
 <td align="right">0.188</td>
 </tr>
 <tr class="odd">
-<td align="left">Hs_mx</td>
+<td>Hs_mx</td>
 <td align="right">0.168</td>
 </tr>
 <tr class="even">
-<td align="left">Hs_Pmir</td>
+<td>Hs_Pmir</td>
 <td align="right">0.052</td>
 </tr>
 <tr class="odd">
-<td align="left">Hs_sa</td>
+<td>Hs_sa</td>
 <td align="right">0.198</td>
 </tr>
 <tr class="even">
-<td align="left">Hs_us</td>
+<td>Hs_us</td>
 <td align="right">0.155</td>
 </tr>
 <tr class="odd">
-<td align="left">Ht</td>
+<td>Ht</td>
 <td align="right">0.247</td>
 </tr>
 <tr class="even">
-<td align="left">Gst</td>
+<td>Gst</td>
 <td align="right">0.595</td>
 </tr>
 <tr class="odd">
-<td align="left">Gprimest</td>
+<td>Gprimest</td>
 <td align="right">0.632</td>
 </tr>
 </tbody>

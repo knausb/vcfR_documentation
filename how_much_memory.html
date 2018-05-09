@@ -21,8 +21,8 @@
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-1.1/textmate.css" rel="stylesheet" />
-<script src="site_libs/highlightjs-1.1/highlight.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 
 <!-- Global Site Tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-107144798-2"></script>
@@ -51,10 +51,12 @@ gtag('config', 'UA-107144798-1');
   }
 </style>
 <script type="text/javascript">
-if (window.hljs && document.readyState && document.readyState === "complete") {
-   window.setTimeout(function() {
-      hljs.initHighlighting();
-   }, 0);
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
 }
 </script>
 
@@ -388,13 +390,8 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 <div id="simulation-of-data" class="section level2">
 <h2>Simulation of data</h2>
 <p>In order to estimate the memory footprint of vcfR objects containing different numbers of variants we’ll use the R package <code>memuse</code>. For simplicity, we’ll ignore the <code>meta</code> slot and instead of using both a <code>fix</code> and a <code>gt</code> slot we’ll use a single matrix of 10 columns. This approximates VCF data containing one sample. As your sample size increases, so will your memory footprint. Depending on your comfort level with R, you may be able to modify the below code to match your data set.</p>
-<pre class="r"><code>library(&#39;memuse&#39;)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;memuse&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:ggplot2&#39;:
-## 
-##     unit</code></pre>
-<pre class="r"><code>nvar &lt;- 10^{2:8}
+<pre class="r"><code>library(&#39;memuse&#39;)
+nvar &lt;- 10^{2:8}
 nMb &lt;- howbig(nrow=10, ncol=10, unit=&quot;MB&quot;)@size
 
 for(i in nvar){

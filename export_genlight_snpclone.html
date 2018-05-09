@@ -20,8 +20,8 @@
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-1.1/textmate.css" rel="stylesheet" />
-<script src="site_libs/highlightjs-1.1/highlight.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 
 <!-- Global Site Tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-107144798-2"></script>
@@ -50,10 +50,12 @@ gtag('config', 'UA-107144798-1');
   }
 </style>
 <script type="text/javascript">
-if (window.hljs && document.readyState && document.readyState === "complete") {
-   window.setTimeout(function() {
-      hljs.initHighlighting();
-   }, 0);
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
 }
 </script>
 
@@ -393,7 +395,6 @@ x &lt;- vcfR2genlight(vcf)</code></pre>
 <pre><code>## Warning in vcfR2genlight(vcf): Found 312 loci with more than two alleles.
 ## Objects of class genlight only support loci with two alleles.
 ## 312 loci will be omitted from the genlight object.</code></pre>
-<pre><code>## Loading required package: parallel</code></pre>
 <pre class="r"><code>x</code></pre>
 <pre><code>##  /// GENLIGHT OBJECT /////////
 ## 
@@ -419,12 +420,12 @@ x &lt;- vcfR2genlight(vcf)</code></pre>
 <pre><code>## Loading required package: methods</code></pre>
 <pre><code>## Loading required package: ade4</code></pre>
 <pre><code>## 
-##    /// adegenet 2.0.1 is loaded ////////////
+##    /// adegenet 2.1.1 is loaded ////////////
 ## 
 ##    &gt; overview: &#39;?adegenet&#39;
 ##    &gt; tutorials/doc/questions: &#39;adegenetWeb()&#39; 
 ##    &gt; bug reports/feature requests: adegenetIssues()</code></pre>
-<pre><code>## This is poppr version 2.5.0. To get started, type package?poppr
+<pre><code>## This is poppr version 2.7.1. To get started, type package?poppr
 ## OMP parallel support: available</code></pre>
 <pre class="r"><code>x &lt;- as.snpclone(x)
 x</code></pre>

@@ -11,7 +11,7 @@
 
 <meta name="author" content="Brian J. Knaus" />
 
-<meta name="date" content="2017-11-29" />
+<meta name="date" content="2018-05-09" />
 
 <title>Windowing</title>
 
@@ -22,8 +22,8 @@
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-1.1/textmate.css" rel="stylesheet" />
-<script src="site_libs/highlightjs-1.1/highlight.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 
 <!-- Global Site Tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-107144798-2"></script>
@@ -52,10 +52,12 @@ gtag('config', 'UA-107144798-1');
   }
 </style>
 <script type="text/javascript">
-if (window.hljs && document.readyState && document.readyState === "complete") {
-   window.setTimeout(function() {
-      hljs.initHighlighting();
-   }, 0);
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
 }
 </script>
 
@@ -376,7 +378,7 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 
 <h1 class="title toc-ignore">Windowing</h1>
 <h4 class="author"><em>Brian J. Knaus</em></h4>
-<h4 class="date"><em>2017-11-29</em></h4>
+<h4 class="date"><em>2018-05-09</em></h4>
 
 </div>
 
