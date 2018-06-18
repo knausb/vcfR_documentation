@@ -414,17 +414,17 @@ chrom &lt;- create.chromR(name=&quot;Supercontig&quot;, vcf=vcf, seq=dna, ann=gf
 <pre class="r"><code>chrom &lt;- masker(chrom, min_QUAL=0, min_DP=350, max_DP=650, min_MQ=59.5, max_MQ=60.5)
 chrom &lt;- proc.chromR(chrom, verbose = TRUE)</code></pre>
 <pre><code>## Nucleotide regions complete.</code></pre>
-<pre><code>##   elapsed time:  0.247</code></pre>
+<pre><code>##   elapsed time:  0.245</code></pre>
 <pre><code>## N regions complete.</code></pre>
-<pre><code>##   elapsed time:  0.225</code></pre>
+<pre><code>##   elapsed time:  0.228</code></pre>
 <pre><code>## Population summary complete.</code></pre>
-<pre><code>##   elapsed time:  0.188</code></pre>
+<pre><code>##   elapsed time:  0.186</code></pre>
 <pre><code>## window_init complete.</code></pre>
 <pre><code>##   elapsed time:  0</code></pre>
 <pre><code>## windowize_fasta complete.</code></pre>
-<pre><code>##   elapsed time:  0.149</code></pre>
+<pre><code>##   elapsed time:  0.152</code></pre>
 <pre><code>## windowize_annotations complete.</code></pre>
-<pre><code>##   elapsed time:  0.012</code></pre>
+<pre><code>##   elapsed time:  0.011</code></pre>
 <pre><code>## windowize_variants complete.</code></pre>
 <pre><code>##   elapsed time:  0.001</code></pre>
 <p>The function create.chromR() reports the name of the chromosome (supercontig, contig, etc.) so that we can verify that all three data sources contain the same chromosome. We receive a warning because the names are not identical. Upon visual examination we determine that the names are synonyms and we can proceed.</p>
@@ -530,7 +530,7 @@ chromoqc(chrom, dp.alpha = 22)</code></pre>
 
 <center>
 <hr class="style1">
-<p>Copyright &copy; 2017 Brian J. Knaus. All rights reserved.</p>
+<p>Copyright &copy; 2017, 2018 Brian J. Knaus. All rights reserved.</p>
 <p>USDA Agricultural Research Service, Horticultural Crops Research Lab.</p>
 </center>
 
