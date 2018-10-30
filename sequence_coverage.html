@@ -111,6 +111,9 @@ img {
 .tabbed-pane {
   padding-top: 12px;
 }
+.html-widget {
+  margin-bottom: 20px;
+}
 button.code-folding-btn:focus {
   outline: none;
 }
@@ -383,8 +386,14 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 <div id="reading-vcf-data" class="section level2">
 <h2>Reading VCF data</h2>
 <p>The topic of reading in VCF format data is covered in other vignettes. We include it here for redundancy, and because every example involving VCF data needs to start with some data.</p>
-<pre class="r"><code>library(vcfR)
-vcf_file &lt;- system.file(&quot;extdata&quot;, &quot;pinf_sc50.vcf.gz&quot;, package = &quot;pinfsc50&quot;)
+<pre class="r"><code>library(vcfR)</code></pre>
+<pre><code>## 
+##    *****       ***   vcfR   ***       *****
+##    This is vcfR 1.8.0.9000 
+##      browseVignettes(&#39;vcfR&#39;) # Documentation
+##      citation(&#39;vcfR&#39;) # Citation
+##    *****       *****      *****       *****</code></pre>
+<pre class="r"><code>vcf_file &lt;- system.file(&quot;extdata&quot;, &quot;pinf_sc50.vcf.gz&quot;, package = &quot;pinfsc50&quot;)
 vcf &lt;- read.vcfR(vcf_file, verbose = FALSE)</code></pre>
 <p>Calling the object by name, with no options (the show method), provides a summary of the data.</p>
 <pre class="r"><code>vcf</code></pre>
@@ -392,7 +401,7 @@ vcf &lt;- read.vcfR(vcf_file, verbose = FALSE)</code></pre>
 ## 18 samples
 ## 1 CHROMs
 ## 22,031 variants
-## Object size: 20.9 Mb
+## Object size: 22.4 Mb
 ## 7.929 percent missing data
 ## *****        *****         *****</code></pre>
 </div>
@@ -485,19 +494,23 @@ abline(h=seq(0,1e4, by=100), col=&quot;#C0C0C088&quot;)</code></pre>
                                                          scale = &quot;count&quot;, trim=TRUE)
   p &lt;- p + theme_bw()
   p &lt;- p + theme(axis.title.x = element_blank(), 
-                 axis.text.x = element_text(angle = 60, hjust = 1))
+                 axis.text.x = element_text(angle = 60, hjust = 1, size=12))
 #  p &lt;- p + stat_summary(fun.data=mean_sdl, mult=1, geom=&quot;pointrange&quot;, color=&quot;black&quot;)
   p &lt;- p + scale_y_continuous(trans=scales::log2_trans(), 
                               breaks=c(1, 10, 100, 800),
                               minor_breaks=c(1:10, 2:10*10, 2:8*100))
+  p &lt;- p + theme(axis.title.y = element_text(size=12))
   p &lt;- p + theme( panel.grid.major.y=element_line(color = &quot;#A9A9A9&quot;, size=0.6) )
   p &lt;- p + theme( panel.grid.minor.y=element_line(color = &quot;#C0C0C0&quot;, size=0.2) )
+  p &lt;- p + stat_summary(fun.y=median, geom=&quot;point&quot;, shape=23, size=2)
   p
 } else {
   message(&quot;The packages reshape2 and ggplot2 are required for this example but do not appear
           to be installed.  Please use install.packages(c(&#39;reshape2&#39;, &#39;ggplot2&#39;, &#39;scales&#39;)) if you would
           like to install them.&quot;)
 }</code></pre>
+<pre><code>## Loading required package: reshape2</code></pre>
+<pre><code>## Loading required package: ggplot2</code></pre>
 <p><img src="sequence_coverage_files/figure-html/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>The violin plot presents the distribution of the data throughout its range. They also provide an easy way to apply a logarithmic transformation (here base 2) that effectively compresses large values and stretches out small values. Here we observe a large density of per variant sequence depths that are greater than ten (for the most part). This may be interpreted as having attained sufficient sequence depth for a diploid organism.</p>
 </div>
@@ -522,7 +535,7 @@ abline(h=seq(0,200, by=20), col=&quot;#C0C0C088&quot;)</code></pre>
 ## 18 samples
 ## 1 CHROMs
 ## 22,031 variants
-## Object size: 20.9 Mb
+## Object size: 22.4 Mb
 ## 7.929 percent missing data
 ## *****        *****         *****</code></pre>
 <pre class="r"><code>is.na( vcf@gt[,-1][ is.na(dp) ] ) &lt;- TRUE
@@ -531,7 +544,7 @@ vcf</code></pre>
 ## 18 samples
 ## 1 CHROMs
 ## 22,031 variants
-## Object size: 19.9 Mb
+## Object size: 21.3 Mb
 ## 21.06 percent missing data
 ## *****        *****         *****</code></pre>
 <p>We can see that we’ve increased the amount of missing data in our vcfR object. This validated the success of our manipulation. However, we may want to use this information to further mitigate the data set.</p>

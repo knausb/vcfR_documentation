@@ -111,6 +111,9 @@ img {
 .tabbed-pane {
   padding-top: 12px;
 }
+.html-widget {
+  margin-bottom: 20px;
+}
 button.code-folding-btn:focus {
   outline: none;
 }
@@ -387,8 +390,14 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 
 <p>Once a sequencing run is complete the data are typically mapped to a reference genome, variants are called and these variant are stored in a VCF file. At this point one of the first questions asked is how well did the sequencing go? One measure of sequencing quality is sequence depth or how many times each position was sequenced. In VCF data only information on the variable positions are reported. But this can be used as a convenient subset of an entire genome. Many variant callers report this information, but not all. Make sure to check your variant caller documentation if you do not see this information in your file, there is a chance it was an option that was not selected. Here we visualize the depth information from a VCF file to provide a perspective on sequence quality.</p>
 <p>We can extract the depth data (DP) as explained elsewhere. This results in a matrix of depth data. We can take a quick peak at this to remind us what it looks like.</p>
-<pre class="r"><code>library(vcfR)
-vcf &lt;- read.vcfR(&#39;TASSEL_GBS0077.vcf.gz&#39;)
+<pre class="r"><code>library(vcfR)</code></pre>
+<pre><code>## 
+##    *****       ***   vcfR   ***       *****
+##    This is vcfR 1.8.0.9000 
+##      browseVignettes(&#39;vcfR&#39;) # Documentation
+##      citation(&#39;vcfR&#39;) # Citation
+##    *****       *****      *****       *****</code></pre>
+<pre class="r"><code>vcf &lt;- read.vcfR(&#39;TASSEL_GBS0077.vcf.gz&#39;)
 dp &lt;- extract.gt(vcf, element = &quot;DP&quot;, as.numeric=TRUE)</code></pre>
 <pre class="r"><code>dp[1:4,1:6]</code></pre>
 <pre><code>##          1 10 13 1725-d-8-21-07-r-1-pm-r 18 1858-d-10-15-07-p-3-pm-r
