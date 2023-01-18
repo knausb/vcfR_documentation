@@ -79,6 +79,8 @@ navbar:
       menu:
         - text: "Subset to 1 chromosome"
           href: "subset_data_to_1chrom.html"
+        - text: "Missing data"
+          href: "missing_data.html"
         - text: "VCF software"
           href: "vcf_software.html"
         - text: "Haploidizing diploid data"
