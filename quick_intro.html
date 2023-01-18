@@ -1,24 +1,34 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
 
 <title>A quick introduction</title>
 
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
@@ -46,12 +56,18 @@ gtag('js', new Date());
 gtag('config', 'UA-107144798-1'); 
 </script>
 
-<style type="text/css">code{white-space: pre;}</style>
+
+
 <style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -64,38 +80,12 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
+
 
 <link rel="stylesheet" href="styles.css" type="text/css" />
 
-</head>
 
-<body>
 
 <style type = "text/css">
 .main-container {
@@ -103,58 +93,71 @@ h6 {
   margin-left: auto;
   margin-right: auto;
 }
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
-}
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
 }
+.html-widget {
+  margin-bottom: 20px;
+}
 button.code-folding-btn:focus {
   outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
 }
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 61px;
-  padding-bottom: 40px;
+.dropdown-submenu {
+  position: relative;
 }
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
 }
-
-.section h2 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
 }
-.section h3 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
 }
-.section h4 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
 }
-.section h5 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu.pull-left {
+  float: none;
 }
-.section h6 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -164,55 +167,90 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.parent().addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
-
-
-<div class="container-fluid main-container">
 
 <!-- tabsets -->
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-</script>
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
 
 <!-- code folding -->
 
 
-
-
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <style type="text/css">
 
@@ -226,6 +264,12 @@ $(document).ready(function ()  {
 }
 }
 
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
 
 .toc-content {
   padding-left: 30px;
@@ -261,8 +305,6 @@ div.tocify {
 
 .tocify-subheader .tocify-item {
   font-size: 0.90em;
-  padding-left: 25px;
-  text-indent: 0;
 }
 
 .tocify .list-group-item {
@@ -272,8 +314,18 @@ div.tocify {
 
 </style>
 
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
 <!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
+<div class="row">
 <div class="col-xs-12 col-sm-4 col-md-3">
 <div id="TOC" class="tocify">
 </div>
@@ -287,7 +339,7 @@ div.tocify {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -303,7 +355,7 @@ div.tocify {
   <a href="rlanguage.html">R language</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Tutorial
      
     <span class="caret"></span>
@@ -354,7 +406,7 @@ div.tocify {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     GBS class
      
     <span class="caret"></span>
@@ -387,7 +439,7 @@ div.tocify {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Ploidy
      
     <span class="caret"></span>
@@ -405,7 +457,7 @@ div.tocify {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Export
      
     <span class="caret"></span>
@@ -429,7 +481,7 @@ div.tocify {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     FAQ
      
     <span class="caret"></span>
@@ -437,6 +489,9 @@ div.tocify {
   <ul class="dropdown-menu" role="menu">
     <li>
       <a href="subset_data_to_1chrom.html">Subset to 1 chromosome</a>
+    </li>
+    <li>
+      <a href="missing_data.html">Missing data</a>
     </li>
     <li>
       <a href="vcf_software.html">VCF software</a>
@@ -468,7 +523,10 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 </center>
 </p>
 
-<div class="fluid-row" id="header">
+
+
+
+<div id="header">
 
 
 
@@ -477,15 +535,47 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 </div>
 
 
-<p>vcfR is a package intended to help visualize, manipulate and quality filter VCF data.</p>
+<p>vcfR is a package intended to help visualize, manipulate and quality
+filter VCF data.</p>
 <div id="preliminaries" class="section level2">
 <h2>Preliminaries</h2>
-<p>Input files frequently present challenges to analysis. A common problem I encounter is that chromosome names are not standardized among VCF, FASTA and GFF files. This presents work for the analyst. I suggest reading these files into R, syncronizing the names in R and then proceeding with downstream analyses. The other option I see is to create a set of files where the data is identical to the initial files, but the names have been syncronized. This later choice results in the creation of files which are largely redundant, something I feel is unnecessary.</p>
-<p>Memory use is another important consideration when using vcfR. A strength of R is that it was typically intended to read in entire datasets into memory. This allows for visualization, manipulation and analyses to be performed on the entire dataset at once. The size of genomic datasets, particularly the VCF data, present a challenge in that they may be too large for practical use in R. This presents us with the challenge of reading enough data into memory so that we can explore a large amount of it, but not so much that we exceed our existing resources. It has been my experience that R does not perfomr well when memory use approaches 1 GB of RAM, so simply investing in a workstation with a large amount of memory may not be a solution. (This may change in the future as R is under continual development.) My solution to finding this balance is to work on single chomosomes. Actually, the ‘chromosomes’ in my projects are typically supercontigs, scaffolds or contigs. This is one situation where not having complete chromosomes actually can be an advantage.</p>
+<p>Input files frequently present challenges to analysis. A common
+problem I encounter is that chromosome names are not standardized among
+VCF, FASTA and GFF files. This presents work for the analyst. I suggest
+reading these files into R, syncronizing the names in R and then
+proceeding with downstream analyses. The other option I see is to create
+a set of files where the data is identical to the initial files, but the
+names have been syncronized. This later choice results in the creation
+of files which are largely redundant, something I feel is
+unnecessary.</p>
+<p>Memory use is another important consideration when using vcfR. A
+strength of R is that it was typically intended to read in entire
+datasets into memory. This allows for visualization, manipulation and
+analyses to be performed on the entire dataset at once. The size of
+genomic datasets, particularly the VCF data, present a challenge in that
+they may be too large for practical use in R. This presents us with the
+challenge of reading enough data into memory so that we can explore a
+large amount of it, but not so much that we exceed our existing
+resources. It has been my experience that R does not perfomr well when
+memory use approaches 1 GB of RAM, so simply investing in a workstation
+with a large amount of memory may not be a solution. (This may change in
+the future as R is under continual development.) My solution to finding
+this balance is to work on single chomosomes. Actually, the
+‘chromosomes’ in my projects are typically supercontigs, scaffolds or
+contigs. This is one situation where not having complete chromosomes
+actually can be an advantage.</p>
 </div>
 <div id="data-input" class="section level2">
 <h2>Data input</h2>
-<p>The vcfR package is designed to work with data from <a href="http://www.1000genomes.org/node/101">VCF</a> files. The use of a sequence file (<a href="https://en.wikipedia.org/wiki/FASTA_format">FASTA format</a>) and an annotation file (<a href="https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md">GFF format</a>) can provide helpful context, but are not required. We’ll begin our example by locating the data files from the package ‘pinfsc50.’</p>
+<p>The vcfR package is designed to work with data from <a
+href="http://www.1000genomes.org/node/101">VCF</a> files. The use of a
+sequence file (<a
+href="https://en.wikipedia.org/wiki/FASTA_format">FASTA format</a>) and
+an annotation file (<a
+href="https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md">GFF
+format</a>) can provide helpful context, but are not required. We’ll
+begin our example by locating the data files from the package
+‘pinfsc50.’</p>
 <pre class="r"><code>pkg &lt;- &quot;pinfsc50&quot;
 vcf_file &lt;- system.file(&quot;extdata&quot;, &quot;pinf_sc50.vcf.gz&quot;, package = pkg)
 dna_file &lt;- system.file(&quot;extdata&quot;, &quot;pinf_sc50.fasta&quot;, package = pkg)
@@ -493,18 +583,46 @@ gff_file &lt;- system.file(&quot;extdata&quot;, &quot;pinf_sc50.gff&quot;, packa
 <p>Then read in the VCF file with vcfR.</p>
 <pre class="r"><code>library(vcfR)
 vcf &lt;- read.vcfR( vcf_file, verbose = FALSE )</code></pre>
-<p>The function <code>read.vcfR()</code> takes the filename you specify and reads it into R where it is stored as a <strong>vcfR</strong> object. The <strong>vcfR</strong> object is an S4 class object with three slots containing the metadata, the fixed data and the genotype data. More information on VCF data can be found in the vignette ‘vcf data.’ This object provides a known organization for the data so that downstream functions can easily access it.</p>
-<p>Genomic reference sequence files are typically in FASTA format files. These can be read in using the package ape.</p>
+<p>The function <code>read.vcfR()</code> takes the filename you specify
+and reads it into R where it is stored as a <strong>vcfR</strong>
+object. The <strong>vcfR</strong> object is an S4 class object with
+three slots containing the metadata, the fixed data and the genotype
+data. More information on VCF data can be found in the vignette ‘vcf
+data.’ This object provides a known organization for the data so that
+downstream functions can easily access it.</p>
+<p>Genomic reference sequence files are typically in FASTA format files.
+These can be read in using the package ape.</p>
 <pre class="r"><code>dna &lt;- ape::read.dna(dna_file, format = &quot;fasta&quot;)</code></pre>
-<p>Annotation files (we currently support <a href="https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md">GFF</a>), files which contain coordinates for annotations such as start and end points of genes, are tabular and can be read in with typical R functions.</p>
+<p>Annotation files (we currently support <a
+href="https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md">GFF</a>),
+files which contain coordinates for annotations such as start and end
+points of genes, are tabular and can be read in with typical R
+functions.</p>
 <pre class="r"><code>gff &lt;- read.table(gff_file, sep=&quot;\t&quot;, quote=&quot;&quot;)</code></pre>
-<p>In my experience, GFF files typically to not surround text with quotes. This can present a challenge to reading these files into R. Disabling quotes in the call to <code>read.table()</code> typically helps handle this.</p>
-<p>Once the data has been read into memory, modifications can be made to chromosome names or any other inconsistencies and one can proceed.</p>
-<p>vcfR was designed to work on an individual chromosome, supercontig or contig, depending on the state of your genome. Reading an entire genome into memory may present a technical challenge when there is a lot of data. For example, when the genome is large or there are a lot of samples. Attempting to read in lage datasets to memory may exhaust all available memory and result in an unresponsive computer. Working on chromosomes appears to be a natural way to decompose this problem. Once you have read an object into R (e.g., an annotation or sequence file) you may need to subset it to data for a single chromosome, if necessary.</p>
+<p>In my experience, GFF files typically to not surround text with
+quotes. This can present a challenge to reading these files into R.
+Disabling quotes in the call to <code>read.table()</code> typically
+helps handle this.</p>
+<p>Once the data has been read into memory, modifications can be made to
+chromosome names or any other inconsistencies and one can proceed.</p>
+<p>vcfR was designed to work on an individual chromosome, supercontig or
+contig, depending on the state of your genome. Reading an entire genome
+into memory may present a technical challenge when there is a lot of
+data. For example, when the genome is large or there are a lot of
+samples. Attempting to read in lage datasets to memory may exhaust all
+available memory and result in an unresponsive computer. Working on
+chromosomes appears to be a natural way to decompose this problem. Once
+you have read an object into R (e.g., an annotation or sequence file)
+you may need to subset it to data for a single chromosome, if
+necessary.</p>
 </div>
 <div id="creating-chromr-objects" class="section level2">
 <h2>Creating chromR objects</h2>
-<p>Once the data are in memory we can use it to create a <strong>chromR</strong> object with the function <code>create.chromR()</code>. The <code>create.chromR()</code> function creates a new chromR object and populates it with data you provided it.</p>
+<p>Once the data are in memory we can use it to create a
+<strong>chromR</strong> object with the function
+<code>create.chromR()</code>. The <code>create.chromR()</code> function
+creates a new chromR object and populates it with data you provided
+it.</p>
 <pre class="r"><code>library(vcfR)
 chrom &lt;- create.chromR(name=&#39;Supercontig&#39;, vcf=vcf, seq=dna, ann=gff)</code></pre>
 <pre><code>## Names in vcf:</code></pre>
@@ -519,62 +637,139 @@ chrom &lt;- create.chromR(name=&#39;Supercontig&#39;, vcf=vcf, seq=dna, ann=gff)
 <pre><code>##   Supercontig_1.50</code></pre>
 <pre><code>## Initializing var.info slot.</code></pre>
 <pre><code>## var.info slot initialized.</code></pre>
-<p>Note that the names of our three data sources are not identical. This results in a warning. When we examine the output we see that the name in the VCF file is ‘Supercontig_1.50,’ while the name in the FASTA is ‘Supercontig_1.50 of Phytophthora infestans T30-4.’ We know that these are synonyms so we can ignore the warning and proceed.</p>
-<p>The parameter ‘name’ is a name you can assign to your object. This information is used when plotting the chromR object. The vcfR object should be of class vcfR, which was most likely created with the function <code>read.vcfR()</code>. This object is inserted into the chrom object with the function <code>vcfR2chromR()</code>. The parameter ‘seq’ should be a DNAbin object (see the R package ape) with one sequence in it. This sequence will be inserted into the chromR object with the function <code>seq2chromR()</code>. If a sequence is not provided, <code>seq2chromR()</code> will infer the length of your chromosome from the maximum position in the vcfR object. The parameter ‘ann’ should be a <a href="https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md">GFF</a> and be of class data.frame. These can typically be read in with base R functions such as <code>read.table()</code>. This table will then be inserted into the chromR object by <code>ann2chromR()</code>. This function will check to see if columns 4 and 5 (“start” and “end”) are numeric. If not, it will try to recast them as so.</p>
+<p>Note that the names of our three data sources are not identical. This
+results in a warning. When we examine the output we see that the name in
+the VCF file is ‘Supercontig_1.50,’ while the name in the FASTA is
+‘Supercontig_1.50 of Phytophthora infestans T30-4.’ We know that these
+are synonyms so we can ignore the warning and proceed.</p>
+<p>The parameter ‘name’ is a name you can assign to your object. This
+information is used when plotting the chromR object. The vcfR object
+should be of class vcfR, which was most likely created with the function
+<code>read.vcfR()</code>. This object is inserted into the chrom object
+with the function <code>vcfR2chromR()</code>. The parameter ‘seq’ should
+be a DNAbin object (see the R package ape) with one sequence in it. This
+sequence will be inserted into the chromR object with the function
+<code>seq2chromR()</code>. If a sequence is not provided,
+<code>seq2chromR()</code> will infer the length of your chromosome from
+the maximum position in the vcfR object. The parameter ‘ann’ should be a
+<a
+href="https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md">GFF</a>
+and be of class data.frame. These can typically be read in with base R
+functions such as <code>read.table()</code>. This table will then be
+inserted into the chromR object by <code>ann2chromR()</code>. This
+function will check to see if columns 4 and 5 (“start” and “end”) are
+numeric. If not, it will try to recast them as so.</p>
 </div>
 <div id="processing-chromr-objects" class="section level2">
 <h2>Processing chromR objects</h2>
-<p>Once the chromR object has been created a few processing steps are needed. First, you may want to get a quick look at some of your data. This can be done with the plot function.</p>
+<p>Once the chromR object has been created a few processing steps are
+needed. First, you may want to get a quick look at some of your data.
+This can be done with the plot function.</p>
 <pre class="r"><code>plot(chrom)</code></pre>
 <p><img src="quick_intro_files/figure-html/plot%20chrom-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>The distribution of read depth (DP) stands out. Presumably, there is some base ploid level at which most of each genome is sequenced at. Here we see a peak, which may represent that base ploid region, but we also see a long tail which may represent copy number variants. Because genotypers typically expect a constant level of ploidy, variant calls in copy number variants may be suspect. We can see that mapping qualities (MQ) are all rather peaked around a value of 60. Because of this, if we would like to filter on this parameter we now know that we would have to employ a narrow threshold. Interpretation of the qualities (QUAL) appears less straightforward and may be clinal from a value of zero. You may conclude that this is not an ideal parameter to filter on. No SNP densities are found at this point because this data results from windowing analyses performed by <code>proc_chromR()</code> (see below). Filtering on other parameters may reveal a more straight forward path.</p>
-<p>Note that VCF data created by different variant calling software may or may not have these fields or their ranges may be different. For example, here the mapping quality is peaked at 60. Other softwares may create files where mapping quality is peaked at 20 or some other value. This is why it is important to visualize the distribution of your data so you understand its properties.</p>
-<p>We can use the <code>masker()</code> function to try to filter out data that we do not have high confidence in. The masker() function uses quality, depth and mapping quality to try to select high quality variants. See <code>?masker</code> for default values. When using masker, variants deemed to be of low quality are not deleted from the dataset. Instead, a logical vector is created to indicate which variants have or have not been filtered. This maintains the geometry of the data matrices throughout the analyisis and allows the user to easily undo any changes.</p>
+<p>The distribution of read depth (DP) stands out. Presumably, there is
+some base ploid level at which most of each genome is sequenced at. Here
+we see a peak, which may represent that base ploid region, but we also
+see a long tail which may represent copy number variants. Because
+genotypers typically expect a constant level of ploidy, variant calls in
+copy number variants may be suspect. We can see that mapping qualities
+(MQ) are all rather peaked around a value of 60. Because of this, if we
+would like to filter on this parameter we now know that we would have to
+employ a narrow threshold. Interpretation of the qualities (QUAL)
+appears less straightforward and may be clinal from a value of zero. You
+may conclude that this is not an ideal parameter to filter on. No SNP
+densities are found at this point because this data results from
+windowing analyses performed by <code>proc_chromR()</code> (see below).
+Filtering on other parameters may reveal a more straight forward
+path.</p>
+<p>Note that VCF data created by different variant calling software may
+or may not have these fields or their ranges may be different. For
+example, here the mapping quality is peaked at 60. Other softwares may
+create files where mapping quality is peaked at 20 or some other value.
+This is why it is important to visualize the distribution of your data
+so you understand its properties.</p>
+<p>We can use the <code>masker()</code> function to try to filter out
+data that we do not have high confidence in. The masker() function uses
+quality, depth and mapping quality to try to select high quality
+variants. See <code>?masker</code> for default values. When using
+masker, variants deemed to be of low quality are not deleted from the
+dataset. Instead, a logical vector is created to indicate which variants
+have or have not been filtered. This maintains the geometry of the data
+matrices throughout the analyisis and allows the user to easily undo any
+changes.</p>
 <pre class="r"><code>chrom &lt;- masker(chrom, min_QUAL = 1, min_DP = 300, max_DP = 700, min_MQ = 59.9,  max_MQ = 60.1)
 plot(chrom)</code></pre>
 <p><img src="quick_intro_files/figure-html/masker-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>Once we’re satisfied with which variants we want to consider to be of high quality we can process the chromR object with <code>proc.chromR()</code>. This function calls several helper functions to process the variant, sequence and annotation data for visualization.</p>
-<p>The function <code>regex.win()</code> defines rectangles for where called sequence (A, C, G and T) occur as well as where ambiguous nucleotides occur (N) which are used later for plotting. This function also defines rectangles for annotated features, which are also for plotting.</p>
-<p>The function <code>var.win()</code> performs windowing analyses on the data. Currently it summarizes variant count per window as well as G/C content per window.</p>
+<p>Once we’re satisfied with which variants we want to consider to be of
+high quality we can process the chromR object with
+<code>proc.chromR()</code>. This function calls several helper functions
+to process the variant, sequence and annotation data for
+visualization.</p>
+<p>The function <code>regex.win()</code> defines rectangles for where
+called sequence (A, C, G and T) occur as well as where ambiguous
+nucleotides occur (N) which are used later for plotting. This function
+also defines rectangles for annotated features, which are also for
+plotting.</p>
+<p>The function <code>var.win()</code> performs windowing analyses on
+the data. Currently it summarizes variant count per window as well as
+G/C content per window.</p>
 <pre class="r"><code>chrom &lt;- proc.chromR(chrom, verbose=TRUE)</code></pre>
 <pre><code>## Nucleotide regions complete.</code></pre>
-<pre><code>##   elapsed time:  0.244</code></pre>
+<pre><code>##   elapsed time:  0.119</code></pre>
 <pre><code>## N regions complete.</code></pre>
-<pre><code>##   elapsed time:  0.233</code></pre>
+<pre><code>##   elapsed time:  0.111</code></pre>
 <pre><code>## Population summary complete.</code></pre>
-<pre><code>##   elapsed time:  0.18</code></pre>
+<pre><code>##   elapsed time:  0.119</code></pre>
 <pre><code>## window_init complete.</code></pre>
-<pre><code>##   elapsed time:  0.001</code></pre>
+<pre><code>##   elapsed time:  0</code></pre>
 <pre><code>## windowize_fasta complete.</code></pre>
-<pre><code>##   elapsed time:  0.15</code></pre>
+<pre><code>##   elapsed time:  0.06</code></pre>
 <pre><code>## windowize_annotations complete.</code></pre>
-<pre><code>##   elapsed time:  0.011</code></pre>
+<pre><code>##   elapsed time:  0.009</code></pre>
 <pre><code>## windowize_variants complete.</code></pre>
-<pre><code>##   elapsed time:  0.001</code></pre>
+<pre><code>##   elapsed time:  0</code></pre>
 <pre class="r"><code>plot(chrom)</code></pre>
 <p><img src="quick_intro_files/figure-html/proc.chromR-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>Now that we’ve processed our chromR object, we have variant counts per window. We’re also ready to move on to more complex plots.</p>
+<p>Now that we’ve processed our chromR object, we have variant counts
+per window. We’re also ready to move on to more complex plots.</p>
 </div>
 <div id="visualizing-data" class="section level2">
 <h2>Visualizing data</h2>
-<p>At this point we’ve input three types of data (variant, sequence and annotation), inserted them into a chromR object, masked variants we feel were not of high quality and processed some summaries of these data. We can now move on to visualizing these data.</p>
-<p>The function <code>chromoqc()</code> uses the R function <code>layout()</code> to make composite plots of the data. These plots can include barplots as well as scatterplots which have chromosomal coordinates.</p>
+<p>At this point we’ve input three types of data (variant, sequence and
+annotation), inserted them into a chromR object, masked variants we feel
+were not of high quality and processed some summaries of these data. We
+can now move on to visualizing these data.</p>
+<p>The function <code>chromoqc()</code> uses the R function
+<code>layout()</code> to make composite plots of the data. These plots
+can include barplots as well as scatterplots which have chromosomal
+coordinates.</p>
 <pre class="r"><code>chromoqc(chrom, dp.alpha=20)</code></pre>
 <p><img src="quick_intro_files/figure-html/chromoqc1-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>We can also zoom in on a feature of interest by using the <code>xlim()</code> parameter.</p>
+<p>We can also zoom in on a feature of interest by using the
+<code>xlim()</code> parameter.</p>
 <pre class="r"><code>chromoqc(chrom, xlim=c(5e+05, 6e+05))</code></pre>
 <p><img src="quick_intro_files/figure-html/chromoqc2-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="output-of-data" class="section level2">
 <h2>Output of data</h2>
-<p>One of the goals of the package vcfR is to help investigators understand and explore their data. Once they’ve gained an understanding of this data, they will likely want to act upon it. One way to act upon this understanding is to use their aquired comprehension of their data to filter it to what they feel is of adequate quality.</p>
+<p>One of the goals of the package vcfR is to help investigators
+understand and explore their data. Once they’ve gained an understanding
+of this data, they will likely want to act upon it. One way to act upon
+this understanding is to use their aquired comprehension of their data
+to filter it to what they feel is of adequate quality.</p>
 <div id="output-to-vcf-file" class="section level3">
 <h3>Output to VCF file</h3>
-<p>Within the framework of the package vcfR, the filtering and output of variants determined to be of adequate quality can be accomplished with the function <code>write.vcf()</code>. This function takes a vcfR object and optionally subsets it using the mask, created in previous steps, and outputs it to a (gzipped) VCF file. This file should be usable by all VCF compliant softwares for downstream analyses.</p>
+<p>Within the framework of the package vcfR, the filtering and output of
+variants determined to be of adequate quality can be accomplished with
+the function <code>write.vcf()</code>. This function takes a vcfR object
+and optionally subsets it using the mask, created in previous steps, and
+outputs it to a (gzipped) VCF file. This file should be usable by all
+VCF compliant softwares for downstream analyses.</p>
 </div>
 <div id="conversion-to-other-r-objects" class="section level3">
 <h3>Conversion to other R objects</h3>
-<p>Conversion of vcfR and chromR to objects supported in other R packages is covered in the vignette ‘Converting data.’</p>
+<p>Conversion of vcfR and chromR to objects supported in other R
+packages is covered in the vignette ‘Converting data.’</p>
 </div>
 </div>
 
@@ -594,13 +789,59 @@ plot(chrom)</code></pre>
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
 });
 
 
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
 </script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

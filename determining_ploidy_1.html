@@ -1,24 +1,34 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
 
 <title>Determining ploidy 1</title>
 
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -43,12 +53,18 @@ gtag('js', new Date());
 gtag('config', 'UA-107144798-1'); 
 </script>
 
-<style type="text/css">code{white-space: pre;}</style>
+
+
 <style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -61,38 +77,12 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
+
 
 <link rel="stylesheet" href="styles.css" type="text/css" />
 
-</head>
 
-<body>
 
 <style type = "text/css">
 .main-container {
@@ -100,58 +90,71 @@ h6 {
   margin-left: auto;
   margin-right: auto;
 }
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
-}
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
 }
+.html-widget {
+  margin-bottom: 20px;
+}
 button.code-folding-btn:focus {
   outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
 }
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 61px;
-  padding-bottom: 40px;
+.dropdown-submenu {
+  position: relative;
 }
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
 }
-
-.section h2 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
 }
-.section h3 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
 }
-.section h4 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
 }
-.section h5 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu.pull-left {
+  float: none;
 }
-.section h6 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -161,27 +164,98 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.parent().addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
-
-
-<div class="container-fluid main-container">
 
 <!-- tabsets -->
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-</script>
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
 
 <!-- code folding -->
 
 
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
 
 
 
@@ -189,7 +263,7 @@ $(document).ready(function () {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -205,7 +279,7 @@ $(document).ready(function () {
   <a href="rlanguage.html">R language</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Tutorial
      
     <span class="caret"></span>
@@ -256,7 +330,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     GBS class
      
     <span class="caret"></span>
@@ -289,7 +363,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Ploidy
      
     <span class="caret"></span>
@@ -307,7 +381,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Export
      
     <span class="caret"></span>
@@ -331,7 +405,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     FAQ
      
     <span class="caret"></span>
@@ -339,6 +413,9 @@ $(document).ready(function () {
   <ul class="dropdown-menu" role="menu">
     <li>
       <a href="subset_data_to_1chrom.html">Subset to 1 chromosome</a>
+    </li>
+    <li>
+      <a href="missing_data.html">Missing data</a>
     </li>
     <li>
       <a href="vcf_software.html">VCF software</a>
@@ -370,7 +447,10 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 </center>
 </p>
 
-<div class="fluid-row" id="header">
+
+
+
+<div id="header">
 
 
 
@@ -379,7 +459,10 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 </div>
 
 
-<p>For some organisms ploidy information is unclear. This is important because current variant callers can need to have ploidy specified at the time of variant calling (i.e., they cannot infer ploidy). Here I explore a method to infer ploidy from VCF data.</p>
+<p>For some organisms ploidy information is unclear. This is important
+because current variant callers can need to have ploidy specified at the
+time of variant calling (i.e., they cannot infer ploidy). Here I explore
+a method to infer ploidy from VCF data.</p>
 <div id="input-data" class="section level2">
 <h2>Input data</h2>
 <p>Data import is performed similar to other examples.</p>
@@ -398,15 +481,31 @@ vcf</code></pre>
 ## 18 samples
 ## 1 CHROMs
 ## 22,031 variants
-## Object size: 20.9 Mb
+## Object size: 22.4 Mb
 ## 7.929 percent missing data
 ## *****        *****         *****</code></pre>
 </div>
 <div id="allele-balance" class="section level2">
 <h2>Allele balance</h2>
-<p>In high throughput sequencing we sequence each allele multiple times. For heterozygotes it is assumed that we sequence each allele an equal number of times. For example, if we sequence a diploid heterozygote at 30X we would expect to sequence each allele 15 times. Some variation around this expectation may be due to sequencing error. If we sequence a triploid heterozygote with a genotype of A/A/T at 30X we would expect to sequence A 20 times and T 10 times. Because we can not determine which A was sequenced we can only report the sum of all sequences even though we expect to sequence both A alleles 10 times. For a triploid heterozygote with a genotype of A/C/T sequenced at 30X would expect to sequence A 10 times, C 10 times and T 10 times.</p>
+<p>In high throughput sequencing we sequence each allele multiple times.
+For heterozygotes it is assumed that we sequence each allele an equal
+number of times. For example, if we sequence a diploid heterozygote at
+30X we would expect to sequence each allele 15 times. Some variation
+around this expectation may be due to sequencing error. If we sequence a
+triploid heterozygote with a genotype of A/A/T at 30X we would expect to
+sequence A 20 times and T 10 times. Because we can not determine which A
+was sequenced we can only report the sum of all sequences even though we
+expect to sequence both A alleles 10 times. For a triploid heterozygote
+with a genotype of A/C/T sequenced at 30X would expect to sequence A 10
+times, C 10 times and T 10 times.</p>
 <pre class="r"><code>knitr::kable(vcf@gt[c(1:2,11,30),1:4])</code></pre>
-<table>
+<table style="width:100%;">
+<colgroup>
+<col width="14%" />
+<col width="28%" />
+<col width="28%" />
+<col width="28%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th align="left">FORMAT</th>
@@ -442,13 +541,15 @@ vcf</code></pre>
 </tr>
 </tbody>
 </table>
-<p>The ‘AD’ field in our VCF data includes the depth at which each allele was sequenced. We can extract this information with the function <code>extract.gt()</code>.</p>
+<p>The ‘AD’ field in our VCF data includes the depth at which each
+allele was sequenced. We can extract this information with the function
+<code>extract.gt()</code>.</p>
 <pre class="r"><code>ad &lt;- extract.gt(vcf, element = &#39;AD&#39;)</code></pre>
 <pre class="r"><code>knitr::kable(ad[c(1:2,11,30),1:4])</code></pre>
 <table>
 <thead>
 <tr class="header">
-<th></th>
+<th align="left"></th>
 <th align="left">BL2009P4_us23</th>
 <th align="left">DDR7602</th>
 <th align="left">IN2009T1_us22</th>
@@ -457,28 +558,28 @@ vcf</code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Supercontig_1.50_41</td>
+<td align="left">Supercontig_1.50_41</td>
 <td align="left">0,7</td>
 <td align="left">0,6</td>
 <td align="left">0,8</td>
 <td align="left">0,6</td>
 </tr>
 <tr class="even">
-<td>Supercontig_1.50_136</td>
+<td align="left">Supercontig_1.50_136</td>
 <td align="left">12,0</td>
 <td align="left">20,0</td>
 <td align="left">16,0</td>
 <td align="left">20,0</td>
 </tr>
 <tr class="odd">
-<td>Supercontig_1.50_616</td>
+<td align="left">Supercontig_1.50_616</td>
 <td align="left">17,12</td>
 <td align="left">32,0</td>
 <td align="left">40,0</td>
 <td align="left">32,0</td>
 </tr>
 <tr class="even">
-<td>Supercontig_1.50_1887</td>
+<td align="left">Supercontig_1.50_1887</td>
 <td align="left">7,4</td>
 <td align="left">16,0</td>
 <td align="left">26,0</td>
@@ -486,13 +587,19 @@ vcf</code></pre>
 </tr>
 </tbody>
 </table>
-<p>Note that these genotypes were called as diploids. This can be validated by confirming that the genotypes consist of two alleles. Allele depth appears to be independent of this parameterization. This is probably because this information can be gathered upstream of the process of genotype calling. Despite the specification of diploidy, the allele depth information can include the observation of multiple alleles.</p>
+<p>Note that these genotypes were called as diploids. This can be
+validated by confirming that the genotypes consist of two alleles.
+Allele depth appears to be independent of this parameterization. This is
+probably because this information can be gathered upstream of the
+process of genotype calling. Despite the specification of diploidy, the
+allele depth information can include the observation of multiple
+alleles.</p>
 <pre class="r"><code>#knitr::kable(ad[grep(&quot;[^0],[^0],[^0]&quot;, ad[,&#39;DDR7602&#39;]),1:4])
 knitr::kable(ad[grep(&quot;[^0],[^0],[^0]&quot;, ad[,&#39;P13626&#39;])[1:6],c(2:3,12)])</code></pre>
 <table>
 <thead>
 <tr class="header">
-<th></th>
+<th align="left"></th>
 <th align="left">DDR7602</th>
 <th align="left">IN2009T1_us22</th>
 <th align="left">P13626</th>
@@ -500,47 +607,53 @@ knitr::kable(ad[grep(&quot;[^0],[^0],[^0]&quot;, ad[,&#39;P13626&#39;])[1:6],c(2
 </thead>
 <tbody>
 <tr class="odd">
-<td>Supercontig_1.50_105867</td>
+<td align="left">Supercontig_1.50_105867</td>
 <td align="left">0,0,23</td>
 <td align="left">12,9,0</td>
 <td align="left">8,7,13</td>
 </tr>
 <tr class="even">
-<td>Supercontig_1.50_208264</td>
+<td align="left">Supercontig_1.50_208264</td>
 <td align="left">7,2,0</td>
 <td align="left">14,1,0</td>
 <td align="left">6,2,4</td>
 </tr>
 <tr class="odd">
-<td>Supercontig_1.50_212192</td>
+<td align="left">Supercontig_1.50_212192</td>
 <td align="left">2,1,0</td>
 <td align="left">18,2,0</td>
 <td align="left">9,1,6</td>
 </tr>
 <tr class="even">
-<td>Supercontig_1.50_218971</td>
+<td align="left">Supercontig_1.50_218971</td>
 <td align="left">1,0,4</td>
 <td align="left">14,3,7</td>
 <td align="left">11,2,9</td>
 </tr>
 <tr class="odd">
-<td>Supercontig_1.50_442450</td>
+<td align="left">Supercontig_1.50_442450</td>
 <td align="left">2,3,0</td>
 <td align="left">0,7,0</td>
 <td align="left">1,5,1</td>
 </tr>
 <tr class="even">
-<td>Supercontig_1.50_485181</td>
+<td align="left">Supercontig_1.50_485181</td>
 <td align="left">29,2,1</td>
 <td align="left">42,0,0</td>
 <td align="left">29,4,3</td>
 </tr>
 </tbody>
 </table>
-<p>This can be seen in the VCF data along with the genotypes as well.</p>
+<p>This can be seen in the VCF data along with the genotypes as
+well.</p>
 <pre class="r"><code>#knitr::kable(vcf@gt[grep(&quot;[^0],[^0],[^0]&quot;, ad[,&#39;P13626&#39;]),c(4:5,13)])
 knitr::kable(vcf@gt[grep(&quot;[^0],[^0],[^0]&quot;, ad[,&#39;P13626&#39;])[1:6],c(3:4,13)])</code></pre>
 <table>
+<colgroup>
+<col width="33%" />
+<col width="34%" />
+<col width="32%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th align="left">DDR7602</th>
@@ -581,19 +694,31 @@ knitr::kable(vcf@gt[grep(&quot;[^0],[^0],[^0]&quot;, ad[,&#39;P13626&#39;])[1:6]
 </tr>
 </tbody>
 </table>
-<p>The genotypes are reported as diploid genotypes because this was specified as an argument for the variant caller. Despite this specification, we can see that more than two alleles can be observed for a sample at a variant. Here we’ve searched the sample P13626 for teh presented example.</p>
-<p>The function <code>extract.gt()</code> isolates the ‘AD’ data from the colon delimited string in the VCF data. We expect integer counts for the number of sequences observed. However, because this data is comma delimited we need another step before we have integers. We use the function <code>masplit()</code> to extract the first and second allele. At that point we have integers so we can use math to create allele frequencies from the counts.</p>
+<p>The genotypes are reported as diploid genotypes because this was
+specified as an argument for the variant caller. Despite this
+specification, we can see that more than two alleles can be observed for
+a sample at a variant. Here we’ve searched the sample P13626 for teh
+presented example.</p>
+<p>The function <code>extract.gt()</code> isolates the ‘AD’ data from
+the colon delimited string in the VCF data. We expect integer counts for
+the number of sequences observed. However, because this data is comma
+delimited we need another step before we have integers. We use the
+function <code>masplit()</code> to extract the first and second allele.
+At that point we have integers so we can use math to create allele
+frequencies from the counts.</p>
 <pre class="r"><code>allele1 &lt;- masplit(ad, record = 1)
 allele2 &lt;- masplit(ad, record = 2)
 
 ad1 &lt;- allele1 / (allele1 + allele2)
 ad2 &lt;- allele2 / (allele1 + allele2)</code></pre>
-<p>Once we have our allele frequencies we can plot them with a histogram.</p>
+<p>Once we have our allele frequencies we can plot them with a
+histogram.</p>
 <pre class="r"><code>hist(ad2[,&quot;P17777us22&quot;], breaks = seq(0,1,by=0.02), col = &quot;#1f78b4&quot;, xaxt=&quot;n&quot;)
 hist(ad1[,&quot;P17777us22&quot;], breaks = seq(0,1,by=0.02), col = &quot;#a6cee3&quot;, add = TRUE)
 axis(side=1, at=c(0,0.25,0.333,0.5,0.666,0.75,1), labels=c(0,&quot;1/4&quot;,&quot;1/3&quot;,&quot;1/2&quot;,&quot;1/3&quot;,&quot;3/4&quot;,1))</code></pre>
 <p><img src="determining_ploidy_1_files/figure-html/unnamed-chunk-8-1.png" width="768" style="display: block; margin: auto;" /></p>
-<p>The most common class of variant is the homozygote. This overwhelms the plot. We can remove these so we can focus on the heterozygotes.</p>
+<p>The most common class of variant is the homozygote. This overwhelms
+the plot. We can remove these so we can focus on the heterozygotes.</p>
 <pre class="r"><code>gt &lt;- extract.gt(vcf, element = &#39;GT&#39;)
 hets &lt;- is_het(gt)
 
@@ -609,11 +734,15 @@ hist(ad2[,&quot;P17777us22&quot;], breaks = seq(0,1,by=0.02), col = &quot;#1f78b
 hist(ad1[,&quot;P17777us22&quot;], breaks = seq(0,1,by=0.02), col = &quot;#a6cee3&quot;, add = TRUE)
 axis(side=1, at=c(0,0.25,0.333,0.5,0.666,0.75,1), labels=c(0,&quot;1/4&quot;,&quot;1/3&quot;,&quot;1/2&quot;,&quot;1/3&quot;,&quot;3/4&quot;,1))</code></pre>
 <p><img src="determining_ploidy_1_files/figure-html/unnamed-chunk-9-1.png" width="768" style="display: block; margin: auto;" /></p>
-<p>This allows us to focus on the heterozygous variants and we observe a peak at 0.5 consistent with our expectation. However, the frequencies range almost completely from 0 to one. This suggests some improvement could be made.</p>
+<p>This allows us to focus on the heterozygous variants and we observe a
+peak at 0.5 consistent with our expectation. However, the frequencies
+range almost completely from 0 to one. This suggests some improvement
+could be made.</p>
 </div>
 <div id="allele-depth" class="section level2">
 <h2>Allele Depth</h2>
-<p>To get an idea on how to improve our plots we can take a closer look at allele depth.</p>
+<p>To get an idea on how to improve our plots we can take a closer look
+at allele depth.</p>
 <pre class="r"><code>ad &lt;- extract.gt(vcf, element = &#39;AD&#39;)
 #ad[1:3,1:4]
 
@@ -634,8 +763,17 @@ sums[,&quot;P17777us22&quot;]</code></pre>
 ##  19  75</code></pre>
 <pre class="r"><code>abline(v=sums[,&quot;P17777us22&quot;], col=2, lwd=2)</code></pre>
 <p><img src="determining_ploidy_1_files/figure-html/unnamed-chunk-10-1.png" width="768" style="display: block; margin: auto;" /></p>
-<p>Here we have presented the number of times the most abundant allele was sequenced as a histogram. We see two classes of calls resulting in peaks at just below 40 and just below 60. These peaks correspond to heterozygotes and homozygotes respectively. There are a substantial number of variants with exceptionally high coverage, here we’ve limited the presentation to just variants below 100. There is also a substantial peak near zero representing variants sequenced at low coverage. Filtering this data by imposing some sort of threshold may improve our other analyses. Here we’ve used the 15% and 95% quantiles.</p>
-<p>We can see how this treatment looks on the second most abundant allele as well.</p>
+<p>Here we have presented the number of times the most abundant allele
+was sequenced as a histogram. We see two classes of calls resulting in
+peaks at just below 40 and just below 60. These peaks correspond to
+heterozygotes and homozygotes respectively. There are a substantial
+number of variants with exceptionally high coverage, here we’ve limited
+the presentation to just variants below 100. There is also a substantial
+peak near zero representing variants sequenced at low coverage.
+Filtering this data by imposing some sort of threshold may improve our
+other analyses. Here we’ve used the 15% and 95% quantiles.</p>
+<p>We can see how this treatment looks on the second most abundant
+allele as well.</p>
 <pre class="r"><code>tmp &lt;- allele2[,&quot;P17777us22&quot;]
 tmp &lt;- tmp[tmp&gt;0]
 tmp &lt;- tmp[tmp&lt;=100]
@@ -647,7 +785,8 @@ sums[,&quot;P17777us22&quot;]</code></pre>
 ##  19  75</code></pre>
 <pre class="r"><code>abline(v=sums[,&quot;P17777us22&quot;], col=2, lwd=2)</code></pre>
 <p><img src="determining_ploidy_1_files/figure-html/unnamed-chunk-12-1.png" width="768" style="display: block; margin: auto;" /></p>
-<p>We can use this information to filter our data. First we’ll look at the raw data.</p>
+<p>We can use this information to filter our data. First we’ll look at
+the raw data.</p>
 <pre class="r"><code>#vcf &lt;- extract.indels(vcf)
 #gq &lt;- extract.gt(vcf, element = &#39;GQ&#39;, as.numeric = TRUE)
 #vcf@gt[,-1][ gq &lt; 99 ] &lt;- NA
@@ -665,7 +804,8 @@ boxplot(allele1, las=3)</code></pre>
 #tmp &lt;- allele1[,&quot;P17777us22&quot;]
 #tmp &lt;- tmp[tmp &lt;= 100]
 #hist(tmp, breaks=seq(0,100,by=1), col=&quot;#808080&quot;)</code></pre>
-<p>Now we can use our quantiles to censor variants outside of our desired range by setting them to NA.</p>
+<p>Now we can use our quantiles to censor variants outside of our
+desired range by setting them to NA.</p>
 <pre class="r"><code>sums &lt;- apply(allele1, MARGIN=2, quantile, probs=c(0.15, 0.95), na.rm=TRUE)
 # Allele 1
 dp2 &lt;- sweep(allele1, MARGIN=2, FUN = &quot;-&quot;, sums[1,])
@@ -699,14 +839,16 @@ vcf@gt[,-1][dp2 &gt; 0] &lt;- NA
 #hist(adp, breaks=seq(0, max(adp, na.rm = TRUE), by=1), col=&quot;#C0C0C0&quot;)
 #par(mfrow=c(1,1))
 #abline(v=sums[,&quot;P17777us22&quot;], col=2, lwd = 2)</code></pre>
-<p>Now we can check out work with another set of box and whisker plots.</p>
+<p>Now we can check out work with another set of box and whisker
+plots.</p>
 <pre class="r"><code>ad &lt;- extract.gt(vcf, element = &#39;AD&#39;)
 allele1 &lt;- masplit(ad, record = 1)
 allele2 &lt;- masplit(ad, record = 2)
 boxplot(allele1, las=3)</code></pre>
 <p><img src="determining_ploidy_1_files/figure-html/unnamed-chunk-15-1.png" width="768" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>#hist(allele1[,&quot;P17777us22&quot;], ylim=c(0,2000), breaks = seq(0,100,by=5) )</code></pre>
-<p>Now we can see if our histogram of allele balance has been cleaned up.</p>
+<p>Now we can see if our histogram of allele balance has been cleaned
+up.</p>
 <pre class="r"><code>gt &lt;- extract.gt(vcf, element = &#39;GT&#39;)
 hets &lt;- is_het(gt)
 is.na( ad[ !hets ] ) &lt;- TRUE
@@ -721,13 +863,21 @@ hist(ad2[,&quot;P17777us22&quot;], breaks = seq(0,1,by=0.02), col = &quot;#1f78b
 hist(ad1[,&quot;P17777us22&quot;], breaks = seq(0,1,by=0.02), col = &quot;#a6cee3&quot;, add = TRUE)
 axis(side=1, at=c(0,0.25,0.333,0.5,0.666,0.75,1), labels=c(0,&quot;1/4&quot;,&quot;1/3&quot;,&quot;1/2&quot;,&quot;2/3&quot;,&quot;3/4&quot;,1))</code></pre>
 <p><img src="determining_ploidy_1_files/figure-html/unnamed-chunk-16-1.png" width="768" style="display: block; margin: auto;" /></p>
-<p>We see that the shoulders that were present in the previous plot are almost entirely removed. This appears to be a dramatic improvement.</p>
-<p>While we’ve focused on one sample through most of this example its important to realize that we’ve been analyzing all of the samples in the dataset. This means that now that we have one sample that appears to to have been well processed we can now examine the other samples as well.</p>
+<p>We see that the shoulders that were present in the previous plot are
+almost entirely removed. This appears to be a dramatic improvement.</p>
+<p>While we’ve focused on one sample through most of this example its
+important to realize that we’ve been analyzing all of the samples in the
+dataset. This means that now that we have one sample that appears to to
+have been well processed we can now examine the other samples as
+well.</p>
 <pre class="r"><code>hist(ad2[,&quot;P13626&quot;], breaks = seq(0,1,by=0.02), col = &quot;#33a02c&quot;, xaxt=&quot;n&quot;, main=&quot;P13626&quot;)
 hist(ad1[,&quot;P13626&quot;], breaks = seq(0,1,by=0.02), col = &quot;#b2df8a&quot;, add = TRUE)
 axis(side=1, at=c(0,0.25,0.333,0.5,0.666,0.75,1), labels=c(0,&quot;1/4&quot;,&quot;1/3&quot;,&quot;1/2&quot;,&quot;2/3&quot;,&quot;3/4&quot;,1))</code></pre>
 <p><img src="determining_ploidy_1_files/figure-html/unnamed-chunk-17-1.png" width="768" style="display: block; margin: auto;" /></p>
-<p>This is an example of a sample that appears triploid. The greatest density of the allele frequencies are at 1/3 and 2/3 as we would expect from a triploid. This demonstrates how these methods can be used to infer ploidy among diploids, triploids and possibly higher ploids.</p>
+<p>This is an example of a sample that appears triploid. The greatest
+density of the allele frequencies are at 1/3 and 2/3 as we would expect
+from a triploid. This demonstrates how these methods can be used to
+infer ploidy among diploids, triploids and possibly higher ploids.</p>
 </div>
 
 <center>
@@ -744,7 +894,7 @@ axis(side=1, at=c(0,0.25,0.333,0.5,0.666,0.75,1), labels=c(0,&quot;1/4&quot;,&qu
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
@@ -752,6 +902,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

@@ -1,24 +1,34 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
 
 <title>vcfR objects</title>
 
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -43,12 +53,18 @@ gtag('js', new Date());
 gtag('config', 'UA-107144798-1'); 
 </script>
 
-<style type="text/css">code{white-space: pre;}</style>
+
+
 <style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -61,38 +77,12 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
+
 
 <link rel="stylesheet" href="styles.css" type="text/css" />
 
-</head>
 
-<body>
 
 <style type = "text/css">
 .main-container {
@@ -100,58 +90,71 @@ h6 {
   margin-left: auto;
   margin-right: auto;
 }
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
-}
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
 }
+.html-widget {
+  margin-bottom: 20px;
+}
 button.code-folding-btn:focus {
   outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
 }
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 61px;
-  padding-bottom: 40px;
+.dropdown-submenu {
+  position: relative;
 }
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
 }
-
-.section h2 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
 }
-.section h3 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
 }
-.section h4 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
 }
-.section h5 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu.pull-left {
+  float: none;
 }
-.section h6 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -161,27 +164,98 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.parent().addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
-
-
-<div class="container-fluid main-container">
 
 <!-- tabsets -->
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-</script>
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
 
 <!-- code folding -->
 
 
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
 
 
 
@@ -189,7 +263,7 @@ $(document).ready(function () {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -205,7 +279,7 @@ $(document).ready(function () {
   <a href="rlanguage.html">R language</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Tutorial
      
     <span class="caret"></span>
@@ -256,7 +330,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     GBS class
      
     <span class="caret"></span>
@@ -289,7 +363,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Ploidy
      
     <span class="caret"></span>
@@ -307,7 +381,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Export
      
     <span class="caret"></span>
@@ -331,7 +405,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     FAQ
      
     <span class="caret"></span>
@@ -339,6 +413,9 @@ $(document).ready(function () {
   <ul class="dropdown-menu" role="menu">
     <li>
       <a href="subset_data_to_1chrom.html">Subset to 1 chromosome</a>
+    </li>
+    <li>
+      <a href="missing_data.html">Missing data</a>
     </li>
     <li>
       <a href="vcf_software.html">VCF software</a>
@@ -370,7 +447,10 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 </center>
 </p>
 
-<div class="fluid-row" id="header">
+
+
+
+<div id="header">
 
 
 
@@ -380,34 +460,63 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 
 <div id="TOC">
 <ul>
-<li><a href="#creation">Creation</a></li>
-<li><a href="#summarization">Summarization</a></li>
-<li><a href="#queries">Queries</a></li>
-<li><a href="#subsetting">Subsetting</a></li>
+<li><a href="#creation" id="toc-creation">Creation</a></li>
+<li><a href="#summarization"
+id="toc-summarization">Summarization</a></li>
+<li><a href="#queries" id="toc-queries">Queries</a></li>
+<li><a href="#subsetting" id="toc-subsetting">Subsetting</a></li>
 </ul>
 </div>
 
-<p>The package vcfR uses two objects to contain data: vcfR and chromR. The chromR object will be covered in a later section. The vcfR object is intended to contain data read in from a variant call format (VCF) file. Once stored in this object the data may be manipulated in a number of ways. It may also be used as part of the more complicated chromR object. Here we provide an overview of the vcfR object.</p>
+<p>The package vcfR uses two objects to contain data: vcfR and chromR.
+The chromR object will be covered in a later section. The vcfR object is
+intended to contain data read in from a variant call format (VCF) file.
+Once stored in this object the data may be manipulated in a number of
+ways. It may also be used as part of the more complicated chromR object.
+Here we provide an overview of the vcfR object.</p>
 <div id="creation" class="section level2">
 <h2>Creation</h2>
-<p>A first step in understanding the vcfR object is to create one so we can explore it.</p>
+<p>A first step in understanding the vcfR object is to create one so we
+can explore it.</p>
 <pre class="r"><code>library(vcfR)
 vcf_file &lt;- system.file(&quot;extdata&quot;, &quot;pinf_sc50.vcf.gz&quot;, package = &quot;pinfsc50&quot;)
 vcf &lt;- read.vcfR( vcf_file, verbose = FALSE )</code></pre>
-<p>Here we start by loading the library vcfR to make its functions available to us. The function <code>system.file()</code> locates teh file ‘pinf_sc50.vcf.gz’ in the R package ‘pinfsc50.’ This library may be in different locations on different system, so this function helps us find our example file. In practice, you’ll substitute this step by using the name of your data file and any relevant path information (if the file is not in your working directory). The function <code>read.vcfR()</code> reads in a VCF file and returns a vcfR object. Here we’ve called this vcfR object ‘vcf.’ We’ve also set ‘verbose = FALSE’ in order to improve the formating of this page. In practice, tou will typically leave ‘verbose = TRUE’ (it’s default) so that progress is reported. Large files may require some patience to import, so progress provides important feedback during this step.</p>
+<p>Here we start by loading the library vcfR to make its functions
+available to us. The function <code>system.file()</code> locates teh
+file ‘pinf_sc50.vcf.gz’ in the R package ‘pinfsc50.’ This library may be
+in different locations on different system, so this function helps us
+find our example file. In practice, you’ll substitute this step by using
+the name of your data file and any relevant path information (if the
+file is not in your working directory). The function
+<code>read.vcfR()</code> reads in a VCF file and returns a vcfR object.
+Here we’ve called this vcfR object ‘vcf.’ We’ve also set ‘verbose =
+FALSE’ in order to improve the formating of this page. In practice, tou
+will typically leave ‘verbose = TRUE’ (it’s default) so that progress is
+reported. Large files may require some patience to import, so progress
+provides important feedback during this step.</p>
 </div>
 <div id="summarization" class="section level2">
 <h2>Summarization</h2>
-<p>Once we’re imorted our VCF data, we’ll want to explore our vcfR object to validate that its contents are what we expect. Two relevant tools are the object’s <code>show</code> method as wellas the <code>head()</code> command.</p>
+<p>Once we’re imorted our VCF data, we’ll want to explore our vcfR
+object to validate that its contents are what we expect. Two relevant
+tools are the object’s <code>show</code> method as wellas the
+<code>head()</code> command.</p>
 <pre class="r"><code>vcf</code></pre>
 <pre><code>## ***** Object of Class vcfR *****
 ## 18 samples
 ## 1 CHROMs
 ## 22,031 variants
-## Object size: 20.9 Mb
+## Object size: 22.4 Mb
 ## 7.929 percent missing data
 ## *****        *****         *****</code></pre>
-<p>When we execute the object’s name with no function we implement the object’s <code>show</code> method. The <code>show</code> method for vcfR objects reports a summary of the object’s contents. Here we see that we have 18 samples and 22,031 variants. We should know how many samples were in our experiment. This number should be compared to the value reported here. We may similarly have some information about how many variants should be in the file. That number can also be compared to the value reported here.</p>
+<p>When we execute the object’s name with no function we implement the
+object’s <code>show</code> method. The <code>show</code> method for vcfR
+objects reports a summary of the object’s contents. Here we see that we
+have 18 samples and 22,031 variants. We should know how many samples
+were in our experiment. This number should be compared to the value
+reported here. We may similarly have some information about how many
+variants should be in the file. That number can also be compared to the
+value reported here.</p>
 <pre class="r"><code>head(vcf)</code></pre>
 <pre><code>## [1] &quot;***** Object of class &#39;vcfR&#39; *****&quot;
 ## [1] &quot;***** Meta section *****&quot;
@@ -429,37 +538,42 @@ vcf &lt;- read.vcfR( vcf_file, verbose = FALSE )</code></pre>
 ## [6,] &quot;Supercontig_1.50&quot; &quot;462&quot; NA &quot;T&quot;  &quot;G&quot; &quot;1301.07&quot; NA    
 ## [1] 
 ## [1] &quot;***** Genotype section *****&quot;
-##      FORMAT           BL2009P4_us23             
-## [1,] &quot;GT:AD:DP:GQ:PL&quot; &quot;1|1:0,7:7:21:283,21,0&quot;   
-## [2,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:12,0:12:36:0,36,427&quot; 
-## [3,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:27,0:27:81:0,81,1117&quot;
-## [4,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:29,0:29:87:0,87,1243&quot;
-## [5,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:26,0:26:78:0,78,1034&quot;
-## [6,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:23,0:23:69:0,69,958&quot; 
-##      DDR7602                     IN2009T1_us22              
-## [1,] &quot;1|1:0,6:6:18:243,18,0&quot;     &quot;1|1:0,8:8:24:324,24,0&quot;    
-## [2,] &quot;0|0:20,0:20:60:0,60,819&quot;   &quot;0|0:16,0:16:48:0,48,650&quot;  
-## [3,] &quot;0|0:26,0:26:78:0,78,1077&quot;  &quot;0|0:23,0:23:69:0,69,946&quot;  
-## [4,] &quot;0|0:27,0:27:81:0,81,1158&quot;  &quot;0|0:32,0:32:96:0,96,1299&quot; 
-## [5,] &quot;0|0:30,0:30:90:0,90,1242&quot;  &quot;0|0:41,0:41:99:0,122,1613&quot;
-## [6,] &quot;0|0:36,0:36:99:0,108,1556&quot; &quot;0|0:35,0:35:99:0,105,1467&quot;
-##      LBUS5                       NL07434                    
-## [1,] &quot;1|1:0,6:6:18:243,18,0&quot;     &quot;1|1:0,12:12:36:486,36,0&quot;  
-## [2,] &quot;0|0:20,0:20:60:0,60,819&quot;   &quot;0|0:28,0:28:84:0,84,948&quot;  
-## [3,] &quot;0|0:26,0:26:78:0,78,1077&quot;  &quot;0|1:19,20:39:99:565,0,559&quot;
-## [4,] &quot;0|0:27,0:27:81:0,81,1158&quot;  &quot;0|1:19,19:38:99:523,0,535&quot;
-## [5,] &quot;0|0:30,0:30:90:0,90,1242&quot;  &quot;0|1:22,22:44:99:593,0,651&quot;
-## [6,] &quot;0|0:36,0:36:99:0,108,1556&quot; &quot;0|1:29,25:54:99:723,0,876&quot;
+##      FORMAT           BL2009P4_us23              DDR7602                    
+## [1,] &quot;GT:AD:DP:GQ:PL&quot; &quot;1|1:0,7:7:21:283,21,0&quot;    &quot;1|1:0,6:6:18:243,18,0&quot;    
+## [2,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:12,0:12:36:0,36,427&quot;  &quot;0|0:20,0:20:60:0,60,819&quot;  
+## [3,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:27,0:27:81:0,81,1117&quot; &quot;0|0:26,0:26:78:0,78,1077&quot; 
+## [4,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:29,0:29:87:0,87,1243&quot; &quot;0|0:27,0:27:81:0,81,1158&quot; 
+## [5,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:26,0:26:78:0,78,1034&quot; &quot;0|0:30,0:30:90:0,90,1242&quot; 
+## [6,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:23,0:23:69:0,69,958&quot;  &quot;0|0:36,0:36:99:0,108,1556&quot;
+##      IN2009T1_us22               LBUS5                      
+## [1,] &quot;1|1:0,8:8:24:324,24,0&quot;     &quot;1|1:0,6:6:18:243,18,0&quot;    
+## [2,] &quot;0|0:16,0:16:48:0,48,650&quot;   &quot;0|0:20,0:20:60:0,60,819&quot;  
+## [3,] &quot;0|0:23,0:23:69:0,69,946&quot;   &quot;0|0:26,0:26:78:0,78,1077&quot; 
+## [4,] &quot;0|0:32,0:32:96:0,96,1299&quot;  &quot;0|0:27,0:27:81:0,81,1158&quot; 
+## [5,] &quot;0|0:41,0:41:99:0,122,1613&quot; &quot;0|0:30,0:30:90:0,90,1242&quot; 
+## [6,] &quot;0|0:35,0:35:99:0,105,1467&quot; &quot;0|0:36,0:36:99:0,108,1556&quot;
+##      NL07434                    
+## [1,] &quot;1|1:0,12:12:36:486,36,0&quot;  
+## [2,] &quot;0|0:28,0:28:84:0,84,948&quot;  
+## [3,] &quot;0|1:19,20:39:99:565,0,559&quot;
+## [4,] &quot;0|1:19,19:38:99:523,0,535&quot;
+## [5,] &quot;0|1:22,22:44:99:593,0,651&quot;
+## [6,] &quot;0|1:29,25:54:99:723,0,876&quot;
 ## [1] &quot;First 6 columns only.&quot;
 ## [1] 
 ## [1] &quot;Unique GT formats:&quot;
 ## [1] &quot;GT:AD:DP:GQ:PL&quot;
 ## [1]</code></pre>
-<p>The <code>head()</code> function reports the head, or the top, of an object. A vcfR object consists of three slots: meta, fix and gt. Here we see the first few lines or rows of each slot. More information on VCF data can be found in the section <a href="./vcf_data.html">vcf_data</a>.</p>
+<p>The <code>head()</code> function reports the head, or the top, of an
+object. A vcfR object consists of three slots: meta, fix and gt. Here we
+see the first few lines or rows of each slot. More information on VCF
+data can be found in the section <a
+href="./vcf_data.html">vcf_data</a>.</p>
 </div>
 <div id="queries" class="section level2">
 <h2>Queries</h2>
-<p>Once we have validated that our vcfR object contains the data we expect we may want to explore it further.</p>
+<p>Once we have validated that our vcfR object contains the data we
+expect we may want to explore it further.</p>
 <pre class="r"><code>head(is.polymorphic(vcf, na.omit = TRUE))</code></pre>
 <pre><code>##  Supercontig_1.50_41 Supercontig_1.50_136 Supercontig_1.50_254 
 ##                FALSE                 TRUE                 TRUE 
@@ -467,20 +581,48 @@ vcf &lt;- read.vcfR( vcf_file, verbose = FALSE )</code></pre>
 ##                 TRUE                 TRUE                 TRUE</code></pre>
 <pre class="r"><code>head(is.biallelic(vcf))</code></pre>
 <pre><code>## [1] TRUE TRUE TRUE TRUE TRUE TRUE</code></pre>
-<p>VCF files report only variable, or polymorphic, positions. This means that all positions in your VCF file should have been polymorphic. The package vcfR allows you to manipulate VCF data. For example, you may want to omit certain samples. If the samples you omit were the only ones polymorphic for certain positions you may have rendered these positions unpolymorphic. Note that columns of the ‘fix’ slot contains summaries over all samples. If you remove samples then these summaries are no longer accurate, so make sure you keep this in mind when making these changes. This function allows you to query the positions to validate that they are polymorphic.</p>
-<p>The function <code>is.biallelic()</code> queries positions to determine if they contain no more than two alleles. Some downstream analyses can only handle biallelic loci. Some R object from other packages, or file formats for other softwares, can only handle biallelic loci. This funciton helps validate if loci contain more than two alleles and can help manage this situation if desired.</p>
+<p>VCF files report only variable, or polymorphic, positions. This means
+that all positions in your VCF file should have been polymorphic. The
+package vcfR allows you to manipulate VCF data. For example, you may
+want to omit certain samples. If the samples you omit were the only ones
+polymorphic for certain positions you may have rendered these positions
+unpolymorphic. Note that columns of the ‘fix’ slot contains summaries
+over all samples. If you remove samples then these summaries are no
+longer accurate, so make sure you keep this in mind when making these
+changes. This function allows you to query the positions to validate
+that they are polymorphic.</p>
+<p>The function <code>is.biallelic()</code> queries positions to
+determine if they contain no more than two alleles. Some downstream
+analyses can only handle biallelic loci. Some R object from other
+packages, or file formats for other softwares, can only handle biallelic
+loci. This funciton helps validate if loci contain more than two alleles
+and can help manage this situation if desired.</p>
 <pre class="r"><code>vcf2 &lt;- extract.indels(vcf)</code></pre>
-<p>Variants contained in VCF data may include single nucleotide polymorphisms (SNPs) as well as indels or more complicated features. Some analyses may require that only SNPs are used (e.g., when a mutation model is used). In these cases it may be useful to subset the data to only the SNPs. The function <code>extract.indels()</code> may be used for this. Note that it is different from the previous queries in that it subsets the vcfR object for you instead of just returning an index. This allows the rapid creation of vcfR object that should only contain SNPs.</p>
+<p>Variants contained in VCF data may include single nucleotide
+polymorphisms (SNPs) as well as indels or more complicated features.
+Some analyses may require that only SNPs are used (e.g., when a mutation
+model is used). In these cases it may be useful to subset the data to
+only the SNPs. The function <code>extract.indels()</code> may be used
+for this. Note that it is different from the previous queries in that it
+subsets the vcfR object for you instead of just returning an index. This
+allows the rapid creation of vcfR object that should only contain
+SNPs.</p>
 </div>
 <div id="subsetting" class="section level2">
 <h2>Subsetting</h2>
-<p>The package vcfR provides the ability to manipulte VCF data. With this functionality comes the ability to create invalide VCF files. When done with forethought this provides valuable options. When not done with forethought this is likely to create problems. Please familiarize yourself with the VCF specification if your goal is to output valid VCF files. If your goal is to create different formats of your data then these tools may be helpful.</p>
+<p>The package vcfR provides the ability to manipulte VCF data. With
+this functionality comes the ability to create invalide VCF files. When
+done with forethought this provides valuable options. When not done with
+forethought this is likely to create problems. Please familiarize
+yourself with the VCF specification if your goal is to output valid VCF
+files. If your goal is to create different formats of your data then
+these tools may be helpful.</p>
 <pre class="r"><code>vcf[,1:4]</code></pre>
 <pre><code>## ***** Object of Class vcfR *****
 ## 3 samples
 ## 1 CHROMs
 ## 22,031 variants
-## Object size: 11.2 Mb
+## Object size: 11.9 Mb
 ## 2.875 percent missing data
 ## *****        *****         *****</code></pre>
 <pre class="r"><code>vcf[1:4,]</code></pre>
@@ -496,10 +638,21 @@ vcf &lt;- read.vcfR( vcf_file, verbose = FALSE )</code></pre>
 ## 18 samples
 ## 1 CHROMs
 ## 21,719 variants
-## Object size: 20.3 Mb
+## Object size: 21.8 Mb
 ## 7.991 percent missing data
 ## *****        *****         *****</code></pre>
-<p>The square brackets (<code>[]</code>) have been implemented for vcfR objects in order to allow their manipulation appear similar to other R objects. The vcfR object’s ‘fix’ and ‘gt’ slots consist of matrices. When columns are selected, by subsetting after the comma, only columns from the ‘gt’ slot are manipulated and the ‘fix’ slot is maintained. Note that the first column of the ‘gt’ slot contains the format information for all of the subsequent columns. This means you will typically want to include the first column. When selecting rows, by indexing before the comma, both the ‘fix’ and ‘gt’ slots are subset. Subsetting can be performed in typical R manners such as the numeric sequences provided above. They can also be combined with the query functions presented above to facilitate more complex operations.</p>
+<p>The square brackets (<code>[]</code>) have been implemented for vcfR
+objects in order to allow their manipulation appear similar to other R
+objects. The vcfR object’s ‘fix’ and ‘gt’ slots consist of matrices.
+When columns are selected, by subsetting after the comma, only columns
+from the ‘gt’ slot are manipulated and the ‘fix’ slot is maintained.
+Note that the first column of the ‘gt’ slot contains the format
+information for all of the subsequent columns. This means you will
+typically want to include the first column. When selecting rows, by
+indexing before the comma, both the ‘fix’ and ‘gt’ slots are subset.
+Subsetting can be performed in typical R manners such as the numeric
+sequences provided above. They can also be combined with the query
+functions presented above to facilitate more complex operations.</p>
 </div>
 
 <center>
@@ -516,7 +669,7 @@ vcf &lt;- read.vcfR( vcf_file, verbose = FALSE )</code></pre>
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
@@ -524,6 +677,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

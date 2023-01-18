@@ -1,24 +1,34 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
 
 <title>Sequence coverage</title>
 
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -43,12 +53,18 @@ gtag('js', new Date());
 gtag('config', 'UA-107144798-1'); 
 </script>
 
-<style type="text/css">code{white-space: pre;}</style>
+
+
 <style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -61,38 +77,12 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
+
 
 <link rel="stylesheet" href="styles.css" type="text/css" />
 
-</head>
 
-<body>
 
 <style type = "text/css">
 .main-container {
@@ -100,13 +90,8 @@ h6 {
   margin-left: auto;
   margin-right: auto;
 }
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
-}
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -117,44 +102,59 @@ img {
 button.code-folding-btn:focus {
   outline: none;
 }
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 61px;
-  padding-bottom: 40px;
+.dropdown-submenu {
+  position: relative;
 }
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
 }
-
-.section h2 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
 }
-.section h3 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
 }
-.section h4 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
 }
-.section h5 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu.pull-left {
+  float: none;
 }
-.section h6 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -164,27 +164,98 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.parent().addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
-
-
-<div class="container-fluid main-container">
 
 <!-- tabsets -->
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-</script>
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
 
 <!-- code folding -->
 
 
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
 
 
 
@@ -192,7 +263,7 @@ $(document).ready(function () {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -208,7 +279,7 @@ $(document).ready(function () {
   <a href="rlanguage.html">R language</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Tutorial
      
     <span class="caret"></span>
@@ -259,7 +330,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     GBS class
      
     <span class="caret"></span>
@@ -292,7 +363,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Ploidy
      
     <span class="caret"></span>
@@ -310,7 +381,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Export
      
     <span class="caret"></span>
@@ -334,7 +405,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     FAQ
      
     <span class="caret"></span>
@@ -342,6 +413,9 @@ $(document).ready(function () {
   <ul class="dropdown-menu" role="menu">
     <li>
       <a href="subset_data_to_1chrom.html">Subset to 1 chromosome</a>
+    </li>
+    <li>
+      <a href="missing_data.html">Missing data</a>
     </li>
     <li>
       <a href="vcf_software.html">VCF software</a>
@@ -373,7 +447,10 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 </center>
 </p>
 
-<div class="fluid-row" id="header">
+
+
+
+<div id="header">
 
 
 
@@ -382,20 +459,25 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 </div>
 
 
-<p>Once data is received from a sequencing center, an initial question is whether the sequencing was successful? A common attempt to address this question is by asking how much sequence coverage was attained. For a diploid organism, one would require at least two reads per variant to infer a genotype. Ideally, we would like a little more so that we have redundancy. How much redundancy is necessary may be a question the researchers need to address themselves. In this vignette we’ll learn how to read in VCF data, extract sequence depth information from it and how to visualize this data.</p>
+<p>Once data is received from a sequencing center, an initial question
+is whether the sequencing was successful? A common attempt to address
+this question is by asking how much sequence coverage was attained. For
+a diploid organism, one would require at least two reads per variant to
+infer a genotype. Ideally, we would like a little more so that we have
+redundancy. How much redundancy is necessary may be a question the
+researchers need to address themselves. In this vignette we’ll learn how
+to read in VCF data, extract sequence depth information from it and how
+to visualize this data.</p>
 <div id="reading-vcf-data" class="section level2">
 <h2>Reading VCF data</h2>
-<p>The topic of reading in VCF format data is covered in other vignettes. We include it here for redundancy, and because every example involving VCF data needs to start with some data.</p>
-<pre class="r"><code>library(vcfR)</code></pre>
-<pre><code>## 
-##    *****       ***   vcfR   ***       *****
-##    This is vcfR 1.8.0.9000 
-##      browseVignettes(&#39;vcfR&#39;) # Documentation
-##      citation(&#39;vcfR&#39;) # Citation
-##    *****       *****      *****       *****</code></pre>
-<pre class="r"><code>vcf_file &lt;- system.file(&quot;extdata&quot;, &quot;pinf_sc50.vcf.gz&quot;, package = &quot;pinfsc50&quot;)
+<p>The topic of reading in VCF format data is covered in other
+vignettes. We include it here for redundancy, and because every example
+involving VCF data needs to start with some data.</p>
+<pre class="r"><code>library(vcfR)
+vcf_file &lt;- system.file(&quot;extdata&quot;, &quot;pinf_sc50.vcf.gz&quot;, package = &quot;pinfsc50&quot;)
 vcf &lt;- read.vcfR(vcf_file, verbose = FALSE)</code></pre>
-<p>Calling the object by name, with no options (the show method), provides a summary of the data.</p>
+<p>Calling the object by name, with no options (the show method),
+provides a summary of the data.</p>
 <pre class="r"><code>vcf</code></pre>
 <pre><code>## ***** Object of Class vcfR *****
 ## 18 samples
@@ -407,7 +489,11 @@ vcf &lt;- read.vcfR(vcf_file, verbose = FALSE)</code></pre>
 </div>
 <div id="querying-vcf-information" class="section level2">
 <h2>Querying VCF information</h2>
-<p>Some, but not all, variant callers will provide per variant and per sample sequence depth information. Some variant callers may provide this information only as an option (see relevant documentation). We can use the ‘head’ method to explore what sort of information exists in our data.</p>
+<p>Some, but not all, variant callers will provide per variant and per
+sample sequence depth information. Some variant callers may provide this
+information only as an option (see relevant documentation). We can use
+the ‘head’ method to explore what sort of information exists in our
+data.</p>
 <pre class="r"><code>head(vcf)</code></pre>
 <pre><code>## [1] &quot;***** Object of class &#39;vcfR&#39; *****&quot;
 ## [1] &quot;***** Meta section *****&quot;
@@ -429,33 +515,39 @@ vcf &lt;- read.vcfR(vcf_file, verbose = FALSE)</code></pre>
 ## [6,] &quot;Supercontig_1.50&quot; &quot;462&quot; NA &quot;T&quot;  &quot;G&quot; &quot;1301.07&quot; NA    
 ## [1] 
 ## [1] &quot;***** Genotype section *****&quot;
-##      FORMAT           BL2009P4_us23             
-## [1,] &quot;GT:AD:DP:GQ:PL&quot; &quot;1|1:0,7:7:21:283,21,0&quot;   
-## [2,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:12,0:12:36:0,36,427&quot; 
-## [3,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:27,0:27:81:0,81,1117&quot;
-## [4,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:29,0:29:87:0,87,1243&quot;
-## [5,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:26,0:26:78:0,78,1034&quot;
-## [6,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:23,0:23:69:0,69,958&quot; 
-##      DDR7602                     IN2009T1_us22              
-## [1,] &quot;1|1:0,6:6:18:243,18,0&quot;     &quot;1|1:0,8:8:24:324,24,0&quot;    
-## [2,] &quot;0|0:20,0:20:60:0,60,819&quot;   &quot;0|0:16,0:16:48:0,48,650&quot;  
-## [3,] &quot;0|0:26,0:26:78:0,78,1077&quot;  &quot;0|0:23,0:23:69:0,69,946&quot;  
-## [4,] &quot;0|0:27,0:27:81:0,81,1158&quot;  &quot;0|0:32,0:32:96:0,96,1299&quot; 
-## [5,] &quot;0|0:30,0:30:90:0,90,1242&quot;  &quot;0|0:41,0:41:99:0,122,1613&quot;
-## [6,] &quot;0|0:36,0:36:99:0,108,1556&quot; &quot;0|0:35,0:35:99:0,105,1467&quot;
-##      LBUS5                       NL07434                    
-## [1,] &quot;1|1:0,6:6:18:243,18,0&quot;     &quot;1|1:0,12:12:36:486,36,0&quot;  
-## [2,] &quot;0|0:20,0:20:60:0,60,819&quot;   &quot;0|0:28,0:28:84:0,84,948&quot;  
-## [3,] &quot;0|0:26,0:26:78:0,78,1077&quot;  &quot;0|1:19,20:39:99:565,0,559&quot;
-## [4,] &quot;0|0:27,0:27:81:0,81,1158&quot;  &quot;0|1:19,19:38:99:523,0,535&quot;
-## [5,] &quot;0|0:30,0:30:90:0,90,1242&quot;  &quot;0|1:22,22:44:99:593,0,651&quot;
-## [6,] &quot;0|0:36,0:36:99:0,108,1556&quot; &quot;0|1:29,25:54:99:723,0,876&quot;
+##      FORMAT           BL2009P4_us23              DDR7602                    
+## [1,] &quot;GT:AD:DP:GQ:PL&quot; &quot;1|1:0,7:7:21:283,21,0&quot;    &quot;1|1:0,6:6:18:243,18,0&quot;    
+## [2,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:12,0:12:36:0,36,427&quot;  &quot;0|0:20,0:20:60:0,60,819&quot;  
+## [3,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:27,0:27:81:0,81,1117&quot; &quot;0|0:26,0:26:78:0,78,1077&quot; 
+## [4,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:29,0:29:87:0,87,1243&quot; &quot;0|0:27,0:27:81:0,81,1158&quot; 
+## [5,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:26,0:26:78:0,78,1034&quot; &quot;0|0:30,0:30:90:0,90,1242&quot; 
+## [6,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:23,0:23:69:0,69,958&quot;  &quot;0|0:36,0:36:99:0,108,1556&quot;
+##      IN2009T1_us22               LBUS5                      
+## [1,] &quot;1|1:0,8:8:24:324,24,0&quot;     &quot;1|1:0,6:6:18:243,18,0&quot;    
+## [2,] &quot;0|0:16,0:16:48:0,48,650&quot;   &quot;0|0:20,0:20:60:0,60,819&quot;  
+## [3,] &quot;0|0:23,0:23:69:0,69,946&quot;   &quot;0|0:26,0:26:78:0,78,1077&quot; 
+## [4,] &quot;0|0:32,0:32:96:0,96,1299&quot;  &quot;0|0:27,0:27:81:0,81,1158&quot; 
+## [5,] &quot;0|0:41,0:41:99:0,122,1613&quot; &quot;0|0:30,0:30:90:0,90,1242&quot; 
+## [6,] &quot;0|0:35,0:35:99:0,105,1467&quot; &quot;0|0:36,0:36:99:0,108,1556&quot;
+##      NL07434                    
+## [1,] &quot;1|1:0,12:12:36:486,36,0&quot;  
+## [2,] &quot;0|0:28,0:28:84:0,84,948&quot;  
+## [3,] &quot;0|1:19,20:39:99:565,0,559&quot;
+## [4,] &quot;0|1:19,19:38:99:523,0,535&quot;
+## [5,] &quot;0|1:22,22:44:99:593,0,651&quot;
+## [6,] &quot;0|1:29,25:54:99:723,0,876&quot;
 ## [1] &quot;First 6 columns only.&quot;
 ## [1] 
 ## [1] &quot;Unique GT formats:&quot;
 ## [1] &quot;GT:AD:DP:GQ:PL&quot;
 ## [1]</code></pre>
-<p>This provides a summary of the information contained in the VCF data. In the genotype section, the first column is titled ‘FORMAT’ and includes fields that describe the genotype data included with each genotype. According to the VCF definition the first element must be the genotype. All subsequent data is optional according to the VCF definition. Each field is defined in the meta region. We can use ‘grep’ to search the meta slot for the definition of these fields.</p>
+<p>This provides a summary of the information contained in the VCF data.
+In the genotype section, the first column is titled ‘FORMAT’ and
+includes fields that describe the genotype data included with each
+genotype. According to the VCF definition the first element must be the
+genotype. All subsequent data is optional according to the VCF
+definition. Each field is defined in the meta region. We can use ‘grep’
+to search the meta slot for the definition of these fields.</p>
 <pre class="r"><code>#strwrap(grep(&#39;DP&#39;, vcf@meta, value = TRUE))
 queryMETA(vcf, element = &#39;DP&#39;)</code></pre>
 <pre><code>## [[1]]
@@ -469,24 +561,51 @@ queryMETA(vcf, element = &#39;DP&#39;)</code></pre>
 ## [2] &quot;Number=1&quot;                                                             
 ## [3] &quot;Type=Integer&quot;                                                         
 ## [4] &quot;Description=Approximate read depth; some reads may have been filtered&quot;</code></pre>
-<p>Here ‘DP’ is defined as a ‘FORMAT’ (the genotype region) as well as in the ‘INFO’ column. We’re interested in the former. This tells us that data for depth (DP) exists, so we can extract the DP information from the genotype slot.</p>
+<p>Here ‘DP’ is defined as a ‘FORMAT’ (the genotype region) as well as
+in the ‘INFO’ column. We’re interested in the former. This tells us that
+data for depth (DP) exists, so we can extract the DP information from
+the genotype slot.</p>
 <pre class="r"><code>dp &lt;- extract.gt(vcf, element=&#39;DP&#39;, as.numeric=TRUE)</code></pre>
-<p>We can use this function to extract other fields by changing the value of the ‘element’ parameter. Here, we’ve specified to convert the data to a numeric. This makes sense because depth should be a number describing how many times a variant was sequenced. Some fields, such as the genotype (GT), may not be easily converted to a numeric because they contain non-numeric characters. For example, the genotype field will contain a pipe (‘|’) for phased data or a forward slash (‘/’) for unphased data. If you select a field which is non-numeric, such as the genotype, and specify as.numeric to be TRUE, you will get a numeric matrix. However, these numbers may not make much sense. Make sure to only use as.numeric=TRUE on data that actually are numeric.</p>
+<p>We can use this function to extract other fields by changing the
+value of the ‘element’ parameter. Here, we’ve specified to convert the
+data to a numeric. This makes sense because depth should be a number
+describing how many times a variant was sequenced. Some fields, such as
+the genotype (GT), may not be easily converted to a numeric because they
+contain non-numeric characters. For example, the genotype field will
+contain a pipe (‘|’) for phased data or a forward slash (‘/’) for
+unphased data. If you select a field which is non-numeric, such as the
+genotype, and specify as.numeric to be TRUE, you will get a numeric
+matrix. However, these numbers may not make much sense. Make sure to
+only use as.numeric=TRUE on data that actually are numeric.</p>
 </div>
 <div id="creating-boxplots-of-sequence-depth" class="section level2">
 <h2>Creating boxplots of sequence depth</h2>
-<p>Now that we have our data, we will want to visualize it. A good choice for this type of data is a box and whisker plot.</p>
+<p>Now that we have our data, we will want to visualize it. A good
+choice for this type of data is a box and whisker plot.</p>
 <pre class="r"><code>par(mar=c(8,4,1,1))
 #boxplot(dp, las=3, col=c(&quot;#C0C0C0&quot;, &quot;#808080&quot;), ylab=&quot;Depth&quot;, log=&#39;y&#39;, las=2)
-boxplot(dp, las=3, col=c(&quot;#C0C0C0&quot;, &quot;#808080&quot;), ylab=&quot;Depth&quot;, las=2)
-abline(h=seq(0,1e4, by=100), col=&quot;#C0C0C088&quot;)</code></pre>
+boxplot(dp, las=3, col=c(&quot;#C0C0C0&quot;, &quot;#808080&quot;), ylab=&quot;Depth&quot;, las=2)</code></pre>
+<pre><code>## Warning in (function (z, notch = FALSE, width = NULL, varwidth = FALSE, :
+## Duplicated argument las = 2 is disregarded</code></pre>
+<pre class="r"><code>abline(h=seq(0,1e4, by=100), col=&quot;#C0C0C088&quot;)</code></pre>
 <p><img src="sequence_coverage_files/figure-html/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>par(mar=c(5,4,4,2))</code></pre>
-<p>This is a reasonable representation of the data. The boxplots contain 50% of the data within each box (the first and third quartiles). The majority of data beyond the first and third quartiles are contained in the whiskers. Outlying data is represented by characters, here open circles. A shortcoming of this plot is that there is a great amount of large values. This compresses the plot so that the boxes are small and the plot is dominated by outliers.</p>
+<p>This is a reasonable representation of the data. The boxplots contain
+50% of the data within each box (the first and third quartiles). The
+majority of data beyond the first and third quartiles are contained in
+the whiskers. Outlying data is represented by characters, here open
+circles. A shortcoming of this plot is that there is a great amount of
+large values. This compresses the plot so that the boxes are small and
+the plot is dominated by outliers.</p>
 </div>
-<div id="creating-violin-plots-of-sequence-depth" class="section level2">
+<div id="creating-violin-plots-of-sequence-depth"
+class="section level2">
 <h2>Creating violin plots of sequence depth</h2>
-<p>For quality control purposes, I’m frequently happy with using boxplots. They are quick and easy to produce. If I want something a little more fancy, say for publication, I may use violin plots. This will require us to recast the data from a matrix to a data.frame, and then we can plot it with ggplot2.</p>
+<p>For quality control purposes, I’m frequently happy with using
+boxplots. They are quick and easy to produce. If I want something a
+little more fancy, say for publication, I may use violin plots. This
+will require us to recast the data from a matrix to a data.frame, and
+then we can plot it with ggplot2.</p>
 <pre class="r"><code>if( require(reshape2) &amp; require(ggplot2) ){
   dpf &lt;- melt(dp, varnames=c(&#39;Index&#39;, &#39;Sample&#39;), value.name = &#39;Depth&#39;, na.rm=TRUE)
   dpf &lt;- dpf[ dpf$Depth &gt; 0,]
@@ -509,27 +628,47 @@ abline(h=seq(0,1e4, by=100), col=&quot;#C0C0C088&quot;)</code></pre>
           to be installed.  Please use install.packages(c(&#39;reshape2&#39;, &#39;ggplot2&#39;, &#39;scales&#39;)) if you would
           like to install them.&quot;)
 }</code></pre>
-<pre><code>## Loading required package: reshape2</code></pre>
-<pre><code>## Loading required package: ggplot2</code></pre>
+<pre><code>## Warning: `fun.y` is deprecated. Use `fun` instead.</code></pre>
 <p><img src="sequence_coverage_files/figure-html/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>The violin plot presents the distribution of the data throughout its range. They also provide an easy way to apply a logarithmic transformation (here base 2) that effectively compresses large values and stretches out small values. Here we observe a large density of per variant sequence depths that are greater than ten (for the most part). This may be interpreted as having attained sufficient sequence depth for a diploid organism.</p>
+<p>The violin plot presents the distribution of the data throughout its
+range. They also provide an easy way to apply a logarithmic
+transformation (here base 2) that effectively compresses large values
+and stretches out small values. Here we observe a large density of per
+variant sequence depths that are greater than ten (for the most part).
+This may be interpreted as having attained sufficient sequence depth for
+a diploid organism.</p>
 </div>
 <div id="filtering-on-sequence-depth." class="section level2">
 <h2>Filtering on sequence depth.</h2>
-<p>In order to sequence a diploid genotype, we need at least two sequence reads. Ideally, we would like some redundancy to build more confidence in our genotypes. This means we may want a lower bound on coverage for whether we call a genotype. You can also see from the plots that we have some samples that have exceptionally high sequence coverage (greater than 100). These may be variants from repetitive portions of the genome, and therefore may be desireable to exclude. Here we pull out summary statistics for each sample and use this information to filter our data. The quantile function is used to build a 90% confidence interval for each sample. We then use this information to set variants which are outside this region to missing data (NA). Lastly, we apply a minimum threshold by setting variants with coverage less than four as missing.</p>
+<p>In order to sequence a diploid genotype, we need at least two
+sequence reads. Ideally, we would like some redundancy to build more
+confidence in our genotypes. This means we may want a lower bound on
+coverage for whether we call a genotype. You can also see from the plots
+that we have some samples that have exceptionally high sequence coverage
+(greater than 100). These may be variants from repetitive portions of
+the genome, and therefore may be desireable to exclude. Here we pull out
+summary statistics for each sample and use this information to filter
+our data. The quantile function is used to build a 90% confidence
+interval for each sample. We then use this information to set variants
+which are outside this region to missing data (NA). Lastly, we apply a
+minimum threshold by setting variants with coverage less than four as
+missing.</p>
 <pre class="r"><code>sums &lt;- apply(dp, MARGIN=2, quantile, probs=c(0.05, 0.95), na.rm=TRUE)
 dp2 &lt;- sweep(dp, MARGIN=2, FUN = &quot;-&quot;, sums[1,])
 dp[dp2 &lt; 0] &lt;- NA
 dp2 &lt;- sweep(dp, MARGIN=2, FUN = &quot;-&quot;, sums[2,])
 dp[dp2 &gt; 0] &lt;- NA
 dp[dp &lt; 4] &lt;- NA</code></pre>
-<p>Now that we’ve accomplished these manipulations, we can visualize the data using boxplots.</p>
+<p>Now that we’ve accomplished these manipulations, we can visualize the
+data using boxplots.</p>
 <pre class="r"><code>par(mar=c(8,4,1,1))
 boxplot(dp, las=3, col=c(&quot;#C0C0C0&quot;, &quot;#808080&quot;), ylab=&quot;Depth&quot;)
 abline(h=seq(0,200, by=20), col=&quot;#C0C0C088&quot;)</code></pre>
 <p><img src="sequence_coverage_files/figure-html/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>par(mar=c(5,4,4,2))</code></pre>
-<p>We can see that we’ve removed many of our outlier variants (circles beyond the whiskers). And our data appear much better behaved. We can now use this information to update our vcfR object.</p>
+<p>We can see that we’ve removed many of our outlier variants (circles
+beyond the whiskers). And our data appear much better behaved. We can
+now use this information to update our vcfR object.</p>
 <pre class="r"><code>vcf</code></pre>
 <pre><code>## ***** Object of Class vcfR *****
 ## 18 samples
@@ -547,7 +686,9 @@ vcf</code></pre>
 ## Object size: 21.3 Mb
 ## 21.06 percent missing data
 ## *****        *****         *****</code></pre>
-<p>We can see that we’ve increased the amount of missing data in our vcfR object. This validated the success of our manipulation. However, we may want to use this information to further mitigate the data set.</p>
+<p>We can see that we’ve increased the amount of missing data in our
+vcfR object. This validated the success of our manipulation. However, we
+may want to use this information to further mitigate the data set.</p>
 </div>
 
 <center>
@@ -564,7 +705,7 @@ vcf</code></pre>
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
@@ -572,6 +713,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

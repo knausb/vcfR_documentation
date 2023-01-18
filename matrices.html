@@ -1,24 +1,34 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
 
 <title>Extracting matrices from vcfR objects</title>
 
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -43,12 +53,18 @@ gtag('js', new Date());
 gtag('config', 'UA-107144798-1'); 
 </script>
 
-<style type="text/css">code{white-space: pre;}</style>
+
+
 <style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -61,38 +77,12 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
+
 
 <link rel="stylesheet" href="styles.css" type="text/css" />
 
-</head>
 
-<body>
 
 <style type = "text/css">
 .main-container {
@@ -100,58 +90,71 @@ h6 {
   margin-left: auto;
   margin-right: auto;
 }
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
-}
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
 }
+.html-widget {
+  margin-bottom: 20px;
+}
 button.code-folding-btn:focus {
   outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
 }
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 61px;
-  padding-bottom: 40px;
+.dropdown-submenu {
+  position: relative;
 }
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
 }
-
-.section h2 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
 }
-.section h3 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
 }
-.section h4 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
 }
-.section h5 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu.pull-left {
+  float: none;
 }
-.section h6 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -161,27 +164,98 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.parent().addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
-
-
-<div class="container-fluid main-container">
 
 <!-- tabsets -->
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-</script>
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
 
 <!-- code folding -->
 
 
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
 
 
 
@@ -189,7 +263,7 @@ $(document).ready(function () {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -205,7 +279,7 @@ $(document).ready(function () {
   <a href="rlanguage.html">R language</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Tutorial
      
     <span class="caret"></span>
@@ -256,7 +330,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     GBS class
      
     <span class="caret"></span>
@@ -289,7 +363,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Ploidy
      
     <span class="caret"></span>
@@ -307,7 +381,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Export
      
     <span class="caret"></span>
@@ -331,7 +405,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     FAQ
      
     <span class="caret"></span>
@@ -339,6 +413,9 @@ $(document).ready(function () {
   <ul class="dropdown-menu" role="menu">
     <li>
       <a href="subset_data_to_1chrom.html">Subset to 1 chromosome</a>
+    </li>
+    <li>
+      <a href="missing_data.html">Missing data</a>
     </li>
     <li>
       <a href="vcf_software.html">VCF software</a>
@@ -370,7 +447,10 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 </center>
 </p>
 
-<div class="fluid-row" id="header">
+
+
+
+<div id="header">
 
 
 
@@ -379,10 +459,19 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 </div>
 
 
-<p>The data contained in VCF files presents a challenge to analysis in that the data are not strictly tabular and are large. Because the data are not strictly tabular we need to find ways to coerce the data into tables or matrices. Once the data is stored as a matrix it can be operated on by numerous R functions and packages. Because the data are large, this process needs to happen in a computationally efficent manner. Here we explore how vcfR facilitates these tasks.</p>
+<p>The data contained in VCF files presents a challenge to analysis in
+that the data are not strictly tabular and are large. Because the data
+are not strictly tabular we need to find ways to coerce the data into
+tables or matrices. Once the data is stored as a matrix it can be
+operated on by numerous R functions and packages. Because the data are
+large, this process needs to happen in a computationally efficent
+manner. Here we explore how vcfR facilitates these tasks.</p>
 <div id="extracting-data-matrices" class="section level2">
 <h2>Extracting data matrices</h2>
-<p>Typical VCF datasets are so large that it is not practical to view them in their entirety. Here we use the example dataset <code>vcfR_test</code> which comes with vcfR. This is a nice dataset because it is small enough to visualize.</p>
+<p>Typical VCF datasets are so large that it is not practical to view
+them in their entirety. Here we use the example dataset
+<code>vcfR_test</code> which comes with vcfR. This is a nice dataset
+because it is small enough to visualize.</p>
 <pre class="r"><code>library(vcfR)
 data(&quot;vcfR_test&quot;)
 head(vcfR_test)</code></pre>
@@ -415,7 +504,15 @@ head(vcfR_test)</code></pre>
 ## [1] &quot;Unique GT formats:&quot;
 ## [1] &quot;GT:GQ:DP:HQ&quot; &quot;GT:GQ:DP&quot;   
 ## [1]</code></pre>
-<p>In the genotype section we see four columns: a FORMAT column that indicates the contents of subsequent columns and three sample columns. Variants one through four contain four pieces of information with each genotype (GT:GQ:DP:HQ). The meaning of these acronyms should be defined in the meta section. Each element of the genotype matrix therefore contains a colon delimeted list that we need to parse before we can work with it. For example, if we wanted to analyze teh genotypes we would need to isolate them from the other information. Thsi can be accomplished using the function <code>extract.gt()</code>.</p>
+<p>In the genotype section we see four columns: a FORMAT column that
+indicates the contents of subsequent columns and three sample columns.
+Variants one through four contain four pieces of information with each
+genotype (GT:GQ:DP:HQ). The meaning of these acronyms should be defined
+in the meta section. Each element of the genotype matrix therefore
+contains a colon delimeted list that we need to parse before we can work
+with it. For example, if we wanted to analyze teh genotypes we would
+need to isolate them from the other information. Thsi can be
+accomplished using the function <code>extract.gt()</code>.</p>
 <pre class="r"><code>gt &lt;- extract.gt(vcfR_test)
 gt</code></pre>
 <pre><code>##            NA00001 NA00002 NA00003
@@ -424,8 +521,22 @@ gt</code></pre>
 ## rs6040355  &quot;1|2&quot;   &quot;2|1&quot;   &quot;2/2&quot;  
 ## 20_1230237 &quot;0|0&quot;   &quot;0|0&quot;   &quot;0/0&quot;  
 ## microsat1  &quot;0/1&quot;   &quot;0/2&quot;   &quot;1/1&quot;</code></pre>
-<p>When a genotype section is included in VCF data the one mandatory field is the genotype (GT) and it must be the first. The genotype is the default field for <code>extract.gt()</code> to work on. Note that the samplers names have been used to name the columns. The variant names (row names) are a little more complicated. The ‘ID’ column of the fixed section contains optional unique identifiers. These typically come from some sort of database of variants. If this column were entirely populated with unique identifiers we could use it to name our variants. However, all variants do not always have an ID. For example, variants 2 and 4 have missing IDs (NA). The function <code>extract.gt()</code> tries to name these variants by combining the chromosome (CHROM) and the position (POS) with the delimiter ’_’ to create a name. We see in our matrix of genotypes that they all have a name.</p>
-<p>We can also extract numeric data from our VCF data. We can do this by selecting a numeric element and setting the parameter <code>as.numeric = TRUE</code>.</p>
+<p>When a genotype section is included in VCF data the one mandatory
+field is the genotype (GT) and it must be the first. The genotype is the
+default field for <code>extract.gt()</code> to work on. Note that the
+samplers names have been used to name the columns. The variant names
+(row names) are a little more complicated. The ‘ID’ column of the fixed
+section contains optional unique identifiers. These typically come from
+some sort of database of variants. If this column were entirely
+populated with unique identifiers we could use it to name our variants.
+However, all variants do not always have an ID. For example, variants 2
+and 4 have missing IDs (NA). The function <code>extract.gt()</code>
+tries to name these variants by combining the chromosome (CHROM) and the
+position (POS) with the delimiter ’_’ to create a name. We see in our
+matrix of genotypes that they all have a name.</p>
+<p>We can also extract numeric data from our VCF data. We can do this by
+selecting a numeric element and setting the parameter
+<code>as.numeric = TRUE</code>.</p>
 <pre class="r"><code>gt &lt;- extract.gt(vcfR_test, element = &#39;DP&#39;, as.numeric = TRUE)
 gt</code></pre>
 <pre><code>##            NA00001 NA00002 NA00003
@@ -434,7 +545,13 @@ gt</code></pre>
 ## rs6040355        6       0       4
 ## 20_1230237       7       4       2
 ## microsat1        4       2       3</code></pre>
-<p>Here we’ve extracted the sequence depth (DP) of each variant and converted it to a numeric. Because they are numeric they may be used for quantitative comparisons. Much of R is designed to work with matrices of numbers. Be careful setting the parameter <code>as.numeric = TRUE</code>. It will do its best to convert the data to a numeric, even if this may not make sense. For example, we could convert the genotype to numeric.</p>
+<p>Here we’ve extracted the sequence depth (DP) of each variant and
+converted it to a numeric. Because they are numeric they may be used for
+quantitative comparisons. Much of R is designed to work with matrices of
+numbers. Be careful setting the parameter
+<code>as.numeric = TRUE</code>. It will do its best to convert the data
+to a numeric, even if this may not make sense. For example, we could
+convert the genotype to numeric.</p>
 <pre class="r"><code>gt &lt;- extract.gt(vcfR_test, element = &#39;GT&#39;, as.numeric = TRUE)
 gt</code></pre>
 <pre><code>##            NA00001 NA00002 NA00003
@@ -443,11 +560,15 @@ gt</code></pre>
 ## rs6040355        1       2       2
 ## 20_1230237       0       0       0
 ## microsat1        0       0       1</code></pre>
-<p>This operation did not throw an error, but the resulting matrix doesn’t appear to make much sense. Only ask to convert numeric data to numeric data or you will probably get unexpected results.</p>
+<p>This operation did not throw an error, but the resulting matrix
+doesn’t appear to make much sense. Only ask to convert numeric data to
+numeric data or you will probably get unexpected results.</p>
 </div>
 <div id="matrix-parsing" class="section level2">
 <h2>Matrix parsing</h2>
-<p>Some elements fromthe genotype section may require further parsing. In our example the haplotype quality (HQ) includes a quality for each haplotype and these values are comma delimited.</p>
+<p>Some elements fromthe genotype section may require further parsing.
+In our example the haplotype quality (HQ) includes a quality for each
+haplotype and these values are comma delimited.</p>
 <pre class="r"><code>gt &lt;- extract.gt(vcfR_test, element = &#39;HQ&#39;)
 gt</code></pre>
 <pre><code>##            NA00001 NA00002 NA00003
@@ -456,7 +577,8 @@ gt</code></pre>
 ## rs6040355  &quot;23,27&quot; &quot;18,2&quot;  NA     
 ## 20_1230237 &quot;56,60&quot; &quot;51,51&quot; NA     
 ## microsat1  NA      NA      NA</code></pre>
-<p>Note that some elements contain data while in others it is missing.</p>
+<p>Note that some elements contain data while in others it is
+missing.</p>
 <pre class="r"><code>myHQ1 &lt;- masplit(gt[,1:2], sort = 0)
 myHQ1</code></pre>
 <pre><code>##            NA00001 NA00002
@@ -465,7 +587,10 @@ myHQ1</code></pre>
 ## rs6040355       23      18
 ## 20_1230237      56      51
 ## microsat1       NA      NA</code></pre>
-<p>The function <code>masplit()</code> is fairly flexible in that you can choose which element to return and you can also sort the data prior to selection. These functions should help make VCF data accessible to the wealth of existing R functions and packages.</p>
+<p>The function <code>masplit()</code> is fairly flexible in that you
+can choose which element to return and you can also sort the data prior
+to selection. These functions should help make VCF data accessible to
+the wealth of existing R functions and packages.</p>
 </div>
 
 <center>
@@ -482,7 +607,7 @@ myHQ1</code></pre>
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
@@ -490,6 +615,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

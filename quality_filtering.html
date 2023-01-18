@@ -1,24 +1,34 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
 
 <title>Quality filtering</title>
 
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
@@ -46,12 +56,18 @@ gtag('js', new Date());
 gtag('config', 'UA-107144798-1'); 
 </script>
 
-<style type="text/css">code{white-space: pre;}</style>
+
+
 <style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -64,38 +80,12 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
+
 
 <link rel="stylesheet" href="styles.css" type="text/css" />
 
-</head>
 
-<body>
 
 <style type = "text/css">
 .main-container {
@@ -103,58 +93,71 @@ h6 {
   margin-left: auto;
   margin-right: auto;
 }
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
-}
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
 }
+.html-widget {
+  margin-bottom: 20px;
+}
 button.code-folding-btn:focus {
   outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
 }
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 61px;
-  padding-bottom: 40px;
+.dropdown-submenu {
+  position: relative;
 }
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
 }
-
-.section h2 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
 }
-.section h3 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
 }
-.section h4 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
 }
-.section h5 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu.pull-left {
+  float: none;
 }
-.section h6 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -164,55 +167,90 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.parent().addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
-
-
-<div class="container-fluid main-container">
 
 <!-- tabsets -->
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-</script>
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
 
 <!-- code folding -->
 
 
-
-
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <style type="text/css">
 
@@ -226,6 +264,12 @@ $(document).ready(function ()  {
 }
 }
 
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
 
 .toc-content {
   padding-left: 30px;
@@ -261,8 +305,6 @@ div.tocify {
 
 .tocify-subheader .tocify-item {
   font-size: 0.90em;
-  padding-left: 25px;
-  text-indent: 0;
 }
 
 .tocify .list-group-item {
@@ -272,8 +314,18 @@ div.tocify {
 
 </style>
 
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
 <!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
+<div class="row">
 <div class="col-xs-12 col-sm-4 col-md-3">
 <div id="TOC" class="tocify">
 </div>
@@ -287,7 +339,7 @@ div.tocify {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -303,7 +355,7 @@ div.tocify {
   <a href="rlanguage.html">R language</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Tutorial
      
     <span class="caret"></span>
@@ -354,7 +406,7 @@ div.tocify {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     GBS class
      
     <span class="caret"></span>
@@ -387,7 +439,7 @@ div.tocify {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Ploidy
      
     <span class="caret"></span>
@@ -405,7 +457,7 @@ div.tocify {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Export
      
     <span class="caret"></span>
@@ -429,7 +481,7 @@ div.tocify {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     FAQ
      
     <span class="caret"></span>
@@ -437,6 +489,9 @@ div.tocify {
   <ul class="dropdown-menu" role="menu">
     <li>
       <a href="subset_data_to_1chrom.html">Subset to 1 chromosome</a>
+    </li>
+    <li>
+      <a href="missing_data.html">Missing data</a>
     </li>
     <li>
       <a href="vcf_software.html">VCF software</a>
@@ -468,7 +523,10 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 </center>
 </p>
 
-<div class="fluid-row" id="header">
+
+
+
+<div id="header">
 
 
 
@@ -477,10 +535,25 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 </div>
 
 
-<p>Once a sequencing run has been completed the sequence reads are typically aligned to a reference genome and variants are called. These variants are typically stored in a VCF format file. THe R package vcfR was designed to import and export this data into the R environment. Once in the R environment, vcfR provides tools to manipulate the data to help you understand its content. Common issues in variant data may be that certain samples may be of low quality or certain vriants may be of questionable quality. Here we’ll provide examples of how vcfR can help accomplish these tasks.</p>
+<p>Once a sequencing run has been completed the sequence reads are
+typically aligned to a reference genome and variants are called. These
+variants are typically stored in a VCF format file. THe R package vcfR
+was designed to import and export this data into the R environment. Once
+in the R environment, vcfR provides tools to manipulate the data to help
+you understand its content. Common issues in variant data may be that
+certain samples may be of low quality or certain vriants may be of
+questionable quality. Here we’ll provide examples of how vcfR can help
+accomplish these tasks.</p>
 <div id="data-import" class="section level2">
 <h2>Data import</h2>
-<p>Our first step will be to import the VCF data into R. The result will be that our VCF data will be stored in a ‘vcfR’ object. Once we have read it in we can validate our data is what we expect by using the <code>show</code> method. The <code>show</code> method is available for many types of objects and is implemented when the object’s name is entered at the console with no other information. THe <code>show</code> method typically provides summary information about the object and what it contains.</p>
+<p>Our first step will be to import the VCF data into R. The result will
+be that our VCF data will be stored in a ‘vcfR’ object. Once we have
+read it in we can validate our data is what we expect by using the
+<code>show</code> method. The <code>show</code> method is available for
+many types of objects and is implemented when the object’s name is
+entered at the console with no other information. THe <code>show</code>
+method typically provides summary information about the object and what
+it contains.</p>
 <pre class="r"><code>library(vcfR)
 vcf &lt;- read.vcfR(&#39;TASSEL_GBS0077.vcf.gz&#39;)
 class(vcf)</code></pre>
@@ -489,14 +562,27 @@ class(vcf)</code></pre>
 ## 61 samples
 ## 7171 CHROMs
 ## 69,296 variants
-## Object size: 46.5 Mb
+## Object size: 47.7 Mb
 ## 37.62 percent missing data
 ## *****        *****         *****</code></pre>
-<p>The results from the <code>show</code> method informs us that our vcfR object contains 61 samples and 69,296 variants. This is what we expected so we can be confident that our data was imported correctly. The output also informs us that there is just over 37% missing data in our file. In our experience this is typical for GBS data sets.</p>
+<p>The results from the <code>show</code> method informs us that our
+vcfR object contains 61 samples and 69,296 variants. This is what we
+expected so we can be confident that our data was imported correctly.
+The output also informs us that there is just over 37% missing data in
+our file. In our experience this is typical for GBS data sets.</p>
 </div>
 <div id="extract-depth-dp" class="section level2">
 <h2>Extract depth (DP)</h2>
-<p>The vcfR function <code>extract.gt()</code> is used to extract matrices of data from teh GT portion of VCF data. the funtion <code>extract.gt()</code> provides a link between VCF data and R. Much of R is designed to operate on matrices of data and once <code>extract.gt()</code> provides this matrix the universe of R becomes available. Note that we use the ‘as.numeric=TRUE’ option here. We should only use this option when we are certain that we have numeric data. If you use it on non-numeric data R will do its best to do something, which is not likely to be what you expect. We can use the <code>queryMETA()</code> function remind us what this element is.</p>
+<p>The vcfR function <code>extract.gt()</code> is used to extract
+matrices of data from teh GT portion of VCF data. the funtion
+<code>extract.gt()</code> provides a link between VCF data and R. Much
+of R is designed to operate on matrices of data and once
+<code>extract.gt()</code> provides this matrix the universe of R becomes
+available. Note that we use the ‘as.numeric=TRUE’ option here. We should
+only use this option when we are certain that we have numeric data. If
+you use it on non-numeric data R will do its best to do something, which
+is not likely to be what you expect. We can use the
+<code>queryMETA()</code> function remind us what this element is.</p>
 <pre class="r"><code>queryMETA(vcf, element = &#39;FORMAT.+DP&#39;)</code></pre>
 <pre><code>## [[1]]
 ## [1] &quot;FORMAT=ID=DP&quot;                                                 
@@ -586,17 +672,20 @@ for(i in 1:myRows){
 <pre class="r"><code># Plot the plot.
 plot_grid(plotlist = myPlots, nrow = myRows)</code></pre>
 <p><img src="quality_filtering_files/figure-html/unnamed-chunk-8-1.png" width="1152" style="display: block; margin: auto;" /></p>
-<p>Once we have extracted the quantile information we can use apply and quantile to build intervals for what we may consider acceptable coverage.</p>
+<p>Once we have extracted the quantile information we can use apply and
+quantile to build intervals for what we may consider acceptable
+coverage.</p>
 <pre class="r"><code>quants &lt;- apply(dp, MARGIN=2, quantile, probs=c(0.1, 0.8), na.rm=TRUE)
 #quants &lt;- apply(dp, MARGIN=2, quantile, probs=c(0.34, 0.68), na.rm=TRUE)
 quants[,1:17]</code></pre>
-<pre><code>##      1 10 13 1725-d-8-21-07-r-1-pm-r 18 1858-d-10-15-07-p-3-pm-r  2 20 22
-## 10%  1  2  1                       1  1                        1  2  2  2
-## 80% 18 42 17                      15 25                       16 34 31 37
-##     31 34 3450-d-4-06-09-r-3-pm-r 37 39  4 40 43
-## 10%  2  1                       1  2  2  2  2  1
-## 80% 29 26                      12 27 36 27 33 23</code></pre>
-<p>We can now use these thresholds to censor data outside this threshold.</p>
+<pre><code>##      1 10 13 1725-d-8-21-07-r-1-pm-r 18 1858-d-10-15-07-p-3-pm-r  2 20 22 31 34
+## 10%  1  2  1                       1  1                        1  2  2  2  2  1
+## 80% 18 42 17                      15 25                       16 34 31 37 29 26
+##     3450-d-4-06-09-r-3-pm-r 37 39  4 40 43
+## 10%                       1  2  2  2  2  1
+## 80%                      12 27 36 27 33 23</code></pre>
+<p>We can now use these thresholds to censor data outside this
+threshold.</p>
 <pre class="r"><code>dp2 &lt;- sweep(dp, MARGIN=2, FUN = &quot;-&quot;, quants[1,])
 dp[dp2 &lt; 0] &lt;- NA
 
@@ -606,16 +695,18 @@ dp[dp2 &gt; 0] &lt;- NA
 dp[dp &lt; 4] &lt;- NA</code></pre>
 <p>Update the vcfR object with the censored data.</p>
 <pre class="r"><code>vcf@gt[,-1][ is.na(dp) == TRUE ] &lt;- NA</code></pre>
-<p>We’ll want to see how this has affected the missingness of our vcfR object.</p>
+<p>We’ll want to see how this has affected the missingness of our vcfR
+object.</p>
 <pre class="r"><code>vcf</code></pre>
 <pre><code>## ***** Object of Class vcfR *****
 ## 61 samples
 ## 7171 CHROMs
 ## 69,296 variants
-## Object size: 45.2 Mb
+## Object size: 46.3 Mb
 ## 66.63 percent missing data
 ## *****        *****         *****</code></pre>
-<p>We’ll want to mitigate variants with a high degree of missingness.</p>
+<p>We’ll want to mitigate variants with a high degree of
+missingness.</p>
 <pre class="r"><code>dp &lt;- extract.gt(vcf, element = &quot;DP&quot;, as.numeric=TRUE)
 
 miss &lt;- apply(dp, MARGIN=1, function(x){sum(is.na(x))})
@@ -662,13 +753,59 @@ heatmap.bp(dp, rlabels = FALSE)</code></pre>
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
 });
 
 
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
 </script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

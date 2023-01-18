@@ -1,24 +1,34 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
 
 <title>Ranking data</title>
 
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -43,12 +53,18 @@ gtag('js', new Date());
 gtag('config', 'UA-107144798-1'); 
 </script>
 
-<style type="text/css">code{white-space: pre;}</style>
+
+
 <style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -61,38 +77,12 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
+
 
 <link rel="stylesheet" href="styles.css" type="text/css" />
 
-</head>
 
-<body>
 
 <style type = "text/css">
 .main-container {
@@ -100,58 +90,71 @@ h6 {
   margin-left: auto;
   margin-right: auto;
 }
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
-}
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
 }
+.html-widget {
+  margin-bottom: 20px;
+}
 button.code-folding-btn:focus {
   outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
 }
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 61px;
-  padding-bottom: 40px;
+.dropdown-submenu {
+  position: relative;
 }
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
 }
-
-.section h2 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
 }
-.section h3 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
 }
-.section h4 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
 }
-.section h5 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu.pull-left {
+  float: none;
 }
-.section h6 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -161,27 +164,98 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.parent().addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
-
-
-<div class="container-fluid main-container">
 
 <!-- tabsets -->
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-</script>
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
 
 <!-- code folding -->
 
 
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
 
 
 
@@ -189,7 +263,7 @@ $(document).ready(function () {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -205,7 +279,7 @@ $(document).ready(function () {
   <a href="rlanguage.html">R language</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Tutorial
      
     <span class="caret"></span>
@@ -256,7 +330,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     GBS class
      
     <span class="caret"></span>
@@ -289,7 +363,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Ploidy
      
     <span class="caret"></span>
@@ -307,7 +381,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Export
      
     <span class="caret"></span>
@@ -331,7 +405,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     FAQ
      
     <span class="caret"></span>
@@ -339,6 +413,9 @@ $(document).ready(function () {
   <ul class="dropdown-menu" role="menu">
     <li>
       <a href="subset_data_to_1chrom.html">Subset to 1 chromosome</a>
+    </li>
+    <li>
+      <a href="missing_data.html">Missing data</a>
     </li>
     <li>
       <a href="vcf_software.html">VCF software</a>
@@ -370,7 +447,10 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 </center>
 </p>
 
-<div class="fluid-row" id="header">
+
+
+
+<div id="header">
 
 
 
@@ -379,7 +459,11 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 </div>
 
 
-<p>In the vignette ‘Filtering data’ we used thresholds as an attempt to isolate the high quality fraction of variants from a VCF file. Here we assign ranks to variants within windows. This information used alone, or in conjunction with thresholds, may be an effective strategy to identify high quality variants.</p>
+<p>In the vignette ‘Filtering data’ we used thresholds as an attempt to
+isolate the high quality fraction of variants from a VCF file. Here we
+assign ranks to variants within windows. This information used alone, or
+in conjunction with thresholds, may be an effective strategy to identify
+high quality variants.</p>
 <div id="data" class="section level2">
 <h2>Data</h2>
 <p>As in other vignettes, we begin by loading the example data.</p>
@@ -397,23 +481,27 @@ chrom &lt;- create.chromR(name=&quot;Supercontig&quot;, vcf=vcf, seq=dna, ann=gf
 #chrom &lt;- masker(chrom, min_DP = 900, max_DP = 1500)
 chrom &lt;- proc.chromR(chrom, verbose = TRUE)</code></pre>
 <pre><code>## Nucleotide regions complete.</code></pre>
-<pre><code>##   elapsed time:  0.246</code></pre>
+<pre><code>##   elapsed time:  0.122</code></pre>
 <pre><code>## N regions complete.</code></pre>
-<pre><code>##   elapsed time:  0.23</code></pre>
+<pre><code>##   elapsed time:  0.114</code></pre>
 <pre><code>## Population summary complete.</code></pre>
-<pre><code>##   elapsed time:  0.225</code></pre>
+<pre><code>##   elapsed time:  0.154</code></pre>
 <pre><code>## window_init complete.</code></pre>
 <pre><code>##   elapsed time:  0</code></pre>
 <pre><code>## windowize_fasta complete.</code></pre>
-<pre><code>##   elapsed time:  0.153</code></pre>
+<pre><code>##   elapsed time:  0.061</code></pre>
 <pre><code>## windowize_annotations complete.</code></pre>
-<pre><code>##   elapsed time:  0.012</code></pre>
+<pre><code>##   elapsed time:  0.008</code></pre>
 <pre><code>## windowize_variants complete.</code></pre>
-<pre><code>##   elapsed time:  0.001</code></pre>
+<pre><code>##   elapsed time:  0</code></pre>
 </div>
 <div id="creating-scores-to-rank" class="section level2">
 <h2>Creating scores to rank</h2>
-<p>Before we can rank our variants, we need to come up with some sort of criteria to help us determine if a variant is high or low quality. Once we have this score we can select the variant with the highest score from each window. In order to create our vector of scores, let’s remind ourselves of what data we have.</p>
+<p>Before we can rank our variants, we need to come up with some sort of
+criteria to help us determine if a variant is high or low quality. Once
+we have this score we can select the variant with the highest score from
+each window. In order to create our vector of scores, let’s remind
+ourselves of what data we have.</p>
 <pre class="r"><code>head(chrom)</code></pre>
 <pre><code>## *****   Class chromR, method head   *****
 ## Name:  Supercontig
@@ -423,8 +511,8 @@ chrom &lt;- proc.chromR(chrom, verbose = TRUE)</code></pre>
 ## [1] &quot;BL2009P4_us23&quot; &quot;DDR7602&quot;       &quot;IN2009T1_us22&quot; &quot;LBUS5&quot;        
 ## [5] &quot;NL07434&quot;       &quot;P10127&quot;       
 ## [1] &quot;...&quot;
-## [1] &quot;P17777us22&quot;   &quot;P6096&quot;        &quot;P7722&quot;        &quot;RS2009P1_us8&quot;
-## [5] &quot;blue13&quot;       &quot;t30-4&quot;       
+## [1] &quot;P17777us22&quot;   &quot;P6096&quot;        &quot;P7722&quot;        &quot;RS2009P1_us8&quot; &quot;blue13&quot;      
+## [6] &quot;t30-4&quot;       
 ## 
 ## *****    VCF fixed data (chromR)    *****
 ##      CHROM              POS   ID REF  ALT QUAL      FILTER
@@ -453,27 +541,27 @@ chrom &lt;- proc.chromR(chrom, verbose = TRUE)</code></pre>
 ## 
 ## *****  VCF genotype data (chromR)  *****
 ## *****     First 6 columns      *********
-##      FORMAT           BL2009P4_us23             
-## [1,] &quot;GT:AD:DP:GQ:PL&quot; &quot;1|1:0,7:7:21:283,21,0&quot;   
-## [2,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:12,0:12:36:0,36,427&quot; 
-## [3,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:27,0:27:81:0,81,1117&quot;
-## [4,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:29,0:29:87:0,87,1243&quot;
-## [5,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:26,0:26:78:0,78,1034&quot;
-## [6,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:23,0:23:69:0,69,958&quot; 
-##      DDR7602                     IN2009T1_us22              
-## [1,] &quot;1|1:0,6:6:18:243,18,0&quot;     &quot;1|1:0,8:8:24:324,24,0&quot;    
-## [2,] &quot;0|0:20,0:20:60:0,60,819&quot;   &quot;0|0:16,0:16:48:0,48,650&quot;  
-## [3,] &quot;0|0:26,0:26:78:0,78,1077&quot;  &quot;0|0:23,0:23:69:0,69,946&quot;  
-## [4,] &quot;0|0:27,0:27:81:0,81,1158&quot;  &quot;0|0:32,0:32:96:0,96,1299&quot; 
-## [5,] &quot;0|0:30,0:30:90:0,90,1242&quot;  &quot;0|0:41,0:41:99:0,122,1613&quot;
-## [6,] &quot;0|0:36,0:36:99:0,108,1556&quot; &quot;0|0:35,0:35:99:0,105,1467&quot;
-##      LBUS5                       NL07434                    
-## [1,] &quot;1|1:0,6:6:18:243,18,0&quot;     &quot;1|1:0,12:12:36:486,36,0&quot;  
-## [2,] &quot;0|0:20,0:20:60:0,60,819&quot;   &quot;0|0:28,0:28:84:0,84,948&quot;  
-## [3,] &quot;0|0:26,0:26:78:0,78,1077&quot;  &quot;0|1:19,20:39:99:565,0,559&quot;
-## [4,] &quot;0|0:27,0:27:81:0,81,1158&quot;  &quot;0|1:19,19:38:99:523,0,535&quot;
-## [5,] &quot;0|0:30,0:30:90:0,90,1242&quot;  &quot;0|1:22,22:44:99:593,0,651&quot;
-## [6,] &quot;0|0:36,0:36:99:0,108,1556&quot; &quot;0|1:29,25:54:99:723,0,876&quot;
+##      FORMAT           BL2009P4_us23              DDR7602                    
+## [1,] &quot;GT:AD:DP:GQ:PL&quot; &quot;1|1:0,7:7:21:283,21,0&quot;    &quot;1|1:0,6:6:18:243,18,0&quot;    
+## [2,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:12,0:12:36:0,36,427&quot;  &quot;0|0:20,0:20:60:0,60,819&quot;  
+## [3,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:27,0:27:81:0,81,1117&quot; &quot;0|0:26,0:26:78:0,78,1077&quot; 
+## [4,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:29,0:29:87:0,87,1243&quot; &quot;0|0:27,0:27:81:0,81,1158&quot; 
+## [5,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:26,0:26:78:0,78,1034&quot; &quot;0|0:30,0:30:90:0,90,1242&quot; 
+## [6,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:23,0:23:69:0,69,958&quot;  &quot;0|0:36,0:36:99:0,108,1556&quot;
+##      IN2009T1_us22               LBUS5                      
+## [1,] &quot;1|1:0,8:8:24:324,24,0&quot;     &quot;1|1:0,6:6:18:243,18,0&quot;    
+## [2,] &quot;0|0:16,0:16:48:0,48,650&quot;   &quot;0|0:20,0:20:60:0,60,819&quot;  
+## [3,] &quot;0|0:23,0:23:69:0,69,946&quot;   &quot;0|0:26,0:26:78:0,78,1077&quot; 
+## [4,] &quot;0|0:32,0:32:96:0,96,1299&quot;  &quot;0|0:27,0:27:81:0,81,1158&quot; 
+## [5,] &quot;0|0:41,0:41:99:0,122,1613&quot; &quot;0|0:30,0:30:90:0,90,1242&quot; 
+## [6,] &quot;0|0:35,0:35:99:0,105,1467&quot; &quot;0|0:36,0:36:99:0,108,1556&quot;
+##      NL07434                    
+## [1,] &quot;1|1:0,12:12:36:486,36,0&quot;  
+## [2,] &quot;0|0:28,0:28:84:0,84,948&quot;  
+## [3,] &quot;0|1:19,20:39:99:565,0,559&quot;
+## [4,] &quot;0|1:19,19:38:99:523,0,535&quot;
+## [5,] &quot;0|1:22,22:44:99:593,0,651&quot;
+## [6,] &quot;0|1:29,25:54:99:723,0,876&quot;
 ## 
 ## *****      Var info (chromR)       *****
 ## *****       First 6 columns        *****
@@ -489,7 +577,9 @@ chrom &lt;- proc.chromR(chrom, verbose = TRUE)</code></pre>
 ## Percent unmasked: 100
 ## 
 ## *****      End head (chromR)        *****</code></pre>
-<p>Let’s use the genotype quality (GQ) and sequence depth (DP) from the VCF genotype information. We can isolate matrices of genotype quality and sequence depth with the extract.gt function.</p>
+<p>Let’s use the genotype quality (GQ) and sequence depth (DP) from the
+VCF genotype information. We can isolate matrices of genotype quality
+and sequence depth with the extract.gt function.</p>
 <pre class="r"><code>gq &lt;- extract.gt(chrom, element=&quot;GQ&quot;, as.numeric=TRUE)
 dp &lt;- extract.gt(chrom, element=&quot;DP&quot;, as.numeric=TRUE)</code></pre>
 <p>We can visualize these data with box and whisker plots.</p>
@@ -503,8 +593,26 @@ boxplot(dp2, las=2, col=2:5, main=&quot;Sequence Depth (DP)&quot;, log=&quot;y&q
 abline(h=10^c(0:4), lty=3, col=&quot;#808080&quot;)</code></pre>
 <p><img src="ranking_data_files/figure-html/unnamed-chunk-4-2.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>par( mar = c(5,4,4,2) )</code></pre>
-<p>The values for genotype quality appear to range from 0 to 100 with among sample variability. For example, sample P13626 consists of variants which are predominantly near 100 while sample P1362 consists of variants with qualities mostly just below 20. Comparison of the plots suggests that there is a correlation among sequence depth (DP) and genotype qualities (GQ) where samples with variants of high sequence depth have variants of high genotype quality.</p>
-<p>Unlike genotype quality, we don’t necessarily want to maximize on sequence depth. Low depth variants may make obvious poor choices, but excessive coverage may represent variants from repetitive regions of the genome. What we really want to optimize on is mean depth, or some other measure of central tendency. This will require a little mathematical gymnastics. If we substract from each library its mean (or other measure of central tendency) it will center the data around zero. We can then take an absolute value which will cause the data to range from zero to some infinite number with zero being our optimal value (the measure of central tendency). The algorithm we’re going to use looks for an optimum and not a minimum, so if we multiply by negative one our data will range from negative infinity to zero with zero being optimal. We now have a measure of depth where the greatest value is the optimal value.</p>
+<p>The values for genotype quality appear to range from 0 to 100 with
+among sample variability. For example, sample P13626 consists of
+variants which are predominantly near 100 while sample P1362 consists of
+variants with qualities mostly just below 20. Comparison of the plots
+suggests that there is a correlation among sequence depth (DP) and
+genotype qualities (GQ) where samples with variants of high sequence
+depth have variants of high genotype quality.</p>
+<p>Unlike genotype quality, we don’t necessarily want to maximize on
+sequence depth. Low depth variants may make obvious poor choices, but
+excessive coverage may represent variants from repetitive regions of the
+genome. What we really want to optimize on is mean depth, or some other
+measure of central tendency. This will require a little mathematical
+gymnastics. If we substract from each library its mean (or other measure
+of central tendency) it will center the data around zero. We can then
+take an absolute value which will cause the data to range from zero to
+some infinite number with zero being our optimal value (the measure of
+central tendency). The algorithm we’re going to use looks for an optimum
+and not a minimum, so if we multiply by negative one our data will range
+from negative infinity to zero with zero being optimal. We now have a
+measure of depth where the greatest value is the optimal value.</p>
 <pre class="r"><code>mids &lt;- apply(dp, MARGIN=2, median, na.rm=TRUE)
 dp2 &lt;- sweep(dp, MARGIN=2, mids, FUN=&quot;-&quot;)
 dp2 &lt;- abs(dp2)
@@ -513,7 +621,19 @@ dp2 &lt;- -1 * dp2</code></pre>
 boxplot(dp2, las=2, col=2:5, main=&quot;Sequence Depth (DP)&quot;)</code></pre>
 <p><img src="ranking_data_files/figure-html/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>par( mar = c(5,4,4,2) )</code></pre>
-<p>Before we combine these data we have one more issue we need to address. In their current state, sequence depth’s range is much greater than genotype quality. This means that the data are effectively weighted, if we simply add them together the sequence depth will have a greater impact on the final metric than will genotype quality. If we are happy with that then we can proceed. If we would like to equalize each metric’s contribution to our final measure of quality we’ll want to normalize the data. The genotype quality data is fairly straight forward. If we divide each library by 100 (their theoretical maximum) they will scale from 0 to 1 instead of 0 to 100. For the sequence depth we can add the absolute value of the minimum value to each library, this will make all of the data positive. Then we can divide by this value and our data should then scale from 0 to 1.</p>
+<p>Before we combine these data we have one more issue we need to
+address. In their current state, sequence depth’s range is much greater
+than genotype quality. This means that the data are effectively
+weighted, if we simply add them together the sequence depth will have a
+greater impact on the final metric than will genotype quality. If we are
+happy with that then we can proceed. If we would like to equalize each
+metric’s contribution to our final measure of quality we’ll want to
+normalize the data. The genotype quality data is fairly straight
+forward. If we divide each library by 100 (their theoretical maximum)
+they will scale from 0 to 1 instead of 0 to 100. For the sequence depth
+we can add the absolute value of the minimum value to each library, this
+will make all of the data positive. Then we can divide by this value and
+our data should then scale from 0 to 1.</p>
 <pre class="r"><code>gq2 &lt;- gq/100
 range(gq2, na.rm=TRUE)</code></pre>
 <pre><code>## [1] 0.00 0.99</code></pre>
@@ -522,7 +642,8 @@ dp2 &lt;- sweep(dp2, MARGIN=2, STATS = amins, FUN=&quot;+&quot;)
 dp2 &lt;- sweep(dp2, MARGIN=2, STATS = amins, FUN=&quot;/&quot;)
 range(dp2, na.rm=TRUE)</code></pre>
 <pre><code>## [1] 0 1</code></pre>
-<p>We now have metrics which are fairly equal. We can add them together and summarize over variants.</p>
+<p>We now have metrics which are fairly equal. We can add them together
+and summarize over variants.</p>
 <pre class="r"><code>scores &lt;- dp2 + gq2
 scores &lt;- rowSums(scores, na.rm = TRUE)</code></pre>
 <p>Check their distribution with a histogram.</p>
@@ -540,26 +661,31 @@ head(chrom@var.info)</code></pre>
 ## 6 Supercontig_1.50 462 58.89 508 TRUE 17          31,3 0.1608997 1.191753
 ##   window_number rank
 ## 1             0   16
-## 2             0   13
-## 3             0    9
+## 2             0   15
+## 3             0   11
 ## 4             0   10
 ## 5             0   14
-## 6             0    2</code></pre>
-<p>This creates a vector of window numbers and rank within each window and adds them to the var.info slot of the chromR object. We can take a look at them bay calling this directly.</p>
+## 6             0    6</code></pre>
+<p>This creates a vector of window numbers and rank within each window
+and adds them to the var.info slot of the chromR object. We can take a
+look at them bay calling this directly.</p>
 <pre class="r"><code>head(chrom@var.info[,c(&#39;POS&#39;, &#39;MQ&#39;, &#39;DP&#39;, &#39;window_number&#39;, &#39;rank&#39;)])</code></pre>
 <pre><code>##   POS    MQ  DP window_number rank
 ## 1  41 51.30 174             0   16
-## 2 136 52.83 390             0   13
-## 3 254 56.79 514             0    9
+## 2 136 52.83 390             0   15
+## 3 254 56.79 514             0   11
 ## 4 275 57.07 514             0   10
 ## 5 386 57.40 509             0   14
-## 6 462 58.89 508             0    2</code></pre>
+## 6 462 58.89 508             0    6</code></pre>
 <p>We can use this information to create our mask.</p>
 <pre class="r"><code>chrom@var.info$mask[chrom@var.info$rank &gt; 1] &lt;- FALSE</code></pre>
 <p>And plot.</p>
 <pre class="r"><code>chromoqc(chrom, dp.alpha=&#39;66&#39;)</code></pre>
 <p><img src="ranking_data_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
-<p>This looks pretty good. But we still have variants with rather high or low depth. We can combine the use of masker, which we explored in the vignette ‘Filtering data’ with our ranks. We’ll first call masker, which will reset our mask, and then censor this mask based on rank.</p>
+<p>This looks pretty good. But we still have variants with rather high
+or low depth. We can combine the use of masker, which we explored in the
+vignette ‘Filtering data’ with our ranks. We’ll first call masker, which
+will reset our mask, and then censor this mask based on rank.</p>
 <pre class="r"><code>chrom &lt;- masker( chrom, min_QUAL=0, min_DP=350, max_DP=650, min_MQ=59.5, max_MQ=60.5 )
 chrom@var.info$mask[ chrom@var.info$rank &gt; 1 ] &lt;- FALSE</code></pre>
 <p>Then replot.</p>
@@ -568,7 +694,19 @@ chrom@var.info$mask[ chrom@var.info$rank &gt; 1 ] &lt;- FALSE</code></pre>
 </div>
 <div id="conclusion" class="section level2">
 <h2>Conclusion</h2>
-<p>This provides another tool to help filter variant files to the highest quality fraction. In a previous vignette we used the function masker() to filter the data. Here we’ve created a composite score which we’d like to maximize and ranked the variants based on theis score within windows. A strength of this method is that by using windows we’re able to evenly space our variants accross a chromosome. Choosing the best, or several best, variants per window does not necessarily guaranty high quality variants. If all of the variants in a window are of low quality then the best of these may still be poor quality. Some some additional processing may be necessary. With these tools it is hoped that an individual can rapidly explore their data and determine a method to extract the highest quality variants so that downstream analyses will be of the highest quality possible.</p>
+<p>This provides another tool to help filter variant files to the
+highest quality fraction. In a previous vignette we used the function
+masker() to filter the data. Here we’ve created a composite score which
+we’d like to maximize and ranked the variants based on theis score
+within windows. A strength of this method is that by using windows we’re
+able to evenly space our variants accross a chromosome. Choosing the
+best, or several best, variants per window does not necessarily guaranty
+high quality variants. If all of the variants in a window are of low
+quality then the best of these may still be poor quality. Some some
+additional processing may be necessary. With these tools it is hoped
+that an individual can rapidly explore their data and determine a method
+to extract the highest quality variants so that downstream analyses will
+be of the highest quality possible.</p>
 </div>
 
 <center>
@@ -585,7 +723,7 @@ chrom@var.info$mask[ chrom@var.info$rank &gt; 1 ] &lt;- FALSE</code></pre>
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
@@ -593,6 +731,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

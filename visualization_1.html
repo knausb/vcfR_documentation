@@ -1,24 +1,34 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
 
 <title>Visualizing VCF data 1</title>
 
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -43,12 +53,18 @@ gtag('js', new Date());
 gtag('config', 'UA-107144798-1'); 
 </script>
 
-<style type="text/css">code{white-space: pre;}</style>
+
+
 <style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -61,38 +77,12 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
+
 
 <link rel="stylesheet" href="styles.css" type="text/css" />
 
-</head>
 
-<body>
 
 <style type = "text/css">
 .main-container {
@@ -100,58 +90,71 @@ h6 {
   margin-left: auto;
   margin-right: auto;
 }
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
-}
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
 }
+.html-widget {
+  margin-bottom: 20px;
+}
 button.code-folding-btn:focus {
   outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
 }
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 61px;
-  padding-bottom: 40px;
+.dropdown-submenu {
+  position: relative;
 }
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
 }
-
-.section h2 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
 }
-.section h3 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
 }
-.section h4 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
 }
-.section h5 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu.pull-left {
+  float: none;
 }
-.section h6 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -161,27 +164,98 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.parent().addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
-
-
-<div class="container-fluid main-container">
 
 <!-- tabsets -->
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-</script>
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
 
 <!-- code folding -->
 
 
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
 
 
 
@@ -189,7 +263,7 @@ $(document).ready(function () {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -205,7 +279,7 @@ $(document).ready(function () {
   <a href="rlanguage.html">R language</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Tutorial
      
     <span class="caret"></span>
@@ -256,7 +330,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     GBS class
      
     <span class="caret"></span>
@@ -289,7 +363,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Ploidy
      
     <span class="caret"></span>
@@ -307,7 +381,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Export
      
     <span class="caret"></span>
@@ -331,7 +405,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     FAQ
      
     <span class="caret"></span>
@@ -339,6 +413,9 @@ $(document).ready(function () {
   <ul class="dropdown-menu" role="menu">
     <li>
       <a href="subset_data_to_1chrom.html">Subset to 1 chromosome</a>
+    </li>
+    <li>
+      <a href="missing_data.html">Missing data</a>
     </li>
     <li>
       <a href="vcf_software.html">VCF software</a>
@@ -370,7 +447,10 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 </center>
 </p>
 
-<div class="fluid-row" id="header">
+
+
+
+<div id="header">
 
 
 
@@ -379,12 +459,23 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 </div>
 
 
-<p>Most variant calling pipelines result in files containing large quantities of variant information. The <a href="http://samtools.github.io/hts-specs/" title="VCF format at hts-specs">variant call format (vcf)</a> is an increasingly popular format for this data. The format of these files and their content is discussed in the vignette ‘vcf data.’ These files are typically intended to be post-processed (i.e., filtered) as an attempt to remove false positives or otherwise problematic sites. The R package vcfR provides tools to facilitate this filtering as well as to visualize the effects of choices made during this process.</p>
+<p>Most variant calling pipelines result in files containing large
+quantities of variant information. The <a
+href="http://samtools.github.io/hts-specs/"
+title="VCF format at hts-specs">variant call format (vcf)</a> is an
+increasingly popular format for this data. The format of these files and
+their content is discussed in the vignette ‘vcf data.’ These files are
+typically intended to be post-processed (i.e., filtered) as an attempt
+to remove false positives or otherwise problematic sites. The R package
+vcfR provides tools to facilitate this filtering as well as to visualize
+the effects of choices made during this process.</p>
 <div id="data-input" class="section level2">
 <h2>Data input</h2>
-<p>The input of data was covered in the vignette ‘Introduction to vcfR.’ If you haven’t read this vignette, you can with:</p>
+<p>The input of data was covered in the vignette ‘Introduction to vcfR.’
+If you haven’t read this vignette, you can with:</p>
 <pre class="r"><code>vignette(&quot;intro_to_vcfR&quot;, package=&quot;vcfR&quot;)</code></pre>
-<p>For this vignette, we’ll use the example data provided in the package pinfsc50.</p>
+<p>For this vignette, we’ll use the example data provided in the package
+pinfsc50.</p>
 <pre class="r"><code>library(vcfR)
 
 # Find the files.
@@ -414,31 +505,52 @@ chrom &lt;- create.chromR(name=&quot;Supercontig&quot;, vcf=vcf, seq=dna, ann=gf
 <pre class="r"><code>chrom &lt;- masker(chrom, min_QUAL=0, min_DP=350, max_DP=650, min_MQ=59.5, max_MQ=60.5)
 chrom &lt;- proc.chromR(chrom, verbose = TRUE)</code></pre>
 <pre><code>## Nucleotide regions complete.</code></pre>
-<pre><code>##   elapsed time:  0.245</code></pre>
+<pre><code>##   elapsed time:  0.118</code></pre>
 <pre><code>## N regions complete.</code></pre>
-<pre><code>##   elapsed time:  0.228</code></pre>
+<pre><code>##   elapsed time:  0.11</code></pre>
 <pre><code>## Population summary complete.</code></pre>
-<pre><code>##   elapsed time:  0.186</code></pre>
+<pre><code>##   elapsed time:  0.121</code></pre>
 <pre><code>## window_init complete.</code></pre>
 <pre><code>##   elapsed time:  0</code></pre>
 <pre><code>## windowize_fasta complete.</code></pre>
-<pre><code>##   elapsed time:  0.152</code></pre>
+<pre><code>##   elapsed time:  0.059</code></pre>
 <pre><code>## windowize_annotations complete.</code></pre>
-<pre><code>##   elapsed time:  0.011</code></pre>
+<pre><code>##   elapsed time:  0.008</code></pre>
 <pre><code>## windowize_variants complete.</code></pre>
 <pre><code>##   elapsed time:  0.001</code></pre>
-<p>The function create.chromR() reports the name of the chromosome (supercontig, contig, etc.) so that we can verify that all three data sources contain the same chromosome. We receive a warning because the names are not identical. Upon visual examination we determine that the names are synonyms and we can proceed.</p>
+<p>The function create.chromR() reports the name of the chromosome
+(supercontig, contig, etc.) so that we can verify that all three data
+sources contain the same chromosome. We receive a warning because the
+names are not identical. Upon visual examination we determine that the
+names are synonyms and we can proceed.</p>
 <p>We can now visualize this data.</p>
 <pre class="r"><code>chromoqc(chrom, dp.alpha = 22)</code></pre>
 <p><img src="visualization_1_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
-<p>In vcfR we refer to this form of plot as a <strong>chromo plot</strong>. This plot summarizes data from our three data sources. Annotation data is represented on the lowest plot. Features in the annotation file (e.g., gene models, exons, etc.) are represented as dark red rectangles. Above the annotation track is a sequence track. Here called nucleotides are represented in green while uncalled nucleotides (Ns) appear in red. Depending on the quality of your genome, it may include streches of uncalled nucleotides. Above the annotation track is a windowing analysis of G/C content. This track includes marginal barplots to summarize its contents, as do the tracks above it. The next track summarizes the number of variants per window. Above that we see dot plots for quality, mapping quality and read depth.</p>
-<p>One of the strengths of R is that it is interactively implemented. This means we can change things fairly rapidly. For example, we can repeat the above the above example using 10 kbp windows instead of the default 1 kbp window. If we become concerned with how our choice of window size affects our analysis, we can change it and visualize it.</p>
+<p>In vcfR we refer to this form of plot as a <strong>chromo
+plot</strong>. This plot summarizes data from our three data sources.
+Annotation data is represented on the lowest plot. Features in the
+annotation file (e.g., gene models, exons, etc.) are represented as dark
+red rectangles. Above the annotation track is a sequence track. Here
+called nucleotides are represented in green while uncalled nucleotides
+(Ns) appear in red. Depending on the quality of your genome, it may
+include streches of uncalled nucleotides. Above the annotation track is
+a windowing analysis of G/C content. This track includes marginal
+barplots to summarize its contents, as do the tracks above it. The next
+track summarizes the number of variants per window. Above that we see
+dot plots for quality, mapping quality and read depth.</p>
+<p>One of the strengths of R is that it is interactively implemented.
+This means we can change things fairly rapidly. For example, we can
+repeat the above the above example using 10 kbp windows instead of the
+default 1 kbp window. If we become concerned with how our choice of
+window size affects our analysis, we can change it and visualize it.</p>
 <pre class="r"><code>chrom &lt;- proc.chromR(chrom, verbose=FALSE, win.size=1e4)
 chromoqc(chrom, dp.alpha = 22)</code></pre>
 <p><img src="visualization_1_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
-<p>We’ll set the window size back to 1 kbp for the subsequent analyses.</p>
+<p>We’ll set the window size back to 1 kbp for the subsequent
+analyses.</p>
 <pre class="r"><code>chrom &lt;- proc.chromR(chrom, verbose=FALSE, win.size=1e3)</code></pre>
-<p>We can also use the function head() to summarize the contents of the chromR object.</p>
+<p>We can also use the function head() to summarize the contents of the
+chromR object.</p>
 <pre class="r"><code>head(chrom)</code></pre>
 <pre><code>## *****   Class chromR, method head   *****
 ## Name:  Supercontig
@@ -448,8 +560,8 @@ chromoqc(chrom, dp.alpha = 22)</code></pre>
 ## [1] &quot;BL2009P4_us23&quot; &quot;DDR7602&quot;       &quot;IN2009T1_us22&quot; &quot;LBUS5&quot;        
 ## [5] &quot;NL07434&quot;       &quot;P10127&quot;       
 ## [1] &quot;...&quot;
-## [1] &quot;P17777us22&quot;   &quot;P6096&quot;        &quot;P7722&quot;        &quot;RS2009P1_us8&quot;
-## [5] &quot;blue13&quot;       &quot;t30-4&quot;       
+## [1] &quot;P17777us22&quot;   &quot;P6096&quot;        &quot;P7722&quot;        &quot;RS2009P1_us8&quot; &quot;blue13&quot;      
+## [6] &quot;t30-4&quot;       
 ## 
 ## *****    VCF fixed data (chromR)    *****
 ##      CHROM              POS   ID REF  ALT QUAL      FILTER
@@ -478,27 +590,27 @@ chromoqc(chrom, dp.alpha = 22)</code></pre>
 ## 
 ## *****  VCF genotype data (chromR)  *****
 ## *****     First 6 columns      *********
-##      FORMAT           BL2009P4_us23             
-## [1,] &quot;GT:AD:DP:GQ:PL&quot; &quot;1|1:0,7:7:21:283,21,0&quot;   
-## [2,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:12,0:12:36:0,36,427&quot; 
-## [3,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:27,0:27:81:0,81,1117&quot;
-## [4,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:29,0:29:87:0,87,1243&quot;
-## [5,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:26,0:26:78:0,78,1034&quot;
-## [6,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:23,0:23:69:0,69,958&quot; 
-##      DDR7602                     IN2009T1_us22              
-## [1,] &quot;1|1:0,6:6:18:243,18,0&quot;     &quot;1|1:0,8:8:24:324,24,0&quot;    
-## [2,] &quot;0|0:20,0:20:60:0,60,819&quot;   &quot;0|0:16,0:16:48:0,48,650&quot;  
-## [3,] &quot;0|0:26,0:26:78:0,78,1077&quot;  &quot;0|0:23,0:23:69:0,69,946&quot;  
-## [4,] &quot;0|0:27,0:27:81:0,81,1158&quot;  &quot;0|0:32,0:32:96:0,96,1299&quot; 
-## [5,] &quot;0|0:30,0:30:90:0,90,1242&quot;  &quot;0|0:41,0:41:99:0,122,1613&quot;
-## [6,] &quot;0|0:36,0:36:99:0,108,1556&quot; &quot;0|0:35,0:35:99:0,105,1467&quot;
-##      LBUS5                       NL07434                    
-## [1,] &quot;1|1:0,6:6:18:243,18,0&quot;     &quot;1|1:0,12:12:36:486,36,0&quot;  
-## [2,] &quot;0|0:20,0:20:60:0,60,819&quot;   &quot;0|0:28,0:28:84:0,84,948&quot;  
-## [3,] &quot;0|0:26,0:26:78:0,78,1077&quot;  &quot;0|1:19,20:39:99:565,0,559&quot;
-## [4,] &quot;0|0:27,0:27:81:0,81,1158&quot;  &quot;0|1:19,19:38:99:523,0,535&quot;
-## [5,] &quot;0|0:30,0:30:90:0,90,1242&quot;  &quot;0|1:22,22:44:99:593,0,651&quot;
-## [6,] &quot;0|0:36,0:36:99:0,108,1556&quot; &quot;0|1:29,25:54:99:723,0,876&quot;
+##      FORMAT           BL2009P4_us23              DDR7602                    
+## [1,] &quot;GT:AD:DP:GQ:PL&quot; &quot;1|1:0,7:7:21:283,21,0&quot;    &quot;1|1:0,6:6:18:243,18,0&quot;    
+## [2,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:12,0:12:36:0,36,427&quot;  &quot;0|0:20,0:20:60:0,60,819&quot;  
+## [3,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:27,0:27:81:0,81,1117&quot; &quot;0|0:26,0:26:78:0,78,1077&quot; 
+## [4,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:29,0:29:87:0,87,1243&quot; &quot;0|0:27,0:27:81:0,81,1158&quot; 
+## [5,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:26,0:26:78:0,78,1034&quot; &quot;0|0:30,0:30:90:0,90,1242&quot; 
+## [6,] &quot;GT:AD:DP:GQ:PL&quot; &quot;0|0:23,0:23:69:0,69,958&quot;  &quot;0|0:36,0:36:99:0,108,1556&quot;
+##      IN2009T1_us22               LBUS5                      
+## [1,] &quot;1|1:0,8:8:24:324,24,0&quot;     &quot;1|1:0,6:6:18:243,18,0&quot;    
+## [2,] &quot;0|0:16,0:16:48:0,48,650&quot;   &quot;0|0:20,0:20:60:0,60,819&quot;  
+## [3,] &quot;0|0:23,0:23:69:0,69,946&quot;   &quot;0|0:26,0:26:78:0,78,1077&quot; 
+## [4,] &quot;0|0:32,0:32:96:0,96,1299&quot;  &quot;0|0:27,0:27:81:0,81,1158&quot; 
+## [5,] &quot;0|0:41,0:41:99:0,122,1613&quot; &quot;0|0:30,0:30:90:0,90,1242&quot; 
+## [6,] &quot;0|0:35,0:35:99:0,105,1467&quot; &quot;0|0:36,0:36:99:0,108,1556&quot;
+##      NL07434                    
+## [1,] &quot;1|1:0,12:12:36:486,36,0&quot;  
+## [2,] &quot;0|0:28,0:28:84:0,84,948&quot;  
+## [3,] &quot;0|1:19,20:39:99:565,0,559&quot;
+## [4,] &quot;0|1:19,19:38:99:523,0,535&quot;
+## [5,] &quot;0|1:22,22:44:99:593,0,651&quot;
+## [6,] &quot;0|1:29,25:54:99:723,0,876&quot;
 ## 
 ## *****      Var info (chromR)       *****
 ## *****       First 6 columns        *****
@@ -514,18 +626,36 @@ chromoqc(chrom, dp.alpha = 22)</code></pre>
 ## Percent unmasked: 47.09
 ## 
 ## *****      End head (chromR)        *****</code></pre>
-<p>The slots of the class chromR are defined in the package documentation.</p>
+<p>The slots of the class chromR are defined in the package
+documentation.</p>
 </div>
 <div id="getting-to-know-your-vcf-data" class="section level2">
 <h2>Getting to know your VCF data</h2>
-<p>The VCF format is discussed in the vignette ‘vcf data’. The chromR object includes the vcfR object and all of its data. Some of this information can be quickly explored using the plot function.</p>
+<p>The VCF format is discussed in the vignette ‘vcf data’. The chromR
+object includes the vcfR object and all of its data. Some of this
+information can be quickly explored using the plot function.</p>
 <pre class="r"><code>plot(chrom)</code></pre>
 <p><img src="visualization_1_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
-<p>Here we see the distribution of some quality metrics. The raw read depth and mapping quality have been extracted from the INFO column of the VCF data. The quality is from the QUAL column of the VCF data. And the variant count per window was summarized during the windowing analysis performed by proc.chromR(). The raw read depth appears fairly continuous, an observation which appears consistent with the above chromo plots. Mapping quality appears to be predominantly one value (about 60), this may not have been apparent in the chromo plots. The varaint count per window summarizes the degree of variability we’ve observed along our chromosome. The peak near zero indicates that many windows lack variants.</p>
+<p>Here we see the distribution of some quality metrics. The raw read
+depth and mapping quality have been extracted from the INFO column of
+the VCF data. The quality is from the QUAL column of the VCF data. And
+the variant count per window was summarized during the windowing
+analysis performed by proc.chromR(). The raw read depth appears fairly
+continuous, an observation which appears consistent with the above
+chromo plots. Mapping quality appears to be predominantly one value
+(about 60), this may not have been apparent in the chromo plots. The
+varaint count per window summarizes the degree of variability we’ve
+observed along our chromosome. The peak near zero indicates that many
+windows lack variants.</p>
 </div>
 <div id="conclusion" class="section level2">
 <h2>Conclusion</h2>
-<p>In this exercise we’ve explored some of the plotting functions provided in vcfR. We’ve also learned how to access some of the information contained in the vcfR data structures so we can visualize and analyze it using other R functions. It is hoped that this provides a foundation for exploring and understanding the contents of VCF files.</p>
+<p>In this exercise we’ve explored some of the plotting functions
+provided in vcfR. We’ve also learned how to access some of the
+information contained in the vcfR data structures so we can visualize
+and analyze it using other R functions. It is hoped that this provides a
+foundation for exploring and understanding the contents of VCF
+files.</p>
 </div>
 
 <center>
@@ -542,7 +672,7 @@ chromoqc(chrom, dp.alpha = 22)</code></pre>
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
@@ -550,6 +680,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

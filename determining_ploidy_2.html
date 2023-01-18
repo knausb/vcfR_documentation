@@ -1,24 +1,34 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
 
 <title>Determining ploidy 2</title>
 
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -43,12 +53,18 @@ gtag('js', new Date());
 gtag('config', 'UA-107144798-1'); 
 </script>
 
-<style type="text/css">code{white-space: pre;}</style>
+
+
 <style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -61,38 +77,12 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
+
 
 <link rel="stylesheet" href="styles.css" type="text/css" />
 
-</head>
 
-<body>
 
 <style type = "text/css">
 .main-container {
@@ -100,58 +90,71 @@ h6 {
   margin-left: auto;
   margin-right: auto;
 }
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
-}
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
 }
+.html-widget {
+  margin-bottom: 20px;
+}
 button.code-folding-btn:focus {
   outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
 }
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 61px;
-  padding-bottom: 40px;
+.dropdown-submenu {
+  position: relative;
 }
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
 }
-
-.section h2 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
 }
-.section h3 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
 }
-.section h4 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
 }
-.section h5 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu.pull-left {
+  float: none;
 }
-.section h6 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -161,27 +164,98 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.parent().addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
-
-
-<div class="container-fluid main-container">
 
 <!-- tabsets -->
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-</script>
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
 
 <!-- code folding -->
 
 
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
 
 
 
@@ -189,7 +263,7 @@ $(document).ready(function () {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -205,7 +279,7 @@ $(document).ready(function () {
   <a href="rlanguage.html">R language</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Tutorial
      
     <span class="caret"></span>
@@ -256,7 +330,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     GBS class
      
     <span class="caret"></span>
@@ -289,7 +363,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Ploidy
      
     <span class="caret"></span>
@@ -307,7 +381,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Export
      
     <span class="caret"></span>
@@ -331,7 +405,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     FAQ
      
     <span class="caret"></span>
@@ -339,6 +413,9 @@ $(document).ready(function () {
   <ul class="dropdown-menu" role="menu">
     <li>
       <a href="subset_data_to_1chrom.html">Subset to 1 chromosome</a>
+    </li>
+    <li>
+      <a href="missing_data.html">Missing data</a>
     </li>
     <li>
       <a href="vcf_software.html">VCF software</a>
@@ -370,7 +447,10 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 </center>
 </p>
 
-<div class="fluid-row" id="header">
+
+
+
+<div id="header">
 
 
 
@@ -379,8 +459,20 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 </div>
 
 
-<p>Previously we showed how to create histograms based on the ratio of alleles observed at heterozygous positions. These histograms may present desireable perspectives when a constant ploidy is expected. Investigators interested in whether there is variation in copy number along a chromosome may require a more detailed perspective. Here we present a perspective of copy number variation along the length of a chromosome.</p>
-<p>Instead of using all of the data each chromosome can be divided into windows of user specified width. For each of these windows a numerical summary of where the peak would be is made. Creating a numerical summary is important because when we move to genome scale data it is easy to generate more windows than we can manually curate. We can visualize some of this data, but the numerical summary will allow us to process many windows over many samples.</p>
+<p>Previously we showed how to create histograms based on the ratio of
+alleles observed at heterozygous positions. These histograms may present
+desireable perspectives when a constant ploidy is expected.
+Investigators interested in whether there is variation in copy number
+along a chromosome may require a more detailed perspective. Here we
+present a perspective of copy number variation along the length of a
+chromosome.</p>
+<p>Instead of using all of the data each chromosome can be divided into
+windows of user specified width. For each of these windows a numerical
+summary of where the peak would be is made. Creating a numerical summary
+is important because when we move to genome scale data it is easy to
+generate more windows than we can manually curate. We can visualize some
+of this data, but the numerical summary will allow us to process many
+windows over many samples.</p>
 <div id="input-data" class="section level2">
 <h2>Input data</h2>
 <p>Data import is performed similar to other examples.</p>
@@ -399,13 +491,16 @@ vcf</code></pre>
 ## 18 samples
 ## 1 CHROMs
 ## 22,031 variants
-## Object size: 20.9 Mb
+## Object size: 22.4 Mb
 ## 7.929 percent missing data
 ## *****        *****         *****</code></pre>
 </div>
 <div id="depth-filtering" class="section level2">
 <h2>Depth filtering</h2>
-<p>We’ll also filter on depth by removng high and low coverage variants. The thresholds for this filtering will be determined by quantiles. Researchers may want to explore other methods available in R (e.g., fit a distribution, mixture models, etc.).</p>
+<p>We’ll also filter on depth by removng high and low coverage variants.
+The thresholds for this filtering will be determined by quantiles.
+Researchers may want to explore other methods available in R (e.g., fit
+a distribution, mixture models, etc.).</p>
 <p>First we extract the alleles and create frequencies</p>
 <pre class="r"><code>ad &lt;- extract.gt(vcf, element = &#39;AD&#39;)
 
@@ -414,7 +509,8 @@ allele2 &lt;- masplit(ad, record = 2)
 
 ad1 &lt;- allele1 / (allele1 + allele2)
 ad2 &lt;- allele2 / (allele1 + allele2)</code></pre>
-<p>We create thresholds based on the most abundant allele as follows.</p>
+<p>We create thresholds based on the most abundant allele as
+follows.</p>
 <pre class="r"><code>dp &lt;- allele1
 #sums &lt;- apply(dp, MARGIN=2, quantile, probs=c(0.15, 0.95), na.rm=TRUE)
 sums &lt;- apply(dp, MARGIN=2, quantile, probs=c(0.1, 0.9), na.rm=TRUE)
@@ -433,7 +529,8 @@ title(ylab = &quot;Count&quot;, line=0, outer = TRUE, font=2)</code></pre>
 <p><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-3-1.png" width="768" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>par(mar=c(5,4,4,2))
 par(oma=c(0,0,0,0))</code></pre>
-<p>We performa similar operation for the second most abundant allele.</p>
+<p>We performa similar operation for the second most abundant
+allele.</p>
 <pre class="r"><code>par(mfrow=c(4,3))
 par(mar=c(2,2,1,1))
 par(oma=c(1,1,0,0))
@@ -455,7 +552,11 @@ par(oma=c(0,0,0,0))</code></pre>
 </div>
 <div id="find-peaks-of-density" class="section level2">
 <h2>Find peaks of density</h2>
-<p>In order to avoid assumptions about the distribution of the allele balance ratios we employ a non-parametric method. The data are binned into bins of user specified widths and the bin with the highest density is chosen as the frequency. This is our numerical summary of our peak density and will be retained in a matrix of samples and windows.</p>
+<p>In order to avoid assumptions about the distribution of the allele
+balance ratios we employ a non-parametric method. The data are binned
+into bins of user specified widths and the bin with the highest density
+is chosen as the frequency. This is our numerical summary of our peak
+density and will be retained in a matrix of samples and windows.</p>
 <pre class="r"><code># Filter on depth quantiles.
 sums &lt;- apply(allele1, MARGIN=2, quantile, probs=c(0.1, 0.9), na.rm=TRUE)
 # Allele 1
@@ -507,7 +608,9 @@ is.na(myPeaks1$peaks[myPeaks1$counts &lt; 20]) &lt;- TRUE
 myPeaks2 &lt;- freq_peak(freq2, getPOS(vcf), winsize = winsize, bin_width = bin_width, lhs = FALSE)
 #myCounts2 &lt;- freq_peak(freq2, getPOS(vcf), winsize = winsize, bin_width = bin_width, count = TRUE)
 is.na(myPeaks2$peaks[myPeaks2$counts &lt; 20]) &lt;- TRUE</code></pre>
-<p>As a proof of concep we can visualize plots of the major allele with a red horizontal line at our predicted peak. We repeat this for the minor allele.</p>
+<p>As a proof of concep we can visualize plots of the major allele with
+a red horizontal line at our predicted peak. We repeat this for the
+minor allele.</p>
 <pre class="r"><code>par(mfrow=c(4,4))
 par(mar=c(2,2,1,1))
 par(oma=c(1,1,0,0))
@@ -606,7 +709,9 @@ par(oma=c(0,0,0,0))</code></pre>
 </div>
 <div id="visualization" class="section level2">
 <h2>Visualization</h2>
-<p>There are a number of ways to visualize this data. One way is to turn our histogram on its side, as a form of marginal summary, and plot our window summaries.</p>
+<p>There are a number of ways to visualize this data. One way is to turn
+our histogram on its side, as a form of marginal summary, and plot our
+window summaries.</p>
 <pre class="r"><code>i &lt;- 2
 
 layout(matrix(1:2, nrow=1), widths = c(4,1))
@@ -634,7 +739,8 @@ barplot(height=bp2$counts, width=0.02,  space = 0, horiz = T, add = TRUE, col=&q
 <p><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-7-1.png" width="768" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>par(mar=c(5,4,4,2))
 par(mfrow=c(1,1))</code></pre>
-<p>Once we determine how to make one plot we can loop over all the samples.</p>
+<p>Once we determine how to make one plot we can loop over all the
+samples.</p>
 <p><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-1.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-2.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-3.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-4.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-5.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-6.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-7.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-8.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-9.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-10.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-11.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-12.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-13.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-14.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-15.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-16.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-17.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-18.png" width="768" style="display: block; margin: auto;" /></p>
 <p>We can also create a matrix of plots.</p>
 <pre class="r"><code>par(mfrow=c(4,3))
@@ -660,7 +766,10 @@ segments(x0=myPeaks1$wins[,&#39;START_pos&#39;], y0=myPeaks2$peaks[,mySample],
 <pre class="r"><code>par(mfrow=c(1,1))
 par(mar=c(5,4,4,2))
 par(oma=c(0,0,0,0))</code></pre>
-<p>We now have a way to create windows of allele balance ratios. We also have several ways to visualize this data. Perhaps most importantly, we have a numerical summary of the peak in each window so we can loop over all of the chromosomes in our reference.</p>
+<p>We now have a way to create windows of allele balance ratios. We also
+have several ways to visualize this data. Perhaps most importantly, we
+have a numerical summary of the peak in each window so we can loop over
+all of the chromosomes in our reference.</p>
 </div>
 
 <center>
@@ -677,7 +786,7 @@ par(oma=c(0,0,0,0))</code></pre>
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
@@ -685,6 +794,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

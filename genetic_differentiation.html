@@ -1,24 +1,34 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
 
 <title>Genetic differentiation</title>
 
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -43,12 +53,18 @@ gtag('js', new Date());
 gtag('config', 'UA-107144798-1'); 
 </script>
 
-<style type="text/css">code{white-space: pre;}</style>
+
+
 <style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -61,38 +77,34 @@ if (window.hljs) {
 
 
 
+
+
 <style type="text/css">
-h1 {
-  font-size: 34px;
+/* for pandoc --citeproc since 2.11 */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
 }
-h1.title {
-  font-size: 38px;
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
 }
-h2 {
-  font-size: 30px;
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
 }
-h3 {
-  font-size: 24px;
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
 }
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
+div.csl-indent {
+  margin-left: 2em;
 }
 </style>
 
 <link rel="stylesheet" href="styles.css" type="text/css" />
 
-</head>
 
-<body>
 
 <style type = "text/css">
 .main-container {
@@ -100,58 +112,71 @@ h6 {
   margin-left: auto;
   margin-right: auto;
 }
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
-}
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
 }
+.html-widget {
+  margin-bottom: 20px;
+}
 button.code-folding-btn:focus {
   outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
 }
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 61px;
-  padding-bottom: 40px;
+.dropdown-submenu {
+  position: relative;
 }
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
 }
-
-.section h2 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
 }
-.section h3 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
 }
-.section h4 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
 }
-.section h5 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu.pull-left {
+  float: none;
 }
-.section h6 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -161,27 +186,98 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.parent().addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
-
-
-<div class="container-fluid main-container">
 
 <!-- tabsets -->
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-</script>
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
 
 <!-- code folding -->
 
 
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
 
 
 
@@ -189,7 +285,7 @@ $(document).ready(function () {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -205,7 +301,7 @@ $(document).ready(function () {
   <a href="rlanguage.html">R language</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Tutorial
      
     <span class="caret"></span>
@@ -256,7 +352,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     GBS class
      
     <span class="caret"></span>
@@ -289,7 +385,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Ploidy
      
     <span class="caret"></span>
@@ -307,7 +403,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Export
      
     <span class="caret"></span>
@@ -331,7 +427,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     FAQ
      
     <span class="caret"></span>
@@ -339,6 +435,9 @@ $(document).ready(function () {
   <ul class="dropdown-menu" role="menu">
     <li>
       <a href="subset_data_to_1chrom.html">Subset to 1 chromosome</a>
+    </li>
+    <li>
+      <a href="missing_data.html">Missing data</a>
     </li>
     <li>
       <a href="vcf_software.html">VCF software</a>
@@ -370,7 +469,10 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 </center>
 </p>
 
-<div class="fluid-row" id="header">
+
+
+
+<div id="header">
 
 
 
@@ -379,14 +481,69 @@ Brian J. Knaus and Niklaus J. Gr&uuml;nwald
 </div>
 
 
-<p>A fundamental question to most population studies is whether populations are diverse and whether this diversity is shared among the populations? To address the question of within population diversity geneticists typically report heterozygosity. This is the probability that two alleles randomly chosen from a population will be different. Ecologists may know this as Simpson’s Index <span class="citation">(Simpson 1949)</span>. To address differentiation population geneticists typically utilize <span class="math inline">\(F_{ST}\)</span> or one of its analogues. Population differentiation measured by <span class="math inline">\(F_{ST}\)</span> was originally proposed by Sewall Wright <span class="citation">(Wright 1949)</span>. This was later extended to a method based of diversity by Masatoshi Nei <span class="citation">(Nei 1973)</span>. As researchers applied these metrics to microsatellites, genetic markers with a large number of alleles, it became clear that Nei’s measure would not correctly range from zero to one, so Philip Hedrick proposed a correction <span class="citation">(Hedrick 2005)</span>. More recently, Lou Jost proposed another alternative <span class="citation">(Jost 2008)</span>. You can tell a topic is popular when so many variants of it are generated. And there are more variants than I’ve mentioned here. A nice discussion as to which measure may be appropriate for your data was posted to the Molecular Ecologist blog titled <a href="http://www.molecularecologist.com/2011/03/should-i-use-fst-gst-or-d-2/">should I use <span class="math inline">\(F_{ST}\)</span>, <span class="math inline">\(G_{ST}\)</span> or <span class="math inline">\(D\)</span>?</a>.</p>
-<p>In <code>vcfR</code> I’ve implemented the function <code>genetic_diff()</code> to measure population diversity and differentiation. Because VCF data typically do not include population information we’ll have to supply it as a factor. The method ‘nei’ employed here is based on the methods reported by Hedrick <span class="citation">(Hedrick 2005)</span>. The exception is that the heterozygosities are weighted by the number of alleles observed in each population. This was inspired by <code>hierfstat::pairwise.fst()</code> which uses the number of individuals observed in each population to weight the heterozygosities. By using the number of alleles observed instead of the number of individuals we remove an assumption about how many alleles each individual may contribute. That is, we should be able to accomodate samples of mixed ploidy.</p>
+<p>A fundamental question to most population studies is whether
+populations are diverse and whether this diversity is shared among the
+populations? To address the question of within population diversity
+geneticists typically report heterozygosity. This is the probability
+that two alleles randomly chosen from a population will be different.
+Ecologists may know this as Simpson’s Index <span
+class="citation">(Simpson 1949)</span>. To address differentiation
+population geneticists typically utilize <span
+class="math inline">\(F_{ST}\)</span> or one of its analogues.
+Population differentiation measured by <span
+class="math inline">\(F_{ST}\)</span> was originally proposed by Sewall
+Wright <span class="citation">(Wright 1949)</span>. This was later
+extended to a method based of diversity by Masatoshi Nei <span
+class="citation">(Nei 1973)</span>. As researchers applied these metrics
+to microsatellites, genetic markers with a large number of alleles, it
+became clear that Nei’s measure would not correctly range from zero to
+one, so Philip Hedrick proposed a correction <span
+class="citation">(Hedrick 2005)</span>. More recently, Lou Jost proposed
+another alternative <span class="citation">(Jost 2008)</span>. You can
+tell a topic is popular when so many variants of it are generated. And
+there are more variants than I’ve mentioned here. A nice discussion as
+to which measure may be appropriate for your data was posted to the
+Molecular Ecologist blog titled <a
+href="http://www.molecularecologist.com/2011/03/should-i-use-fst-gst-or-d-2/">should
+I use <span class="math inline">\(F_{ST}\)</span>, <span
+class="math inline">\(G_{ST}\)</span> or <span
+class="math inline">\(D\)</span>?</a>.</p>
+<p>In <code>vcfR</code> I’ve implemented the function
+<code>genetic_diff()</code> to measure population diversity and
+differentiation. Because VCF data typically do not include population
+information we’ll have to supply it as a factor. The method ‘nei’
+employed here is based on the methods reported by Hedrick <span
+class="citation">(Hedrick 2005)</span>. The exception is that the
+heterozygosities are weighted by the number of alleles observed in each
+population. This was inspired by <code>hierfstat::pairwise.fst()</code>
+which uses the number of individuals observed in each population to
+weight the heterozygosities. By using the number of alleles observed
+instead of the number of individuals we remove an assumption about how
+many alleles each individual may contribute. That is, we should be able
+to accomodate samples of mixed ploidy.</p>
 <pre class="r"><code>library(vcfR)
 data(vcfR_example)
 pop &lt;- as.factor(c(&quot;us&quot;, &quot;eu&quot;, &quot;us&quot;, &quot;af&quot;, &quot;eu&quot;, &quot;us&quot;, &quot;mx&quot;, &quot;eu&quot;, &quot;eu&quot;, &quot;sa&quot;, &quot;mx&quot;, &quot;sa&quot;, &quot;us&quot;, &quot;sa&quot;, &quot;Pmir&quot;, &quot;us&quot;, &quot;eu&quot;, &quot;eu&quot;))
 myDiff &lt;- genetic_diff(vcf, pops = pop, method = &#39;nei&#39;)
 knitr::kable(head(myDiff[,1:15]))</code></pre>
-<table>
+<table style="width:100%;">
+<colgroup>
+<col width="16%" />
+<col width="3%" />
+<col width="5%" />
+<col width="5%" />
+<col width="5%" />
+<col width="7%" />
+<col width="5%" />
+<col width="5%" />
+<col width="9%" />
+<col width="4%" />
+<col width="4%" />
+<col width="4%" />
+<col width="6%" />
+<col width="4%" />
+<col width="4%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th align="left">CHROM</th>
@@ -511,7 +668,13 @@ knitr::kable(head(myDiff[,1:15]))</code></pre>
 </tr>
 </tbody>
 </table>
-<p>The function returns the chromosome and position of each variant as provided in the VCF data. This should allow you to align its output with the VCF data. The heterozygosities for each population are reported as well as the total heterozygosity, followed by the number of alleles observed in each population. Note that in some populations zero alleles were observed. Populations with zero alleles reported heterozygosities of ‘NaN’ because of this absence of data.</p>
+<p>The function returns the chromosome and position of each variant as
+provided in the VCF data. This should allow you to align its output with
+the VCF data. The heterozygosities for each population are reported as
+well as the total heterozygosity, followed by the number of alleles
+observed in each population. Note that in some populations zero alleles
+were observed. Populations with zero alleles reported heterozygosities
+of ‘NaN’ because of this absence of data.</p>
 <pre class="r"><code>knitr::kable(head(myDiff[,16:19]))</code></pre>
 <table>
 <thead>
@@ -561,51 +724,66 @@ knitr::kable(head(myDiff[,1:15]))</code></pre>
 </tr>
 </tbody>
 </table>
-<p>The remaining columns contain <span class="math inline">\(G_{ST}\)</span>, the maximum heterozygosity, the maximum <span class="math inline">\(G_{ST}\)</span> and finally <span class="math inline">\(G&#39;_{ST}\)</span>. The maximum heterozygosity and the maximum <span class="math inline">\(G_{ST}\)</span> are intermediary values used to calculate <span class="math inline">\(G&#39;_{ST}\)</span>. They are typically not reported but provide values to help validate that <span class="math inline">\(G&#39;_{ST}\)</span> was calculated correctly. Note that the populations that had zero alleles and therefore a heterozygosity of ‘NaN’ contributed to <span class="math inline">\(G_{ST}\)</span>s that were also ‘NaN’. To avoid this you may want to consider omitting populations with a small sample size or that contain a large amount of missing data.</p>
-<p>We now have information for each variant in the VCF data. Because this is typically a large quantity of information, we’ll want to summarize it. One way is to take averages of the data.</p>
+<p>The remaining columns contain <span
+class="math inline">\(G_{ST}\)</span>, the maximum heterozygosity, the
+maximum <span class="math inline">\(G_{ST}\)</span> and finally <span
+class="math inline">\(G&#39;_{ST}\)</span>. The maximum heterozygosity
+and the maximum <span class="math inline">\(G_{ST}\)</span> are
+intermediary values used to calculate <span
+class="math inline">\(G&#39;_{ST}\)</span>. They are typically not
+reported but provide values to help validate that <span
+class="math inline">\(G&#39;_{ST}\)</span> was calculated correctly.
+Note that the populations that had zero alleles and therefore a
+heterozygosity of ‘NaN’ contributed to <span
+class="math inline">\(G_{ST}\)</span>s that were also ‘NaN’. To avoid
+this you may want to consider omitting populations with a small sample
+size or that contain a large amount of missing data.</p>
+<p>We now have information for each variant in the VCF data. Because
+this is typically a large quantity of information, we’ll want to
+summarize it. One way is to take averages of the data.</p>
 <pre class="r"><code>knitr::kable(round(colMeans(myDiff[,c(3:9,16,19)], na.rm = TRUE), digits = 3))</code></pre>
 <table>
 <thead>
 <tr class="header">
-<th></th>
+<th align="left"></th>
 <th align="right">x</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Hs_af</td>
+<td align="left">Hs_af</td>
 <td align="right">0.176</td>
 </tr>
 <tr class="even">
-<td>Hs_eu</td>
+<td align="left">Hs_eu</td>
 <td align="right">0.188</td>
 </tr>
 <tr class="odd">
-<td>Hs_mx</td>
+<td align="left">Hs_mx</td>
 <td align="right">0.168</td>
 </tr>
 <tr class="even">
-<td>Hs_Pmir</td>
+<td align="left">Hs_Pmir</td>
 <td align="right">0.052</td>
 </tr>
 <tr class="odd">
-<td>Hs_sa</td>
+<td align="left">Hs_sa</td>
 <td align="right">0.198</td>
 </tr>
 <tr class="even">
-<td>Hs_us</td>
+<td align="left">Hs_us</td>
 <td align="right">0.155</td>
 </tr>
 <tr class="odd">
-<td>Ht</td>
+<td align="left">Ht</td>
 <td align="right">0.247</td>
 </tr>
 <tr class="even">
-<td>Gst</td>
+<td align="left">Gst</td>
 <td align="right">0.595</td>
 </tr>
 <tr class="odd">
-<td>Gprimest</td>
+<td align="left">Gprimest</td>
 <td align="right">0.632</td>
 </tr>
 </tbody>
@@ -623,22 +801,28 @@ p &lt;- p + theme_bw()
 p</code></pre>
 <p><img src="genetic_differentiation_files/figure-html/unnamed-chunk-4-1.png" width="768" style="display: block; margin: auto;" /></p>
 <div id="references" class="section level1 unnumbered">
-<h1>References</h1>
-<div id="refs" class="references">
-<div id="ref-hedrick2005standardized">
-<p>Hedrick, Philip W. 2005. “A Standardized Genetic Differentiation Measure.” <em>Evolution</em> 59 (8). BioOne: 1633–8.</p>
+<h1 class="unnumbered">References</h1>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-hedrick2005standardized" class="csl-entry">
+Hedrick, Philip W. 2005. <span>“A Standardized Genetic Differentiation
+Measure.”</span> <em>Evolution</em> 59 (8): 1633–38.
 </div>
-<div id="ref-jost2008gst">
-<p>Jost, Lou. 2008. “GST and Its Relatives Do Not Measure Differentiation.” <em>Molecular Ecology</em> 17 (18). Wiley Online Library: 4015–26.</p>
+<div id="ref-jost2008gst" class="csl-entry">
+Jost, Lou. 2008. <span>“GST and Its Relatives Do Not Measure
+Differentiation.”</span> <em>Molecular Ecology</em> 17 (18): 4015–26.
 </div>
-<div id="ref-nei1973analysis">
-<p>Nei, Masatoshi. 1973. “Analysis of Gene Diversity in Subdivided Populations.” <em>Proceedings of the National Academy of Sciences</em> 70 (12). National Acad Sciences: 3321–3.</p>
+<div id="ref-nei1973analysis" class="csl-entry">
+Nei, Masatoshi. 1973. <span>“Analysis of Gene Diversity in Subdivided
+Populations.”</span> <em>Proceedings of the National Academy of
+Sciences</em> 70 (12): 3321–23.
 </div>
-<div id="ref-simpson1949measurement">
-<p>Simpson, Edward H. 1949. “Measurement of Diversity.” <em>Nature</em> 163: 688.</p>
+<div id="ref-simpson1949measurement" class="csl-entry">
+Simpson, Edward H. 1949. <span>“Measurement of Diversity.”</span>
+<em>Nature</em> 163: 688.
 </div>
-<div id="ref-wright1949genetical">
-<p>Wright, Sewall. 1949. “The Genetical Structure of Populations.” <em>Annals of Eugenics</em> 15 (1). Wiley Online Library: 323–54.</p>
+<div id="ref-wright1949genetical" class="csl-entry">
+Wright, Sewall. 1949. <span>“The Genetical Structure of
+Populations.”</span> <em>Annals of Eugenics</em> 15 (1): 323–54.
 </div>
 </div>
 </div>
@@ -657,7 +841,7 @@ p</code></pre>
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
@@ -665,6 +849,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
