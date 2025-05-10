@@ -13,7 +13,7 @@
 
 <title>Ranking data</title>
 
-<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
@@ -201,8 +201,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -210,16 +210,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -481,19 +474,19 @@ chrom &lt;- create.chromR(name=&quot;Supercontig&quot;, vcf=vcf, seq=dna, ann=gf
 #chrom &lt;- masker(chrom, min_DP = 900, max_DP = 1500)
 chrom &lt;- proc.chromR(chrom, verbose = TRUE)</code></pre>
 <pre><code>## Nucleotide regions complete.</code></pre>
-<pre><code>##   elapsed time:  0.122</code></pre>
+<pre><code>##   elapsed time:  0.293</code></pre>
 <pre><code>## N regions complete.</code></pre>
-<pre><code>##   elapsed time:  0.114</code></pre>
+<pre><code>##   elapsed time:  0.279</code></pre>
 <pre><code>## Population summary complete.</code></pre>
-<pre><code>##   elapsed time:  0.154</code></pre>
+<pre><code>##   elapsed time:  0.29</code></pre>
 <pre><code>## window_init complete.</code></pre>
-<pre><code>##   elapsed time:  0</code></pre>
+<pre><code>##   elapsed time:  0.001</code></pre>
 <pre><code>## windowize_fasta complete.</code></pre>
-<pre><code>##   elapsed time:  0.061</code></pre>
+<pre><code>##   elapsed time:  0.124</code></pre>
 <pre><code>## windowize_annotations complete.</code></pre>
-<pre><code>##   elapsed time:  0.008</code></pre>
+<pre><code>##   elapsed time:  0.013</code></pre>
 <pre><code>## windowize_variants complete.</code></pre>
-<pre><code>##   elapsed time:  0</code></pre>
+<pre><code>##   elapsed time:  0.001</code></pre>
 </div>
 <div id="creating-scores-to-rank" class="section level2">
 <h2>Creating scores to rank</h2>
@@ -661,22 +654,22 @@ head(chrom@var.info)</code></pre>
 ## 6 Supercontig_1.50 462 58.89 508 TRUE 17          31,3 0.1608997 1.191753
 ##   window_number rank
 ## 1             0   16
-## 2             0   15
-## 3             0   11
+## 2             0   13
+## 3             0    9
 ## 4             0   10
 ## 5             0   14
-## 6             0    6</code></pre>
+## 6             0    2</code></pre>
 <p>This creates a vector of window numbers and rank within each window
 and adds them to the var.info slot of the chromR object. We can take a
 look at them bay calling this directly.</p>
 <pre class="r"><code>head(chrom@var.info[,c(&#39;POS&#39;, &#39;MQ&#39;, &#39;DP&#39;, &#39;window_number&#39;, &#39;rank&#39;)])</code></pre>
 <pre><code>##   POS    MQ  DP window_number rank
 ## 1  41 51.30 174             0   16
-## 2 136 52.83 390             0   15
-## 3 254 56.79 514             0   11
+## 2 136 52.83 390             0   13
+## 3 254 56.79 514             0    9
 ## 4 275 57.07 514             0   10
 ## 5 386 57.40 509             0   14
-## 6 462 58.89 508             0    6</code></pre>
+## 6 462 58.89 508             0    2</code></pre>
 <p>We can use this information to create our mask.</p>
 <pre class="r"><code>chrom@var.info$mask[chrom@var.info$rank &gt; 1] &lt;- FALSE</code></pre>
 <p>And plot.</p>

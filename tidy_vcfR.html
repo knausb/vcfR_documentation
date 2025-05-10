@@ -13,7 +13,7 @@
 
 <title>tidy vcfR</title>
 
-<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
@@ -201,8 +201,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -210,16 +210,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -525,7 +518,7 @@ other list element.</p>
 ## 3        1 20    1110696 rs604… A     G,T      67 PASS       2    10 0.33… T    
 ## 4        1 20    1230237 &lt;NA&gt;   T     &lt;NA&gt;     47 PASS       3    13 &lt;NA&gt;  T    
 ## 5        1 20    1234567 micro… GTC   G,GT…    50 PASS       3     9 &lt;NA&gt;  G    
-## # … with 2 more variables: DB &lt;lgl&gt;, H2 &lt;lgl&gt;</code></pre>
+## # ℹ 2 more variables: DB &lt;lgl&gt;, H2 &lt;lgl&gt;</code></pre>
 <pre class="r"><code>Z$gt</code></pre>
 <pre><code>## # A tibble: 15 × 6
 ##    ChromKey     POS Indiv   gt_GT gt_DP gt_GT_alleles

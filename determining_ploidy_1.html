@@ -13,7 +13,7 @@
 
 <title>Determining ploidy 1</title>
 
-<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
@@ -201,8 +201,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -210,16 +210,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -715,7 +708,7 @@ ad2 &lt;- allele2 / (allele1 + allele2)</code></pre>
 histogram.</p>
 <pre class="r"><code>hist(ad2[,&quot;P17777us22&quot;], breaks = seq(0,1,by=0.02), col = &quot;#1f78b4&quot;, xaxt=&quot;n&quot;)
 hist(ad1[,&quot;P17777us22&quot;], breaks = seq(0,1,by=0.02), col = &quot;#a6cee3&quot;, add = TRUE)
-axis(side=1, at=c(0,0.25,0.333,0.5,0.666,0.75,1), labels=c(0,&quot;1/4&quot;,&quot;1/3&quot;,&quot;1/2&quot;,&quot;1/3&quot;,&quot;3/4&quot;,1))</code></pre>
+axis(side=1, at=c(0,0.25,0.333,0.5,0.666,0.75,1), labels=c(0,&quot;1/4&quot;,&quot;1/3&quot;,&quot;1/2&quot;,&quot;2/3&quot;,&quot;3/4&quot;,1))</code></pre>
 <p><img src="determining_ploidy_1_files/figure-html/unnamed-chunk-8-1.png" width="768" style="display: block; margin: auto;" /></p>
 <p>The most common class of variant is the homozygote. This overwhelms
 the plot. We can remove these so we can focus on the heterozygotes.</p>
@@ -732,7 +725,7 @@ ad2 &lt;- allele2 / (allele1 + allele2)
 
 hist(ad2[,&quot;P17777us22&quot;], breaks = seq(0,1,by=0.02), col = &quot;#1f78b4&quot;, xaxt=&quot;n&quot;)
 hist(ad1[,&quot;P17777us22&quot;], breaks = seq(0,1,by=0.02), col = &quot;#a6cee3&quot;, add = TRUE)
-axis(side=1, at=c(0,0.25,0.333,0.5,0.666,0.75,1), labels=c(0,&quot;1/4&quot;,&quot;1/3&quot;,&quot;1/2&quot;,&quot;1/3&quot;,&quot;3/4&quot;,1))</code></pre>
+axis(side=1, at=c(0,0.25,0.333,0.5,0.666,0.75,1), labels=c(0,&quot;1/4&quot;,&quot;1/3&quot;,&quot;1/2&quot;,&quot;2/3&quot;,&quot;3/4&quot;,1))</code></pre>
 <p><img src="determining_ploidy_1_files/figure-html/unnamed-chunk-9-1.png" width="768" style="display: block; margin: auto;" /></p>
 <p>This allows us to focus on the heterozygous variants and we observe a
 peak at 0.5 consistent with our expectation. However, the frequencies
