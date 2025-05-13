@@ -514,12 +514,21 @@ by a box. We’ll neeed to load a few packages to add functions to help
 us. I think you’ll see that violin plots are a little more involved to
 create, and they are slower to render, but many find them to be more
 informative and more aesthetically pleasing.</p>
-<pre class="r"><code>library(reshape2)
+<pre class="r"><code>#library(reshape2)
 library(ggplot2) 
 library(cowplot)
 
 # Melt our matrix into a long form data.frame.
-dpf &lt;- melt(dp, varnames=c(&#39;Index&#39;, &#39;Sample&#39;), value.name = &#39;Depth&#39;, na.rm=TRUE)
+# https://stackoverflow.com/a/48392823
+names(dimnames(dp)) &lt;- c(&#39;Variant&#39;,&#39;Sample&#39;)
+#dp[1:3, 1:5]
+dpf &lt;- as.data.frame(
+  as.table(dp),
+  responseName = &#39;Depth&#39;
+)
+
+# Melt our matrix into a long form data.frame.
+#dpf &lt;- melt(dp, varnames=c(&#39;Index&#39;, &#39;Sample&#39;), value.name = &#39;Depth&#39;, na.rm=TRUE)
 dpf &lt;- dpf[ dpf$Depth &gt; 0,]
 
 # Create a row designator.

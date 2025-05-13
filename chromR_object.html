@@ -578,17 +578,17 @@ changed the chromR object will need to be processed to update this
 information.</p>
 <pre class="r"><code>chrom &lt;- proc.chromR(chrom, verbose = TRUE)</code></pre>
 <pre><code>## Nucleotide regions complete.</code></pre>
-<pre><code>##   elapsed time:  0.318</code></pre>
+<pre><code>##   elapsed time:  0.312</code></pre>
 <pre><code>## N regions complete.</code></pre>
-<pre><code>##   elapsed time:  0.303</code></pre>
+<pre><code>##   elapsed time:  0.3</code></pre>
 <pre><code>## Population summary complete.</code></pre>
-<pre><code>##   elapsed time:  0.259</code></pre>
+<pre><code>##   elapsed time:  0.26</code></pre>
 <pre><code>## window_init complete.</code></pre>
 <pre><code>##   elapsed time:  0</code></pre>
 <pre><code>## windowize_fasta complete.</code></pre>
-<pre><code>##   elapsed time:  0.124</code></pre>
+<pre><code>##   elapsed time:  0.109</code></pre>
 <pre><code>## windowize_annotations complete.</code></pre>
-<pre><code>##   elapsed time:  0.017</code></pre>
+<pre><code>##   elapsed time:  0.013</code></pre>
 <pre><code>## windowize_variants complete.</code></pre>
 <pre><code>##   elapsed time:  0.001</code></pre>
 <pre class="r"><code>plot(chrom)</code></pre>
@@ -615,19 +615,19 @@ masking.</p>
 <pre class="r"><code>chrom &lt;- masker(chrom, min_QUAL=0, min_DP=350, max_DP=650, min_MQ=59.5, max_MQ=60.5)
 chrom &lt;- proc.chromR(chrom, verbose = TRUE)</code></pre>
 <pre><code>## Nucleotide regions complete.</code></pre>
-<pre><code>##   elapsed time:  0.303</code></pre>
+<pre><code>##   elapsed time:  0.301</code></pre>
 <pre><code>## N regions complete.</code></pre>
-<pre><code>##   elapsed time:  0.308</code></pre>
+<pre><code>##   elapsed time:  0.304</code></pre>
 <pre><code>## Population summary complete.</code></pre>
-<pre><code>##   elapsed time:  0.222</code></pre>
+<pre><code>##   elapsed time:  0.227</code></pre>
 <pre><code>## window_init complete.</code></pre>
 <pre><code>##   elapsed time:  0</code></pre>
 <pre><code>## windowize_fasta complete.</code></pre>
-<pre><code>##   elapsed time:  0.112</code></pre>
+<pre><code>##   elapsed time:  0.11</code></pre>
 <pre><code>## windowize_annotations complete.</code></pre>
-<pre><code>##   elapsed time:  0.014</code></pre>
+<pre><code>##   elapsed time:  0.012</code></pre>
 <pre><code>## windowize_variants complete.</code></pre>
-<pre><code>##   elapsed time:  0</code></pre>
+<pre><code>##   elapsed time:  0.001</code></pre>
 <pre class="r"><code>plot(chrom)</code></pre>
 <p><img src="chromR_object_files/figure-html/unnamed-chunk-9-1.png" width="768" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>chromoqc(chrom)</code></pre>
