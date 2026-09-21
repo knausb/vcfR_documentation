@@ -13,7 +13,7 @@
 
 <title>A quick introduction</title>
 
-<script src="site_libs/header-attrs-2.30/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.31/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
@@ -659,7 +659,7 @@ numeric. If not, it will try to recast them as so.</p>
 needed. First, you may want to get a quick look at some of your data.
 This can be done with the plot function.</p>
 <pre class="r"><code>plot(chrom)</code></pre>
-<p><img src="quick_intro_files/figure-html/plot%20chrom-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="quick_intro_files/figure-html/plot%20chrom-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
 <p>The distribution of read depth (DP) stands out. Presumably, there is
 some base ploid level at which most of each genome is sequenced at. Here
 we see a peak, which may represent that base ploid region, but we also
@@ -692,7 +692,7 @@ matrices throughout the analyisis and allows the user to easily undo any
 changes.</p>
 <pre class="r"><code>chrom &lt;- masker(chrom, min_QUAL = 1, min_DP = 300, max_DP = 700, min_MQ = 59.9,  max_MQ = 60.1)
 plot(chrom)</code></pre>
-<p><img src="quick_intro_files/figure-html/masker-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="quick_intro_files/figure-html/masker-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
 <p>Once we’re satisfied with which variants we want to consider to be of
 high quality we can process the chromR object with
 <code>proc.chromR()</code>. This function calls several helper functions
@@ -708,21 +708,21 @@ the data. Currently it summarizes variant count per window as well as
 G/C content per window.</p>
 <pre class="r"><code>chrom &lt;- proc.chromR(chrom, verbose=TRUE)</code></pre>
 <pre><code>## Nucleotide regions complete.</code></pre>
-<pre><code>##   elapsed time:  0.29</code></pre>
+<pre><code>##   elapsed time:  0.328</code></pre>
 <pre><code>## N regions complete.</code></pre>
 <pre><code>##   elapsed time:  0.301</code></pre>
 <pre><code>## Population summary complete.</code></pre>
-<pre><code>##   elapsed time:  0.208</code></pre>
+<pre><code>##   elapsed time:  0.216</code></pre>
 <pre><code>## window_init complete.</code></pre>
 <pre><code>##   elapsed time:  0.001</code></pre>
 <pre><code>## windowize_fasta complete.</code></pre>
-<pre><code>##   elapsed time:  0.105</code></pre>
+<pre><code>##   elapsed time:  0.107</code></pre>
 <pre><code>## windowize_annotations complete.</code></pre>
 <pre><code>##   elapsed time:  0.013</code></pre>
 <pre><code>## windowize_variants complete.</code></pre>
-<pre><code>##   elapsed time:  0</code></pre>
+<pre><code>##   elapsed time:  0.001</code></pre>
 <pre class="r"><code>plot(chrom)</code></pre>
-<p><img src="quick_intro_files/figure-html/proc.chromR-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="quick_intro_files/figure-html/proc.chromR-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
 <p>Now that we’ve processed our chromR object, we have variant counts
 per window. We’re also ready to move on to more complex plots.</p>
 </div>
@@ -737,11 +737,11 @@ can now move on to visualizing these data.</p>
 can include barplots as well as scatterplots which have chromosomal
 coordinates.</p>
 <pre class="r"><code>chromoqc(chrom, dp.alpha=20)</code></pre>
-<p><img src="quick_intro_files/figure-html/chromoqc1-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="quick_intro_files/figure-html/chromoqc1-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
 <p>We can also zoom in on a feature of interest by using the
 <code>xlim()</code> parameter.</p>
 <pre class="r"><code>chromoqc(chrom, xlim=c(5e+05, 6e+05))</code></pre>
-<p><img src="quick_intro_files/figure-html/chromoqc2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="quick_intro_files/figure-html/chromoqc2-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="output-of-data" class="section level2">
 <h2>Output of data</h2>

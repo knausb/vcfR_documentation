@@ -13,7 +13,7 @@
 
 <title>Sequence coverage</title>
 
-<script src="site_libs/header-attrs-2.30/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.31/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
@@ -581,7 +581,7 @@ boxplot(dp, las=3, col=c(&quot;#C0C0C0&quot;, &quot;#808080&quot;), ylab=&quot;D
 <pre><code>## Warning in (function (z, notch = FALSE, width = NULL, varwidth = FALSE, :
 ## Duplicated argument las = 2 is disregarded</code></pre>
 <pre class="r"><code>abline(h=seq(0,1e4, by=100), col=&quot;#C0C0C088&quot;)</code></pre>
-<p><img src="sequence_coverage_files/figure-html/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="sequence_coverage_files/figure-html/unnamed-chunk-6-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>par(mar=c(5,4,4,2))</code></pre>
 <p>This is a reasonable representation of the data. The boxplots contain
 50% of the data within each box (the first and third quartiles). The
@@ -626,7 +626,7 @@ then we can plot it with ggplot2.</p>
 ## This warning is displayed once per session.
 ## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
 ## generated.</code></pre>
-<p><img src="sequence_coverage_files/figure-html/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="sequence_coverage_files/figure-html/unnamed-chunk-7-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
 <p>The violin plot presents the distribution of the data throughout its
 range. They also provide an easy way to apply a logarithmic
 transformation (here base 2) that effectively compresses large values
@@ -661,7 +661,7 @@ data using boxplots.</p>
 <pre class="r"><code>par(mar=c(8,4,1,1))
 boxplot(dp, las=3, col=c(&quot;#C0C0C0&quot;, &quot;#808080&quot;), ylab=&quot;Depth&quot;)
 abline(h=seq(0,200, by=20), col=&quot;#C0C0C088&quot;)</code></pre>
-<p><img src="sequence_coverage_files/figure-html/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="sequence_coverage_files/figure-html/unnamed-chunk-9-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>par(mar=c(5,4,4,2))</code></pre>
 <p>We can see that we’ve removed many of our outlier variants (circles
 beyond the whiskers). And our data appear much better behaved. We can

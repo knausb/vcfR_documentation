@@ -13,7 +13,7 @@
 
 <title>Ranking data</title>
 
-<script src="site_libs/header-attrs-2.30/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.31/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
@@ -474,17 +474,17 @@ chrom &lt;- create.chromR(name=&quot;Supercontig&quot;, vcf=vcf, seq=dna, ann=gf
 #chrom &lt;- masker(chrom, min_DP = 900, max_DP = 1500)
 chrom &lt;- proc.chromR(chrom, verbose = TRUE)</code></pre>
 <pre><code>## Nucleotide regions complete.</code></pre>
-<pre><code>##   elapsed time:  0.294</code></pre>
+<pre><code>##   elapsed time:  0.293</code></pre>
 <pre><code>## N regions complete.</code></pre>
-<pre><code>##   elapsed time:  0.275</code></pre>
+<pre><code>##   elapsed time:  0.303</code></pre>
 <pre><code>## Population summary complete.</code></pre>
-<pre><code>##   elapsed time:  0.238</code></pre>
+<pre><code>##   elapsed time:  0.234</code></pre>
 <pre><code>## window_init complete.</code></pre>
 <pre><code>##   elapsed time:  0.001</code></pre>
 <pre><code>## windowize_fasta complete.</code></pre>
-<pre><code>##   elapsed time:  0.105</code></pre>
+<pre><code>##   elapsed time:  0.11</code></pre>
 <pre><code>## windowize_annotations complete.</code></pre>
-<pre><code>##   elapsed time:  0.013</code></pre>
+<pre><code>##   elapsed time:  0.012</code></pre>
 <pre><code>## windowize_variants complete.</code></pre>
 <pre><code>##   elapsed time:  0.001</code></pre>
 </div>
@@ -579,12 +579,12 @@ dp &lt;- extract.gt(chrom, element=&quot;DP&quot;, as.numeric=TRUE)</code></pre>
 <pre class="r"><code>#hist(gq[,1])
 par( mar = c(8,4,4,2) )
 boxplot(gq, las=2, col=2:5, main=&quot;Genotype Quality (GQ)&quot;)</code></pre>
-<p><img src="ranking_data_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="ranking_data_files/figure-html/unnamed-chunk-4-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>dp2 &lt;- dp
 dp2[ dp2 == 0 ] &lt;- NA
 boxplot(dp2, las=2, col=2:5, main=&quot;Sequence Depth (DP)&quot;, log=&quot;y&quot;)
 abline(h=10^c(0:4), lty=3, col=&quot;#808080&quot;)</code></pre>
-<p><img src="ranking_data_files/figure-html/unnamed-chunk-4-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="ranking_data_files/figure-html/unnamed-chunk-4-2.png" alt="" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>par( mar = c(5,4,4,2) )</code></pre>
 <p>The values for genotype quality appear to range from 0 to 100 with
 among sample variability. For example, sample P13626 consists of
@@ -612,7 +612,7 @@ dp2 &lt;- abs(dp2)
 dp2 &lt;- -1 * dp2</code></pre>
 <pre class="r"><code>par( mar = c(8,4,4,2) )
 boxplot(dp2, las=2, col=2:5, main=&quot;Sequence Depth (DP)&quot;)</code></pre>
-<p><img src="ranking_data_files/figure-html/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="ranking_data_files/figure-html/unnamed-chunk-6-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>par( mar = c(5,4,4,2) )</code></pre>
 <p>Before we combine these data we have one more issue we need to
 address. In their current state, sequence depth’s range is much greater
@@ -641,7 +641,7 @@ and summarize over variants.</p>
 scores &lt;- rowSums(scores, na.rm = TRUE)</code></pre>
 <p>Check their distribution with a histogram.</p>
 <pre class="r"><code>hist(scores, col=4)</code></pre>
-<p><img src="ranking_data_files/figure-html/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="ranking_data_files/figure-html/unnamed-chunk-9-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
 <p>Once we have scores in hand we can use them to rank our variants.</p>
 <pre class="r"><code>chrom &lt;- rank.variants.chromR(chrom, scores)
 head(chrom@var.info)</code></pre>
@@ -674,7 +674,7 @@ look at them bay calling this directly.</p>
 <pre class="r"><code>chrom@var.info$mask[chrom@var.info$rank &gt; 1] &lt;- FALSE</code></pre>
 <p>And plot.</p>
 <pre class="r"><code>chromoqc(chrom, dp.alpha=&#39;66&#39;)</code></pre>
-<p><img src="ranking_data_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p><img src="ranking_data_files/figure-html/unnamed-chunk-13-1.png" alt="" width="672" /></p>
 <p>This looks pretty good. But we still have variants with rather high
 or low depth. We can combine the use of masker, which we explored in the
 vignette ‘Filtering data’ with our ranks. We’ll first call masker, which
@@ -683,7 +683,7 @@ will reset our mask, and then censor this mask based on rank.</p>
 chrom@var.info$mask[ chrom@var.info$rank &gt; 1 ] &lt;- FALSE</code></pre>
 <p>Then replot.</p>
 <pre class="r"><code>chromoqc(chrom, dp.alpha=&#39;66&#39;)</code></pre>
-<p><img src="ranking_data_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<p><img src="ranking_data_files/figure-html/unnamed-chunk-15-1.png" alt="" width="672" /></p>
 </div>
 <div id="conclusion" class="section level2">
 <h2>Conclusion</h2>

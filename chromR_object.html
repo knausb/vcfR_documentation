@@ -13,7 +13,7 @@
 
 <title>chromR objects</title>
 
-<script src="site_libs/header-attrs-2.30/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.31/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
@@ -539,7 +539,7 @@ object.</p>
 first is <code>plot()</code> which plots histograms of some of the data
 summaries.</p>
 <pre class="r"><code>plot(chrom)</code></pre>
-<p><img src="chromR_object_files/figure-html/unnamed-chunk-3-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="chromR_object_files/figure-html/unnamed-chunk-3-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
 <p>The read depth here is a sum over all samples. We see a peak that
 represents the depth where most of our genomes were sequenced at. Low
 regions of sequence depth may indicatte variants where we may be
@@ -559,7 +559,7 @@ parameter to use to judge your variants. The last panel for SNP
 densities is empty becuase this data is created during the processing of
 chromR objects, which we will discuss below.</p>
 <pre class="r"><code>chromoqc(chrom)</code></pre>
-<p><img src="chromR_object_files/figure-html/unnamed-chunk-4-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="chromR_object_files/figure-html/unnamed-chunk-4-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
 <p>Our second plot, I call it a chromo plot, displays the same
 information as the plot method only it distributes the data along its
 chomosomal coordinates. It also includes a representation of the
@@ -578,21 +578,21 @@ changed the chromR object will need to be processed to update this
 information.</p>
 <pre class="r"><code>chrom &lt;- proc.chromR(chrom, verbose = TRUE)</code></pre>
 <pre><code>## Nucleotide regions complete.</code></pre>
-<pre><code>##   elapsed time:  0.319</code></pre>
+<pre><code>##   elapsed time:  0.314</code></pre>
 <pre><code>## N regions complete.</code></pre>
-<pre><code>##   elapsed time:  0.311</code></pre>
+<pre><code>##   elapsed time:  0.3</code></pre>
 <pre><code>## Population summary complete.</code></pre>
-<pre><code>##   elapsed time:  0.253</code></pre>
+<pre><code>##   elapsed time:  0.235</code></pre>
 <pre><code>## window_init complete.</code></pre>
 <pre><code>##   elapsed time:  0.001</code></pre>
 <pre><code>## windowize_fasta complete.</code></pre>
-<pre><code>##   elapsed time:  0.118</code></pre>
+<pre><code>##   elapsed time:  0.113</code></pre>
 <pre><code>## windowize_annotations complete.</code></pre>
-<pre><code>##   elapsed time:  0.014</code></pre>
+<pre><code>##   elapsed time:  0.012</code></pre>
 <pre><code>## windowize_variants complete.</code></pre>
 <pre><code>##   elapsed time:  0.001</code></pre>
 <pre class="r"><code>plot(chrom)</code></pre>
-<p><img src="chromR_object_files/figure-html/unnamed-chunk-6-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="chromR_object_files/figure-html/unnamed-chunk-6-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
 <p>Subsequent to processing our plot function is identical to its
 previous presentation except that we now have variant densities. When we
 observe the chromoqc plot we see that we now have variant densities,
@@ -600,7 +600,7 @@ nucleotide content as well as a representation of where in our reference
 we have nucleotides (A, C, G or T) or where we have ambiguous
 nucleotides.</p>
 <pre class="r"><code>chromoqc(chrom)</code></pre>
-<p><img src="chromR_object_files/figure-html/unnamed-chunk-7-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="chromR_object_files/figure-html/unnamed-chunk-7-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
 </div>
 <div id="masking-low-quality-variants" class="section level2">
 <h2>Masking low quality variants</h2>
@@ -617,21 +617,21 @@ chrom &lt;- proc.chromR(chrom, verbose = TRUE)</code></pre>
 <pre><code>## Nucleotide regions complete.</code></pre>
 <pre><code>##   elapsed time:  0.31</code></pre>
 <pre><code>## N regions complete.</code></pre>
-<pre><code>##   elapsed time:  0.307</code></pre>
+<pre><code>##   elapsed time:  0.302</code></pre>
 <pre><code>## Population summary complete.</code></pre>
-<pre><code>##   elapsed time:  0.215</code></pre>
+<pre><code>##   elapsed time:  0.2</code></pre>
 <pre><code>## window_init complete.</code></pre>
-<pre><code>##   elapsed time:  0</code></pre>
-<pre><code>## windowize_fasta complete.</code></pre>
-<pre><code>##   elapsed time:  0.115</code></pre>
-<pre><code>## windowize_annotations complete.</code></pre>
-<pre><code>##   elapsed time:  0.013</code></pre>
-<pre><code>## windowize_variants complete.</code></pre>
 <pre><code>##   elapsed time:  0.001</code></pre>
+<pre><code>## windowize_fasta complete.</code></pre>
+<pre><code>##   elapsed time:  0.109</code></pre>
+<pre><code>## windowize_annotations complete.</code></pre>
+<pre><code>##   elapsed time:  0.014</code></pre>
+<pre><code>## windowize_variants complete.</code></pre>
+<pre><code>##   elapsed time:  0</code></pre>
 <pre class="r"><code>plot(chrom)</code></pre>
-<p><img src="chromR_object_files/figure-html/unnamed-chunk-9-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="chromR_object_files/figure-html/unnamed-chunk-9-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>chromoqc(chrom)</code></pre>
-<p><img src="chromR_object_files/figure-html/unnamed-chunk-10-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="chromR_object_files/figure-html/unnamed-chunk-10-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
 <p>These actions have allowed us to focus on variants of relatively
 uniform depth and mapping quality. We can see this in the chromoqc plot
 to validate how our actions have affected the retained data. In practice

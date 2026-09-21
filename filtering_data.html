@@ -13,7 +13,7 @@
 
 <title>Filtering data</title>
 
-<script src="site_libs/header-attrs-2.30/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.31/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
@@ -475,19 +475,19 @@ gff &lt;- read.table(gff_file, sep=&quot;\t&quot;, quote=&quot;&quot;)
 chrom &lt;- create.chromR(name=&quot;Supercontig&quot;, vcf=vcf, seq=dna, ann=gff, verbose=FALSE)
 chrom &lt;- proc.chromR(chrom, verbose = TRUE)</code></pre>
 <pre><code>## Nucleotide regions complete.</code></pre>
-<pre><code>##   elapsed time:  0.328</code></pre>
+<pre><code>##   elapsed time:  0.299</code></pre>
 <pre><code>## N regions complete.</code></pre>
-<pre><code>##   elapsed time:  0.369</code></pre>
+<pre><code>##   elapsed time:  0.285</code></pre>
 <pre><code>## Population summary complete.</code></pre>
-<pre><code>##   elapsed time:  0.315</code></pre>
+<pre><code>##   elapsed time:  0.241</code></pre>
 <pre><code>## window_init complete.</code></pre>
-<pre><code>##   elapsed time:  0</code></pre>
+<pre><code>##   elapsed time:  0.001</code></pre>
 <pre><code>## windowize_fasta complete.</code></pre>
-<pre><code>##   elapsed time:  0.118</code></pre>
+<pre><code>##   elapsed time:  0.11</code></pre>
 <pre><code>## windowize_annotations complete.</code></pre>
-<pre><code>##   elapsed time:  0.02</code></pre>
+<pre><code>##   elapsed time:  0.013</code></pre>
 <pre><code>## windowize_variants complete.</code></pre>
-<pre><code>##   elapsed time:  0.003</code></pre>
+<pre><code>##   elapsed time:  0.001</code></pre>
 </div>
 <div id="using-a-mask" class="section level2">
 <h2>Using a mask</h2>
@@ -609,7 +609,7 @@ column in the var.info slot to judge depth, we’ll change it to include
 only the high quality depth.</p>
 <p>We can now use the plot function to visualize this data.</p>
 <pre class="r"><code>plot(chrom)</code></pre>
-<p><img src="filtering_data_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p><img src="filtering_data_files/figure-html/unnamed-chunk-4-1.png" alt="" width="672" /></p>
 <p>Our summary of DP appears continuous. However, we do have variants
 which appear to have unusually low coverage which we may try to filter
 out. We also see that DP is very long tailed in that it has a number of
@@ -621,14 +621,14 @@ that it is fairly clinal and may not be useful for filtering.</p>
 <p>We can also use the chromoqc function to see how the data are
 distributed along the chromosome.</p>
 <pre class="r"><code>chromoqc(chrom, dp.alpha = 22)</code></pre>
-<p><img src="filtering_data_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p><img src="filtering_data_files/figure-html/unnamed-chunk-5-1.png" alt="" width="672" /></p>
 <p>Now that we have our first peek at the data, we can try to
 parameterize the masker function to isolate variants we feel to be of
 high quality.</p>
 <pre class="r"><code>chrom &lt;- masker(chrom, min_QUAL=0, min_DP=350, max_DP=650, min_MQ=59.5, max_MQ=60.5)
 chrom &lt;- proc.chromR(chrom, verbose = FALSE)
 plot(chrom)</code></pre>
-<p><img src="filtering_data_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p><img src="filtering_data_files/figure-html/unnamed-chunk-6-1.png" alt="" width="672" /></p>
 <p>Note that we need to run proc.chrom() again. This will update the
 variant count per window.</p>
 <p>The distribution of our read depths has now become narrower and
@@ -640,7 +640,7 @@ expect this process to take a few attempts.</p>
 <p>We can use chromoqc() to see how applying this mask affects our
 data.</p>
 <pre class="r"><code>chromoqc(chrom, dp.alpha = 22)</code></pre>
-<p><img src="filtering_data_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><img src="filtering_data_files/figure-html/unnamed-chunk-7-1.png" alt="" width="672" /></p>
 <p>The chromo plot shows us that the variants of low quality populated
 the 3’ end of the supercontig. Filtering has removed all of the variants
 from this region. Use of stringent filtering may be used to build a

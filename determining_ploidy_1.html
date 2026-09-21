@@ -13,7 +13,7 @@
 
 <title>Determining ploidy 1</title>
 
-<script src="site_libs/header-attrs-2.30/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.31/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
@@ -709,7 +709,7 @@ histogram.</p>
 <pre class="r"><code>hist(ad2[,&quot;P17777us22&quot;], breaks = seq(0,1,by=0.02), col = &quot;#1f78b4&quot;, xaxt=&quot;n&quot;)
 hist(ad1[,&quot;P17777us22&quot;], breaks = seq(0,1,by=0.02), col = &quot;#a6cee3&quot;, add = TRUE)
 axis(side=1, at=c(0,0.25,0.333,0.5,0.666,0.75,1), labels=c(0,&quot;1/4&quot;,&quot;1/3&quot;,&quot;1/2&quot;,&quot;2/3&quot;,&quot;3/4&quot;,1))</code></pre>
-<p><img src="determining_ploidy_1_files/figure-html/unnamed-chunk-8-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="determining_ploidy_1_files/figure-html/unnamed-chunk-8-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
 <p>The most common class of variant is the homozygote. This overwhelms
 the plot. We can remove these so we can focus on the heterozygotes.</p>
 <pre class="r"><code>gt &lt;- extract.gt(vcf, element = &#39;GT&#39;)
@@ -726,7 +726,7 @@ ad2 &lt;- allele2 / (allele1 + allele2)
 hist(ad2[,&quot;P17777us22&quot;], breaks = seq(0,1,by=0.02), col = &quot;#1f78b4&quot;, xaxt=&quot;n&quot;)
 hist(ad1[,&quot;P17777us22&quot;], breaks = seq(0,1,by=0.02), col = &quot;#a6cee3&quot;, add = TRUE)
 axis(side=1, at=c(0,0.25,0.333,0.5,0.666,0.75,1), labels=c(0,&quot;1/4&quot;,&quot;1/3&quot;,&quot;1/2&quot;,&quot;2/3&quot;,&quot;3/4&quot;,1))</code></pre>
-<p><img src="determining_ploidy_1_files/figure-html/unnamed-chunk-9-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="determining_ploidy_1_files/figure-html/unnamed-chunk-9-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
 <p>This allows us to focus on the heterozygous variants and we observe a
 peak at 0.5 consistent with our expectation. However, the frequencies
 range almost completely from 0 to one. This suggests some improvement
@@ -755,7 +755,7 @@ sums[,&quot;P17777us22&quot;]</code></pre>
 <pre><code>## 15% 95% 
 ##  19  75</code></pre>
 <pre class="r"><code>abline(v=sums[,&quot;P17777us22&quot;], col=2, lwd=2)</code></pre>
-<p><img src="determining_ploidy_1_files/figure-html/unnamed-chunk-10-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="determining_ploidy_1_files/figure-html/unnamed-chunk-10-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
 <p>Here we have presented the number of times the most abundant allele
 was sequenced as a histogram. We see two classes of calls resulting in
 peaks at just below 40 and just below 60. These peaks correspond to
@@ -777,7 +777,7 @@ sums[,&quot;P17777us22&quot;]</code></pre>
 <pre><code>## 15% 95% 
 ##  19  75</code></pre>
 <pre class="r"><code>abline(v=sums[,&quot;P17777us22&quot;], col=2, lwd=2)</code></pre>
-<p><img src="determining_ploidy_1_files/figure-html/unnamed-chunk-12-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="determining_ploidy_1_files/figure-html/unnamed-chunk-12-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
 <p>We can use this information to filter our data. First we’ll look at
 the raw data.</p>
 <pre class="r"><code>#vcf &lt;- extract.indels(vcf)
@@ -788,7 +788,7 @@ ad &lt;- extract.gt(vcf, element = &#39;AD&#39;)
 allele1 &lt;- masplit(ad, record = 1)
 allele2 &lt;- masplit(ad, record = 2)
 boxplot(allele1, las=3)</code></pre>
-<p><img src="determining_ploidy_1_files/figure-html/unnamed-chunk-13-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="determining_ploidy_1_files/figure-html/unnamed-chunk-13-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>#hist(allele1[,&quot;P17777us22&quot;], ylim=c(0,2000),
 #     breaks = seq(0,max(allele1[,&quot;P17777us22&quot;], na.rm = TRUE),by=5),
 #     xlim=c(0,100))
@@ -838,7 +838,7 @@ plots.</p>
 allele1 &lt;- masplit(ad, record = 1)
 allele2 &lt;- masplit(ad, record = 2)
 boxplot(allele1, las=3)</code></pre>
-<p><img src="determining_ploidy_1_files/figure-html/unnamed-chunk-15-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="determining_ploidy_1_files/figure-html/unnamed-chunk-15-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>#hist(allele1[,&quot;P17777us22&quot;], ylim=c(0,2000), breaks = seq(0,100,by=5) )</code></pre>
 <p>Now we can see if our histogram of allele balance has been cleaned
 up.</p>
@@ -855,7 +855,7 @@ ad2 &lt;- allele2 / (allele1 + allele2)
 hist(ad2[,&quot;P17777us22&quot;], breaks = seq(0,1,by=0.02), col = &quot;#1f78b4&quot;, xaxt=&quot;n&quot;, main=&quot;P17777us22&quot;)
 hist(ad1[,&quot;P17777us22&quot;], breaks = seq(0,1,by=0.02), col = &quot;#a6cee3&quot;, add = TRUE)
 axis(side=1, at=c(0,0.25,0.333,0.5,0.666,0.75,1), labels=c(0,&quot;1/4&quot;,&quot;1/3&quot;,&quot;1/2&quot;,&quot;2/3&quot;,&quot;3/4&quot;,1))</code></pre>
-<p><img src="determining_ploidy_1_files/figure-html/unnamed-chunk-16-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="determining_ploidy_1_files/figure-html/unnamed-chunk-16-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
 <p>We see that the shoulders that were present in the previous plot are
 almost entirely removed. This appears to be a dramatic improvement.</p>
 <p>While we’ve focused on one sample through most of this example its
@@ -866,7 +866,7 @@ well.</p>
 <pre class="r"><code>hist(ad2[,&quot;P13626&quot;], breaks = seq(0,1,by=0.02), col = &quot;#33a02c&quot;, xaxt=&quot;n&quot;, main=&quot;P13626&quot;)
 hist(ad1[,&quot;P13626&quot;], breaks = seq(0,1,by=0.02), col = &quot;#b2df8a&quot;, add = TRUE)
 axis(side=1, at=c(0,0.25,0.333,0.5,0.666,0.75,1), labels=c(0,&quot;1/4&quot;,&quot;1/3&quot;,&quot;1/2&quot;,&quot;2/3&quot;,&quot;3/4&quot;,1))</code></pre>
-<p><img src="determining_ploidy_1_files/figure-html/unnamed-chunk-17-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="determining_ploidy_1_files/figure-html/unnamed-chunk-17-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
 <p>This is an example of a sample that appears triploid. The greatest
 density of the allele frequencies are at 1/3 and 2/3 as we would expect
 from a triploid. This demonstrates how these methods can be used to

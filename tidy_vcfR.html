@@ -13,7 +13,7 @@
 
 <title>tidy vcfR</title>
 
-<script src="site_libs/header-attrs-2.30/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.31/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
@@ -510,34 +510,34 @@ other list element.</p>
 ## 7 FORMAT gt_GT 1      String  Genotype                   
 ## 8 FORMAT gt_DP 1      Integer Read Depth</code></pre>
 <pre class="r"><code>Z$fix</code></pre>
-<pre><code>## # A tibble: 5 × 14
-##   ChromKey CHROM     POS ID     REF   ALT    QUAL FILTER    NS    DP AF    AA   
-##      &lt;int&gt; &lt;chr&gt;   &lt;int&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;
-## 1        1 20      14370 rs605… G     A        29 PASS       3    14 0.5   &lt;NA&gt; 
-## 2        1 20      17330 &lt;NA&gt;   T     A         3 q10        3    11 0.017 &lt;NA&gt; 
-## 3        1 20    1110696 rs604… A     G,T      67 PASS       2    10 0.33… T    
-## 4        1 20    1230237 &lt;NA&gt;   T     &lt;NA&gt;     47 PASS       3    13 &lt;NA&gt;  T    
-## 5        1 20    1234567 micro… GTC   G,GT…    50 PASS       3     9 &lt;NA&gt;  G    
-## # ℹ 2 more variables: DB &lt;lgl&gt;, H2 &lt;lgl&gt;</code></pre>
+<pre><code>## # A tibble: 5 × 15
+##   ChromKey CHROM     POS ID      REF   ALT    QUAL FILTER VariantKey    NS    DP
+##      &lt;int&gt; &lt;chr&gt;   &lt;int&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;int&gt; &lt;int&gt; &lt;int&gt;
+## 1        1 20      14370 rs6054… G     A        29 PASS            1     3    14
+## 2        1 20      17330 &lt;NA&gt;    T     A         3 q10             2     3    11
+## 3        1 20    1110696 rs6040… A     G,T      67 PASS            3     2    10
+## 4        1 20    1230237 &lt;NA&gt;    T     &lt;NA&gt;     47 PASS            4     3    13
+## 5        1 20    1234567 micros… GTC   G,GT…    50 PASS            5     3     9
+## # ℹ 4 more variables: AF &lt;chr&gt;, AA &lt;chr&gt;, DB &lt;lgl&gt;, H2 &lt;lgl&gt;</code></pre>
 <pre class="r"><code>Z$gt</code></pre>
-<pre><code>## # A tibble: 15 × 6
-##    ChromKey     POS Indiv   gt_GT gt_DP gt_GT_alleles
-##       &lt;int&gt;   &lt;int&gt; &lt;chr&gt;   &lt;chr&gt; &lt;int&gt; &lt;chr&gt;        
-##  1        1   14370 NA00001 0|0       1 G|G          
-##  2        1   17330 NA00001 0|0       3 T|T          
-##  3        1 1110696 NA00001 1|2       6 G|T          
-##  4        1 1230237 NA00001 0|0       7 T|T          
-##  5        1 1234567 NA00001 0/1       4 GTC/G        
-##  6        1   14370 NA00002 1|0       8 A|G          
-##  7        1   17330 NA00002 0|1       5 T|A          
-##  8        1 1110696 NA00002 2|1       0 T|G          
-##  9        1 1230237 NA00002 0|0       4 T|T          
-## 10        1 1234567 NA00002 0/2       2 GTC/GTCT     
-## 11        1   14370 NA00003 1/1       5 A/A          
-## 12        1   17330 NA00003 0/0       3 T/T          
-## 13        1 1110696 NA00003 2/2       4 T/T          
-## 14        1 1230237 NA00003 0/0       2 T/T          
-## 15        1 1234567 NA00003 1/1       3 G/G</code></pre>
+<pre><code>## # A tibble: 15 × 7
+##    ChromKey     POS VariantKey Indiv   gt_GT gt_DP gt_GT_alleles
+##       &lt;int&gt;   &lt;int&gt;      &lt;int&gt; &lt;chr&gt;   &lt;chr&gt; &lt;int&gt; &lt;chr&gt;        
+##  1        1   14370          1 NA00001 0|0       1 G|G          
+##  2        1   17330          2 NA00001 0|0       3 T|T          
+##  3        1 1110696          3 NA00001 1|2       6 G|T          
+##  4        1 1230237          4 NA00001 0|0       7 T|T          
+##  5        1 1234567          5 NA00001 0/1       4 GTC/G        
+##  6        1   14370          1 NA00002 1|0       8 A|G          
+##  7        1   17330          2 NA00002 0|1       5 T|A          
+##  8        1 1110696          3 NA00002 2|1       0 T|G          
+##  9        1 1230237          4 NA00002 0|0       4 T|T          
+## 10        1 1234567          5 NA00002 0/2       2 GTC/GTCT     
+## 11        1   14370          1 NA00003 1/1       5 A/A          
+## 12        1   17330          2 NA00003 0/0       3 T/T          
+## 13        1 1110696          3 NA00003 2/2       4 T/T          
+## 14        1 1230237          4 NA00003 0/0       2 T/T          
+## 15        1 1234567          5 NA00003 1/1       3 G/G</code></pre>
 <p>Note that the fix and gt elements have a ‘ChromKey’ to help
 coordinate the variants in both structures. Also, the information from
 the meta region has been used to assign a type to each column (e.g.,

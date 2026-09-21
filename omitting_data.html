@@ -13,7 +13,7 @@
 
 <title>Omitting data</title>
 
-<script src="site_libs/header-attrs-2.30/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.31/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
@@ -509,7 +509,7 @@ of this action. For brevity, we will not here. But you can return to the
 section on depth and reuse the code presented there to visualize how
 this change has affected the distribution of the data.</p>
 <pre class="r"><code>heatmap.bp(dp[1:1000,], rlabels = FALSE)</code></pre>
-<p><img src="omitting_data_files/figure-html/unnamed-chunk-5-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p><img src="omitting_data_files/figure-html/unnamed-chunk-5-1.png" alt="" width="1152" style="display: block; margin: auto;" /></p>
 <p>In this heatmap we see that we have samples in columns and variants
 in rows. The color ramp on the right represents the depth of coverage
 for each variant where yellow is high coverage and purple is low
@@ -538,7 +538,7 @@ vcf</code></pre>
 ## *****        *****         *****</code></pre>
 <pre class="r"><code>dp &lt;- extract.gt(vcf, element = &quot;DP&quot;, as.numeric=TRUE)
 heatmap.bp(dp[1:1000,], rlabels = FALSE)</code></pre>
-<p><img src="omitting_data_files/figure-html/unnamed-chunk-7-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p><img src="omitting_data_files/figure-html/unnamed-chunk-7-1.png" alt="" width="1152" style="display: block; margin: auto;" /></p>
 </div>
 <div id="omitting-variants" class="section level2">
 <h2>Omitting variants</h2>
@@ -558,7 +558,7 @@ vcf</code></pre>
 ## *****        *****         *****</code></pre>
 <pre class="r"><code>dp &lt;- extract.gt(vcf, element = &quot;DP&quot;, as.numeric=TRUE)
 heatmap.bp(dp[1:1000,], rlabels = FALSE)</code></pre>
-<p><img src="omitting_data_files/figure-html/unnamed-chunk-9-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p><img src="omitting_data_files/figure-html/unnamed-chunk-9-1.png" alt="" width="1152" style="display: block; margin: auto;" /></p>
 </div>
 <div id="summary." class="section level2">
 <h2>Summary.</h2>

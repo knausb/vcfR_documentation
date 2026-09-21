@@ -13,7 +13,7 @@
 
 <title>Visualizing VCF data 1</title>
 
-<script src="site_libs/header-attrs-2.30/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.31/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
@@ -498,19 +498,19 @@ chrom &lt;- create.chromR(name=&quot;Supercontig&quot;, vcf=vcf, seq=dna, ann=gf
 <pre class="r"><code>chrom &lt;- masker(chrom, min_QUAL=0, min_DP=350, max_DP=650, min_MQ=59.5, max_MQ=60.5)
 chrom &lt;- proc.chromR(chrom, verbose = TRUE)</code></pre>
 <pre><code>## Nucleotide regions complete.</code></pre>
-<pre><code>##   elapsed time:  0.29</code></pre>
+<pre><code>##   elapsed time:  0.298</code></pre>
 <pre><code>## N regions complete.</code></pre>
-<pre><code>##   elapsed time:  0.276</code></pre>
+<pre><code>##   elapsed time:  0.277</code></pre>
 <pre><code>## Population summary complete.</code></pre>
-<pre><code>##   elapsed time:  0.203</code></pre>
+<pre><code>##   elapsed time:  0.192</code></pre>
 <pre><code>## window_init complete.</code></pre>
-<pre><code>##   elapsed time:  0.001</code></pre>
+<pre><code>##   elapsed time:  0</code></pre>
 <pre><code>## windowize_fasta complete.</code></pre>
-<pre><code>##   elapsed time:  0.105</code></pre>
+<pre><code>##   elapsed time:  0.108</code></pre>
 <pre><code>## windowize_annotations complete.</code></pre>
 <pre><code>##   elapsed time:  0.014</code></pre>
 <pre><code>## windowize_variants complete.</code></pre>
-<pre><code>##   elapsed time:  0.001</code></pre>
+<pre><code>##   elapsed time:  0</code></pre>
 <p>The function create.chromR() reports the name of the chromosome
 (supercontig, contig, etc.) so that we can verify that all three data
 sources contain the same chromosome. We receive a warning because the
@@ -518,7 +518,7 @@ names are not identical. Upon visual examination we determine that the
 names are synonyms and we can proceed.</p>
 <p>We can now visualize this data.</p>
 <pre class="r"><code>chromoqc(chrom, dp.alpha = 22)</code></pre>
-<p><img src="visualization_1_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p><img src="visualization_1_files/figure-html/unnamed-chunk-3-1.png" alt="" width="672" /></p>
 <p>In vcfR we refer to this form of plot as a <strong>chromo
 plot</strong>. This plot summarizes data from our three data sources.
 Annotation data is represented on the lowest plot. Features in the
@@ -538,7 +538,7 @@ default 1 kbp window. If we become concerned with how our choice of
 window size affects our analysis, we can change it and visualize it.</p>
 <pre class="r"><code>chrom &lt;- proc.chromR(chrom, verbose=FALSE, win.size=1e4)
 chromoqc(chrom, dp.alpha = 22)</code></pre>
-<p><img src="visualization_1_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p><img src="visualization_1_files/figure-html/unnamed-chunk-4-1.png" alt="" width="672" /></p>
 <p>We’ll set the window size back to 1 kbp for the subsequent
 analyses.</p>
 <pre class="r"><code>chrom &lt;- proc.chromR(chrom, verbose=FALSE, win.size=1e3)</code></pre>
@@ -628,7 +628,7 @@ documentation.</p>
 object includes the vcfR object and all of its data. Some of this
 information can be quickly explored using the plot function.</p>
 <pre class="r"><code>plot(chrom)</code></pre>
-<p><img src="visualization_1_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><img src="visualization_1_files/figure-html/unnamed-chunk-7-1.png" alt="" width="672" /></p>
 <p>Here we see the distribution of some quality metrics. The raw read
 depth and mapping quality have been extracted from the INFO column of
 the VCF data. The quality is from the QUAL column of the VCF data. And

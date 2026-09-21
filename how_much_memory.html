@@ -15,7 +15,7 @@
 
 <title>How much memory do I need?</title>
 
-<script src="site_libs/header-attrs-2.30/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.31/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
@@ -515,7 +515,7 @@ axis(side = 2, at = log10(nMb), labels=nMb, las=2)
 title(ylab=&quot;Memory use (Mb)&quot;, line=4)
 abline(h=log10(nMb), lwd=2, col=&quot;#C0C0C066&quot;)
 abline(v=log10(nvar), lwd=2, col=&quot;#C0C0C066&quot;)</code></pre>
-<p><img src="how_much_memory_files/figure-html/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="how_much_memory_files/figure-html/unnamed-chunk-2-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>par(mar=c(5,4,4,2))</code></pre>
 <p>This should give us an idea of how much data we can read into a vcfR
 object. When we have 100,000 variants we’ll need about 640 Mb of memory.

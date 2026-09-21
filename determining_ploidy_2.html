@@ -13,7 +13,7 @@
 
 <title>Determining ploidy 2</title>
 
-<script src="site_libs/header-attrs-2.30/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.31/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
@@ -519,7 +519,7 @@ for(i in 1:12){
 }
 title(xlab = &quot;Depth&quot;, line=0, outer = TRUE, font=2)
 title(ylab = &quot;Count&quot;, line=0, outer = TRUE, font=2)</code></pre>
-<p><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-3-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-3-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>par(mar=c(5,4,4,2))
 par(oma=c(0,0,0,0))</code></pre>
 <p>We performa similar operation for the second most abundant
@@ -538,7 +538,7 @@ for(i in 1:12){
 }
 title(xlab = &quot;Depth&quot;, line=0, outer = TRUE, font=2)
 title(ylab = &quot;Count&quot;, line=0, outer = TRUE, font=2)</code></pre>
-<p><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-4-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-4-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>par(mfrow=c(1,1))
 par(mar=c(5,4,4,2))
 par(oma=c(0,0,0,0))</code></pre>
@@ -647,7 +647,7 @@ for(i in 1:4){
   abline(v=myPeaks1$peaks[i,mySample], col=2)
   if(i==2){ title(main=mySample) }
 }</code></pre>
-<p><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-5-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-5-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>par(mfrow=c(1,1))
 par(mar=c(5,4,4,2))
 par(oma=c(0,0,0,0))</code></pre>
@@ -695,7 +695,7 @@ for(i in 1:4){
   abline(v=myPeaks2$peaks[i,mySample], col=2)
   if(i==2){ title(main=mySample) }
 }</code></pre>
-<p><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-6-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-6-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>par(mfrow=c(1,1))
 par(mar=c(5,4,4,2))
 par(oma=c(0,0,0,0))</code></pre>
@@ -729,12 +729,12 @@ bp2 &lt;- hist(freq2[,mySample], breaks = seq(0,1,by=bin_width), plot = FALSE)
 par(mar=c(5,1,4,2))
 barplot(height=bp1$counts, width=0.02,  space = 0, horiz = T, add = FALSE, col=&quot;#A6CEE3&quot;)
 barplot(height=bp2$counts, width=0.02,  space = 0, horiz = T, add = TRUE, col=&quot;#1F78B4&quot;)</code></pre>
-<p><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-7-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-7-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>par(mar=c(5,4,4,2))
 par(mfrow=c(1,1))</code></pre>
 <p>Once we determine how to make one plot we can loop over all the
 samples.</p>
-<p><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-1.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-2.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-3.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-4.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-5.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-6.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-7.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-8.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-9.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-10.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-11.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-12.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-13.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-14.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-15.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-16.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-17.png" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-18.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-1.png" alt="" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-2.png" alt="" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-3.png" alt="" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-4.png" alt="" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-5.png" alt="" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-6.png" alt="" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-7.png" alt="" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-8.png" alt="" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-9.png" alt="" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-10.png" alt="" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-11.png" alt="" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-12.png" alt="" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-13.png" alt="" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-14.png" alt="" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-15.png" alt="" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-16.png" alt="" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-17.png" alt="" width="768" style="display: block; margin: auto;" /><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-8-18.png" alt="" width="768" style="display: block; margin: auto;" /></p>
 <p>We can also create a matrix of plots.</p>
 <pre class="r"><code>par(mfrow=c(4,3))
 par(mar=c(2,2,1,1))
@@ -755,7 +755,7 @@ segments(x0=myPeaks1$wins[,&#39;START_pos&#39;], y0=myPeaks1$peaks[,mySample],
 segments(x0=myPeaks1$wins[,&#39;START_pos&#39;], y0=myPeaks2$peaks[,mySample],
          x1=myPeaks1$wins[,&#39;END_pos&#39;], lwd=3)
 }</code></pre>
-<p><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-9-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="determining_ploidy_2_files/figure-html/unnamed-chunk-9-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>par(mfrow=c(1,1))
 par(mar=c(5,4,4,2))
 par(oma=c(0,0,0,0))</code></pre>

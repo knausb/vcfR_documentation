@@ -13,7 +13,7 @@
 
 <title>Depth plot</title>
 
-<script src="site_libs/header-attrs-2.30/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.31/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
@@ -494,7 +494,7 @@ quick to execute.</p>
 <pre class="r"><code>par(mar=c(12,4,4,2))
 boxplot(dp, col=2:8, las=3)
 title(ylab = &quot;Depth (DP)&quot;)</code></pre>
-<p><img src="depth_plot_files/figure-html/unnamed-chunk-3-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p><img src="depth_plot_files/figure-html/unnamed-chunk-3-1.png" alt="" width="1152" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>par(mar=c(5,4,4,2))</code></pre>
 <p>We’ve generated a box and whisker plot for each sample where 50% of
 the data is contained within each colored box and outliers are presented
@@ -570,7 +570,7 @@ for(i in 1:myRows){
 ## generated.</code></pre>
 <pre class="r"><code># Plot the plot.
 plot_grid(plotlist = myPlots, nrow = myRows)</code></pre>
-<p><img src="depth_plot_files/figure-html/unnamed-chunk-5-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p><img src="depth_plot_files/figure-html/unnamed-chunk-5-1.png" alt="" width="1152" style="display: block; margin: auto;" /></p>
 <p>We can see that the log transformation stretches out the smaller
 values and compresses the larger values. This allows us to focus on
 where our data has the greatest density. We see that the samples with
